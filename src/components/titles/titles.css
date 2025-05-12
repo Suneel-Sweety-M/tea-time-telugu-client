@@ -1,0 +1,118 @@
+.section-title-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.section-title-container .title-text{
+    font-size: 20px;
+    font-weight: 500;
+    margin-right: 15px;
+    white-space: nowrap; 
+}
+
+.section-title-container .title-dot{
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #2962ff;
+    margin-right: 10px;
+}
+
+.section-title-container .title-line{
+    width: 95%;
+    height: 4px;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.title-see-all{
+    margin-left: 5px;
+    font-size: 10px;
+    white-space: nowrap; 
+    color: #808080;
+    cursor: pointer;
+}
+
+.title-see-all:hover{
+    color: black;
+}
+
+/*=== Tab Title ===*/
+.tab-title-container,
+.gallery-title-container {
+  width: 100%;
+  height: 150px;
+  color: white;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-title-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("https://www.radiustheme.com/demo/wordpress/themes/barta/wp-content/themes/barta/assets/img/banner.jpg")
+    no-repeat center center;
+  background-size: cover;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+.tab-title-container *,
+.gallery-title-container * {
+  position: relative;
+  z-index: 2;
+}
+
+.tab-title-container h1,
+.gallery-title-container h1 {
+  font-size: 40px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+
+.gallery-title-container {
+  margin: 0 auto;
+}
+
+.gallery-title-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("https://www.cinejosh.com/newsimg/newsmainimg/deepika-padukone-sara-ali-khan-shradhha-kapoor-rakul-preet-singh_b_2309200617.jpg")
+    no-repeat center center;
+  background-size: cover;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .tab-title-container, .gallery-title-container {
+    height: 200px;
+  }
+  .tab-title-container h1 {
+    font-size: 50px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .tab-title-container, .gallery-title-container {
+    height: 120px;
+  }
+  .tab-title-container h1 {
+    font-size: 40px;
+    padding: 10px;
+  }
+}
