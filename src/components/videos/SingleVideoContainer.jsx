@@ -4,7 +4,7 @@ import SectionTitle from "../titles/SectionTitle";
 import Trailers from "../trailers/Trailers";
 import LatestStories from "../home/LatestStories";
 import { toast } from "react-toastify";
-import { getVideo } from "../../helper/apis";
+import { getVideo, getNewsShortAd } from "../../helper/apis";
 import moment from "moment";
 
 const SingleVideoContainer = () => {
@@ -31,6 +31,37 @@ const SingleVideoContainer = () => {
 
     getVideoData();
   }, [vid]);
+  // const [newsLongAdImg, setNewsLongAdImg] = useState("");
+  // const [newsLongAdLink, setNewsLongAdLink] = useState("");
+  const [newsShortAdImg, setNewsShortAdImg] = useState("");
+  const [newsShortAdLink, setNewsShortAdLink] = useState("");
+
+  // const handleGetNewsLongAd = async () => {
+  //   const res = await getNewsLongAd();
+
+  //   if (res?.status === "success") {
+  //     setNewsLongAdImg(res?.newsLongAd?.img);
+  //     setNewsLongAdLink(res?.newsLongAd?.link);
+  //   } else {
+  //     toast.error(res?.message);
+  //   }
+  // };
+
+  const handleGetNewsShortAd = async () => {
+    const res = await getNewsShortAd();
+
+    if (res?.status === "success") {
+      setNewsShortAdImg(res?.newsShortAd?.img);
+      setNewsShortAdLink(res?.newsShortAd?.link);
+    } else {
+      toast.error(res?.message);
+    }
+  };
+
+  useEffect(() => {
+    // handleGetNewsLongAd();
+    handleGetNewsShortAd();
+  }, []);
   return (
     <>
       {!isLoading ? (
@@ -201,13 +232,16 @@ const SingleVideoContainer = () => {
                 </div>
               </div>
               <LatestStories />
-              <a href="https://eagleiitech.com" target="blank">
-                <img
-                  src="https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
-                  alt="ad-img"
-                  className="ad-img br5 cp"
-                />
-              </a>
+              <a href={newsShortAdLink} target="blank">
+              <img
+                src={
+                  newsShortAdImg ||
+                  "https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
+                }
+                alt="ad"
+                className="ad-img br5 cp"
+              />
+            </a>
             </div>
           </div>
         </div>

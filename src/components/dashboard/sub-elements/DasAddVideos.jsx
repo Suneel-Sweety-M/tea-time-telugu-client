@@ -31,13 +31,13 @@ const DasAddVideos = ({ setPopupBox }) => {
     <div className="popup-news-container popup-container">
       <div className="br5 popup-img p10">
         <div className="das-news-container">
-          <div className="popup-news-top d-flex jcsb">
+          <div className="popup-news-top das-d-flex das-jcsb">
             <div className="das-news-container-title">Add Video</div>
-            <span className="popup-news-top-x mx20">
+            <span className="popup-news-top-x das-mx20">
               <i className="fa fa-xmark" onClick={() => setPopupBox(false)}></i>
             </span>
           </div>
-          <div className="wns-box my20 py20">
+          <div className="wns-box das-my20 das-py20">
             <h3 className="text-start">Add Title</h3>
             <input
               type="text"
@@ -47,7 +47,7 @@ const DasAddVideos = ({ setPopupBox }) => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          <div className="wns-box my20 py20">
+          <div className="wns-box das-my20 das-py20">
             <h3 className="text-start">Add YouTube Video Id</h3>
             <input
               type="text"
@@ -58,7 +58,7 @@ const DasAddVideos = ({ setPopupBox }) => {
             />
           </div>
           {/* <div className="other-details"> */}
-          {/* <div className="wns-box my20 py20">
+          {/* <div className="wns-box das-my20 das-py20">
                 <h3 className="">Category</h3>
                 <select
                   name=""
@@ -70,7 +70,7 @@ const DasAddVideos = ({ setPopupBox }) => {
                   <option value="videos">Videos</option>
                 </select>
               </div> */}
-          <div className="wns-box my20 py20">
+          <div className="wns-box das-my20 das-py20">
             <h3 className="text-start">Sub Category</h3>
             <select
               name=""

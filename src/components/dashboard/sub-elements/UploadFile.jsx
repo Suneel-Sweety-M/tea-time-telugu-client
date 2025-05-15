@@ -24,9 +24,10 @@ const UploadFile = ({ setIsUpload }) => {
     }
   };
 
-  const uploadFile = async () => {
+  const submitFile = async () => {
     try {
       setIsUploading(true);
+      console.log('Selected file:', file); // Check if file exists
 
       const formData = new FormData();
       formData.append("file", file);
@@ -40,7 +41,9 @@ const UploadFile = ({ setIsUpload }) => {
         toast.error(res?.message);
       }
       setIsUploading(false);
+      setFile(null);
     } catch (error) {
+      setFile(null);
       console.log(error);
       setIsUploading(false);
     }
@@ -52,7 +55,9 @@ const UploadFile = ({ setIsUpload }) => {
         return toast.error("Please select a file!");
       }
       setFile(f);
-      uploadFile();
+      console.log(file);
+      
+      submitFile();
     } catch (error) {
       console.log(error);
     }

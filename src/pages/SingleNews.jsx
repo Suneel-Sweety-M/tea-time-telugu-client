@@ -6,8 +6,9 @@ import LatestStories from "../components/home/LatestStories";
 import SectionTitle from "../components/titles/SectionTitle";
 import NewsComments from "../components/single-news/NewsComments";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getSingleNews } from "../helper/apis";
+import { getNewsShortAd, getSingleNews } from "../helper/apis";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const SingleNews = () => {
   const { id } = useParams();
@@ -44,6 +45,39 @@ const SingleNews = () => {
   useEffect(() => {
     getNews();
   }, [getNews]);
+
+  // const [newsLongAdImg, setNewsLongAdImg] = useState("");
+  // const [newsLongAdLink, setNewsLongAdLink] = useState("");
+  const [newsShortAdImg, setNewsShortAdImg] = useState("");
+  const [newsShortAdLink, setNewsShortAdLink] = useState("");
+
+  // const handleGetNewsLongAd = async () => {
+  //   const res = await getNewsLongAd();
+
+  //   if (res?.status === "success") {
+  //     setNewsLongAdImg(res?.newsLongAd?.img);
+  //     setNewsLongAdLink(res?.newsLongAd?.link);
+  //   } else {
+  //     toast.error(res?.message);
+  //   }
+  // };
+
+  const handleGetNewsShortAd = async () => {
+    const res = await getNewsShortAd();
+
+    if (res?.status === "success") {
+      setNewsShortAdImg(res?.newsShortAd?.img);
+      setNewsShortAdLink(res?.newsShortAd?.link);
+    } else {
+      toast.error(res?.message);
+    }
+  };
+
+  useEffect(() => {
+    // handleGetNewsLongAd();
+    handleGetNewsShortAd();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -166,9 +200,12 @@ const SingleNews = () => {
               </div>
             </div>
             <LatestStories />
-            <a href="https://eagleiitech.com" target="blank">
+            <a href={newsShortAdLink} target="blank">
               <img
-                src="https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
+                src={
+                  newsShortAdImg ||
+                  "https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
+                }
                 alt="ad"
                 className="ad-img br5 cp"
               />
@@ -211,7 +248,7 @@ const SingleNews = () => {
                   >
                     <div className="latest-collection-image-container">
                       <img
-                        src={collection?.galleryPics[0]?.url}
+                        src={collection?.mainUrl}
                         alt={collection?.title}
                         loading="lazy"
                         className="latest-collection-image"

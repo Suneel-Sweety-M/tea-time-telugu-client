@@ -4,8 +4,9 @@ import Footer from "../components/footer/Footer";
 import LatestStories from "../components/home/LatestStories";
 import SectionTitle from "../components/titles/SectionTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getSingleGallery } from "../helper/apis";
+import { getNewsShortAd, getSingleGallery } from "../helper/apis";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const GalleryShow = () => {
   const { id } = useParams();
@@ -64,7 +65,37 @@ const GalleryShow = () => {
   useEffect(() => {
     getPictures();
   }, [getPictures]);
+// const [newsLongAdImg, setNewsLongAdImg] = useState("");
+  // const [newsLongAdLink, setNewsLongAdLink] = useState("");
+  const [newsShortAdImg, setNewsShortAdImg] = useState("");
+  const [newsShortAdLink, setNewsShortAdLink] = useState("");
 
+  // const handleGetNewsLongAd = async () => {
+  //   const res = await getNewsLongAd();
+
+  //   if (res?.status === "success") {
+  //     setNewsLongAdImg(res?.newsLongAd?.img);
+  //     setNewsLongAdLink(res?.newsLongAd?.link);
+  //   } else {
+  //     toast.error(res?.message);
+  //   }
+  // };
+
+  const handleGetNewsShortAd = async () => {
+    const res = await getNewsShortAd();
+
+    if (res?.status === "success") {
+      setNewsShortAdImg(res?.newsShortAd?.img);
+      setNewsShortAdLink(res?.newsShortAd?.link);
+    } else {
+      toast.error(res?.message);
+    }
+  };
+
+  useEffect(() => {
+    // handleGetNewsLongAd();
+    handleGetNewsShortAd();
+  }, []);
   return (
     <>
       <Navbar />
@@ -216,9 +247,12 @@ const GalleryShow = () => {
               </div>
             </div>
             <LatestStories />
-            <a href="https://eagleiitech.com" target="blank">
+            <a href={newsShortAdLink} target="blank">
               <img
-                src="https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
+                src={
+                  newsShortAdImg ||
+                  "https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
+                }
                 alt="ad"
                 className="ad-img br5 cp"
               />
@@ -253,7 +287,7 @@ const GalleryShow = () => {
             <div className="latest-collection-grid">
               {suggestedPosts?.slice(0, 9)?.map((collection) => (
                 <Link
-                  to={`/${collection?.category}/${collection?._id}`}
+                  to={`/gallery/${collection?._id}`}
                   key={collection?._id}
                   className="latest-collection-card"
                   aria-label={`View ${collection?.title}`}

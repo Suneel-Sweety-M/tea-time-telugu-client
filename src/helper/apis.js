@@ -901,3 +901,195 @@ export const setMoviePoster = async (data) => {
     console.log(error);
   }
 };
+
+export const getNavbarAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-navbar-ad",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const setNavbarAd = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-navbar-ad",
+      method: "POST",
+      data,
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Home Ads
+export const getHomeLongAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-home-long-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting home long ad:", error);
+    throw error;
+  }
+};
+
+export const setHomeLongAd = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-home-long-ad",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error setting home long ad:", error);
+    throw error;
+  }
+};
+
+export const getHomeShortAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-home-short-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting home short ad:", error);
+    throw error;
+  }
+};
+
+export const setHomeShortAd = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-home-short-ad",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error setting home short ad:", error);
+    throw error;
+  }
+};
+
+// Category Ads
+export const getCategoryLongAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-category-long-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting category long ad:", error);
+    throw error;
+  }
+};
+
+export const setCategoryLongAd = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-category-long-ad",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error setting category long ad:", error);
+    throw error;
+  }
+};
+
+export const getCategoryShortAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-category-short-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting category short ad:", error);
+    throw error;
+  }
+};
+
+export const setCategoryShortAd = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-category-short-ad",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error setting category short ad:", error);
+    throw error;
+  }
+};
+
+// News Ads
+export const getNewsLongAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-news-long-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting news long ad:", error);
+    throw error;
+  }
+};
+
+export const setNewsLongAd = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-news-long-ad",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error setting news long ad:", error);
+    throw error;
+  }
+};
+
+export const getNewsShortAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-news-short-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting news short ad:", error);
+    throw error;
+  }
+};
+
+export const setNewsShortAd = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-news-short-ad",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error setting news short ad:", error);
+    throw error;
+  }
+};

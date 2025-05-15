@@ -21,14 +21,12 @@ const DashboardSidebar = ({ setBars }) => {
   }, [dispatch, navigate]);
 
   useEffect(() => {
-    if (uid !== user?._id) {
-      navigate("/");
-    }
-
-    if (!uid || uid?.length !== 24) {
-      navigate("/");
-    }
-  }, [navigate, uid, user?._id]);
+    if (!user || !uid) return; // Wait until user and uid are available
+  
+  if (String(uid) !== String(user._id)) {
+    navigate("/");
+  }
+  }, [navigate, uid, user]);
 
   return (
     <div className="das-sidebar">

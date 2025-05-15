@@ -27,7 +27,7 @@ const HomeReviews = () => {
   return (
     <div className="home-review-container">
       <SectionTitle title="Reviews" nav="/reviews" />
-      {loading ? (
+      {!loading ? (
         <div className="home-review-grid">
           {news?.slice(0, 4)?.map((review) => (
             <Link

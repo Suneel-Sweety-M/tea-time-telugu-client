@@ -78,19 +78,19 @@ const DasAddGallery = () => {
 
   return (
     <>
-      <div className="write-news-container my20">
+      <div className="write-news-container das-my20">
         <div className="das-news-container">
-          <div className="das-all-gallery-section-top d-flex jcsb aic">
+          <div className="das-all-gallery-section-top das-d-flex das-jcsb aic">
             <span className="das-news-container-title">Add Gallery</span>
             <Link
               to={`/${user?._id}/dashboard/all-gallery`}
-              className="d-flex aic"
+              className="das-d-flex aic"
             >
               <b className="color-blue">View All</b>
             </Link>
           </div>
           <div className="write-news-section">
-            <div className="wns-box my20 py20">
+            <div className="wns-box das-my20 das-py20">
               <h3 className="">Add Name</h3>
               <input
                 type="text"
@@ -100,7 +100,7 @@ const DasAddGallery = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className="wns-box my20 py20">
+            <div className="wns-box das-my20 das-py20">
               <h3 className="">Add Title</h3>
               <input
                 type="text"
@@ -110,8 +110,8 @@ const DasAddGallery = () => {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
-            <div className="wns-box my20 py20">
-              <div className="d-flex jcsb">
+            <div className="wns-box das-my20 das-py20">
+              <div className="das-d-flex das-jcsb">
                 <h3 className="">Add Description</h3>
                 <div
                   className="upload-system-files br5 cp"
@@ -127,7 +127,7 @@ const DasAddGallery = () => {
                 onChange={(newContent) => setDescription(newContent)}
               />
             </div>
-            {/* <div className="wns-box my20 py20">
+            {/* <div className="wns-box das-my20 das-py20">
               <h3 className="">Main Image</h3>
               <div className="br5 upload-news-img">
                 <div className="upload-news-img-box dfc fdc">
@@ -136,7 +136,7 @@ const DasAddGallery = () => {
                 </div>
               </div>
             </div> */}
-            <div className="wns-box my20 py20">
+            <div className="wns-box das-my20 das-py20">
               <h3 className="">Add Images</h3>
               <div className="das-gallery-grid">
                 {mediaFiles?.map((file, index) => renderPreview(file, index))}
@@ -158,7 +158,7 @@ const DasAddGallery = () => {
               </div>
             </div>
             <div className="other-details">
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="">Category</h3>
                 <select
                   name=""
@@ -172,7 +172,7 @@ const DasAddGallery = () => {
                   <option value="hero">Hero</option>
                 </select>
               </div>
-              {/* <div className="wns-box my20 py20">
+              {/* <div className="wns-box das-my20 das-py20">
               <h3 className="">Sub Category</h3>
               <select name="" id="" className="br5">
                 <option value="">Select Here</option>
@@ -199,7 +199,7 @@ const DasAddGallery = () => {
         </div>
       </div>
 
-      <div className="preview-box bgc-fff m20 p20">
+      <div className="preview-box bgc-fff das-m20 p20">
         <h4>Preview</h4>
         <div
           dangerouslySetInnerHTML={{ __html: description }}

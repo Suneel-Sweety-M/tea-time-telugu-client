@@ -3,7 +3,7 @@ import "./navbar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Youtube from "../youtube/Youtube";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, logoutUser } from "../../helper/apis";
+import { getNavbarAd, loginUser, logoutUser } from "../../helper/apis";
 import { login } from "../../redux/userSlice";
 import { toast } from "react-toastify";
 
@@ -22,11 +22,23 @@ const Navbar = () => {
     email: "",
     password: "",
   });
+  const [navbarAdImg, setNavbarAdImg] = useState("");
+  const [navbarAdLink, setNavbarAdLink] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
+
+  const handleGetNavbarAd = async () => {
+    const res = await getNavbarAd();
+    if (res?.status === "success") {
+      setNavbarAdImg(res?.navbarAd?.img);
+      setNavbarAdLink(res?.navbarAd?.link);
+    } else {
+      toast.error(res?.message);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,6 +113,7 @@ const Navbar = () => {
       setDate(today.toLocaleDateString("en-US", options));
     }
     getFormattedDate();
+    handleGetNavbarAd();
   }, []);
 
   return (
@@ -166,12 +179,15 @@ const Navbar = () => {
               <img src="/assets/new-ttt-logo.jpg" alt="logo" />
             </Link>
             <a
-              href="https://eagleiitech.com"
+              href={navbarAdLink}
               target="blank"
               className="navbar-logo-section-right"
             >
               <img
-                src="https://res.cloudinary.com/demmiusik/image/upload/v1746878560/pccjt7szazjq1szr5xmj.png"
+                src={
+                  navbarAdImg ||
+                  "https://res.cloudinary.com/demmiusik/image/upload/v1746878560/pccjt7szazjq1szr5xmj.png"
+                }
                 alt="ad"
               />
             </a>

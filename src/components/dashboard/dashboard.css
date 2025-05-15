@@ -3,6 +3,8 @@
   height: 100vh;
   display: flex;
   background-color: #e0e7ed;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .das-left {
@@ -348,6 +350,9 @@
 
 .add-writer-form-left {
   width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-writer-form-right {
@@ -658,6 +663,7 @@
 }
 
 .das-video-card-btn {
+  width: fit-content;
   padding: 4px 10px;
   color: #fff;
   border-radius: 5px;
@@ -690,6 +696,7 @@
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  margin: 20px 5px;
 }
 
 .das-gallery-card {
@@ -801,15 +808,116 @@
   }
 }
 
-/*=============*/
-.d-flex {
+/*=========================*/
+.das-d-flex {
   display: flex;
 }
 
-.jcsb{
+.das-jcsb {
   justify-content: space-between;
 }
 
-.p10{
+.p10 {
   padding: 10px;
+}
+
+.m10 {
+  margin: 10px;
+}
+
+.das-m20 {
+  margin: 20px;
+}
+
+.das-float-right {
+  float: right;
+}
+
+.das-my20 {
+  margin: 20px 0 20px 0;
+}
+
+.das-mx20 {
+  margin: 0 20px 0 20px;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+.br5 {
+  border-radius: 5px;
+}
+.box-shadow {
+  /* box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04); */
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.das-mt20 {
+  margin-top: 20px;
+}
+
+.das-mx10 {
+  margin: 0 10px 0 10px;
+}
+
+.das-mr20 {
+  margin-right: 20px;
+}
+
+.duo-con-50 {
+  width: 50%;
+}
+
+.das-py20 {
+  margin: 20px 0 20px 0;
+}
+
+.das-mb20 {
+  margin-bottom: 20px;
+}
+
+.py10 {
+  padding: 10px 0 10px 0;
+}
+
+.color-main-org {
+  color: #f25a23;
+}
+
+.fs22 {
+  font-size: 22px;
+}
+
+.fw5 {
+  font-weight: 500;
+}
+
+.bgc-fff {
+  background-color: #fff;
+}
+
+.m5 {
+  margin: 5px;
+}
+
+.aic {
+  align-items: center;
+}
+
+.c-fff {
+  color: #fff;
+}
+
+.ml20 {
+  margin-left: 20px;
+}
+
+.fs20 {
+  font-size: 20px;
 }

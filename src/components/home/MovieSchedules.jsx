@@ -75,7 +75,7 @@ const MovieSchedules = () => {
                   display: releaseCategory !== item?.category && "none",
                 }}
               >
-                <span className="tac ms-text">{item?.movie}</span>
+                <span className="text-center ms-text">{item?.movie}</span>
                 <span className="ms-text">{item?.date} </span>
               </div>
             ))}

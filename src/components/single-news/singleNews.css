@@ -68,6 +68,7 @@
 }
 .single-news-description > p {
   margin: 20px 0;
+  font-family: inherit !important;
 }
 
 .single-news-description img {

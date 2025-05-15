@@ -73,7 +73,7 @@ const DasWriters = () => {
                   <i className="fa fa-pen"></i>
                   <span>{u?.role}</span>
                 </div>
-                <div className="d-flex aic">
+                <div className="das-d-flex aic">
                   {updatingUserId === u?._id ? ( // Check if this user is being updated
                     <div className="is-submitting-btn btn fw5">Updating...</div>
                   ) : u?.isActive ? (

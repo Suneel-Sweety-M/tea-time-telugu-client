@@ -16,7 +16,7 @@ import { login } from "../../redux/userSlice";
 import moment from "moment";
 
 const NewsComments = ({ news, getNews, setCommentsCount }) => {
-  const [showReplyBox, setShowReplyBox] = useState(false);
+  // const [showReplyBox, setShowReplyBox] = useState(false);
   const { id } = useParams();
   const { user } = useSelector((state) => state.user);
   const [allComments, setAllComments] = useState([]);
@@ -24,8 +24,8 @@ const NewsComments = ({ news, getNews, setCommentsCount }) => {
   const [comment, setComment] = useState("");
   const [deleteCommentId, setdeleteCommentId] = useState("");
   const [replyInputs, setReplyInputs] = useState({});
-  const [commentsLoadCount, setcommentsLoadCount] = useState(3);
-  const [replyCommentsLoadCount, setreplyCommentsLoadCount] = useState(3);
+  // const [commentsLoadCount, setcommentsLoadCount] = useState(3);
+  // const [replyCommentsLoadCount, setreplyCommentsLoadCount] = useState(3);
   const [seePassword, setSeePassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [joinPopup, setJoinPopup] = useState(false);
@@ -287,9 +287,6 @@ const NewsComments = ({ news, getNews, setCommentsCount }) => {
       console.log(error);
     }
   };
-
-  const [showReplies, setShowReplies] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
 
   useEffect(() => {
     fetchComments();

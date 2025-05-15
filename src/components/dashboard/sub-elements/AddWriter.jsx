@@ -47,11 +47,11 @@ const AddWriter = () => {
   };
 
   return (
-    <div className="add-writer-container m20 bgc-fff br5 p20">
+    <div className="add-writer-container das-m20 bgc-fff br5 p20">
       <div className="add-writer-container-title fw5 fs22">Add Account</div>
       <div className="add-writer-form">
         {/* <div className="add-writer-form-left dfc">
-          <div className="add-writer-form-img-section d-flex fdc">
+          <div className="add-writer-form-img-section das-d-flex fdc">
             <img src="https://res.cloudinary.com/demmiusik/image/upload/v1711703262/s66xmxvaoqky3ipbxskj.jpg" alt="default-img" className="img-default" />
             <button className="btn mt10">Upload</button>
           </div>

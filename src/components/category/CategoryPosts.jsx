@@ -146,34 +146,38 @@ const CategoryPosts = () => {
         </div>
       ) : (
         <div className="category-posts-section">
-          {displayNews.map((post) => (
-            <Link
-              to={`/${post?.category}/${post?._id}`}
-              key={post?._id}
-              className="single-category-post box-shadow"
-            >
-              <div className="single-category-post-image-container">
-                <img
-                  src={
-                    post?.mainUrl ||
-                    "https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
-                  }
-                  alt={post.title}
-                />
-              </div>
-              <div className="single-category-post-texts">
-                <span className="single-category-post-category">
-                  {post?.category} /{" "}
-                  {moment(post?.createdAt).format("MMM DD, YYYY")}
-                </span>
-                <h3 className="single-category-post-title">{post?.title}</h3>
-                <p
+          {displayNews?.length > 0 ? (
+            displayNews.map((post) => (
+              <Link
+                to={`/${post?.category}/${post?._id}`}
+                key={post?._id}
+                className="single-category-post box-shadow"
+              >
+                <div className="single-category-post-image-container">
+                  <img
+                    src={
+                      post?.mainUrl ||
+                      "https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
+                    }
+                    alt={post.title}
+                  />
+                </div>
+                <div className="single-category-post-texts">
+                  <span className="single-category-post-category">
+                    {post?.category} /{" "}
+                    {moment(post?.createdAt).format("MMM DD, YYYY")}
+                  </span>
+                  <h3 className="single-category-post-title">{post?.title}</h3>
+                  {/* <p
                   className="single-category-post-desc font-inherit"
                   dangerouslySetInnerHTML={{ __html: post?.description }}
-                />
-              </div>
-            </Link>
-          ))}
+                /> */}
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p>No data found!</p>
+          )}
         </div>
       )}
 

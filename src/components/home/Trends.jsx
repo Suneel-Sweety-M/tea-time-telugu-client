@@ -87,12 +87,12 @@ const Trends = () => {
                   {moment(mainTrends?.createdAt).format("MMM DD, YYYY")}
                 </span>
                 <h3 className="trends-title fs20">{mainTrends?.title}</h3>
-                <span
+                {/* <span
                   className="trends-desc dynamic-desc"
                   dangerouslySetInnerHTML={{
                     __html: mainTrends?.description,
                   }}
-                />
+                /> */}
               </div>
             </Link>
           </div>
@@ -116,12 +116,12 @@ const Trends = () => {
                     {moment(item?.createdAt).format("MMM DD, YYYY")}
                   </span>
                   <h3 className="trends-title fs20">{item?.title}</h3>
-                  <span
+                  {/* <span
                     className="trends-desc dynamic-desc"
                     dangerouslySetInnerHTML={{
                       __html: mainTrends?.description,
                     }}
-                  />
+                  /> */}
                 </div>
               </Link>
             ))}

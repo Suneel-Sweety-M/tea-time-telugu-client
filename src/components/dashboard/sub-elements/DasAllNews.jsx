@@ -126,11 +126,11 @@ const DasAllNews = () => {
 
   return (
     <>
-      <div className="mt20">
+      <div className="das-mt20">
         <div className="das-news-container">
           <div className="das-news-container-title">All News</div>
           <div className="das-news-filter-container">
-            <div className="nfc-left d-flex">
+            <div className="nfc-left das-d-flex">
               <select
                 className="nfc-filter mr10"
                 value={category}
@@ -158,7 +158,7 @@ const DasAllNews = () => {
                 <i className="fa fa-search"></i>
               </div>
             </div>
-            <div className="nfc-right d-flex">
+            <div className="nfc-right das-d-flex">
               <div className="nfc-filters mr10">
                 <select
                   className="nfc-filter"
@@ -285,19 +285,19 @@ const DasAllNews = () => {
         <div className="popup-news-container popup-container">
           <div className="br5 popup-img p10">
             <div className="das-news-container">
-              <div className="popup-news-top d-flex jcsb">
+              <div className="popup-news-top das-d-flex das-jcsb">
                 <div className="das-news-container-title">
                   Are you sure want to delete ?
                 </div>
-                <span className="popup-news-top-x mx20">
+                <span className="popup-news-top-x das-mx20">
                   <i
                     className="fa fa-xmark"
                     onClick={() => setDeletePopup(false)}
                   ></i>
                 </span>
               </div>
-              <div className="das-all-news-bottom mt20">
-                <div className="news-popup-btns mx10">
+              <div className="das-all-news-bottom das-mt20">
+                <div className="news-popup-btns das-mx10">
                   <button className="btn" onClick={handleDeleteCancel}>
                     Cancel
                   </button>

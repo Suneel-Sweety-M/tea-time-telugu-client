@@ -101,13 +101,13 @@ const DasAllGallery = () => {
 
   return (
     <>
-      <div className="das-all-gallery-container m20 p20 box-shadow">
+      <div className="das-all-gallery-container das-m20 p20 box-shadow">
         <div className="das-all-gallery-section">
-          <div className="das-all-gallery-section-top d-flex jcsb aic">
+          <div className="das-all-gallery-section-top das-d-flex das-jcsb aic">
             <span className="das-news-container-title">Galleries</span>
             <Link
               to={`/${user?._id}/dashboard/add-gallery`}
-              className="d-flex aic color-blue"
+              className="das-d-flex aic color-blue"
             >
               <h3 className="mr10">Add</h3>{" "}
               <i className="fa fa-plus cp fw6"></i>
@@ -115,7 +115,7 @@ const DasAllGallery = () => {
           </div>
           <div className="das-all-gallery-section-bottom">
             <div className="das-news-filter-container">
-              <div className="nfc-left d-flex">
+              <div className="nfc-left das-d-flex">
                 <div className="nfc-search">
                   <input
                     type="input"
@@ -128,7 +128,7 @@ const DasAllGallery = () => {
                   <i className="fa fa-search"></i>
                 </div>
               </div>
-              <div className="nfc-right d-flex">
+              <div className="nfc-right das-d-flex">
                 <div className="nfc-filters">
                   <select
                     className="nfc-filter mr10"
@@ -184,7 +184,7 @@ const DasAllGallery = () => {
                             <i className="fa fa-trash"></i>
                           </span>
                         </div>
-                        <h3 className="das-gallery-card-title twolineselpsis mx10">
+                        <h3 className="das-gallery-card-title twolineselpsis das-mx10">
                           {item?.title}
                         </h3>
                       </div>
@@ -210,7 +210,7 @@ const DasAllGallery = () => {
             )}
 
             {!isLoading && allGallery?.length > 0 && (
-              <div className="das-all-news-pagenation mt20">
+              <div className="das-all-news-pagenation das-mt20">
                 <div className="dan-pagenation-sec">
                   <span>News per page: </span>
                   <select
@@ -247,19 +247,19 @@ const DasAllGallery = () => {
         <div className="popup-news-container popup-container">
           <div className="br5 popup-img p10">
             <div className="das-news-container">
-              <div className="popup-news-top d-flex jcsb">
+              <div className="popup-news-top das-d-flex das-jcsb">
                 <div className="das-news-container-title">
                   Are you sure want to delete ?
                 </div>
-                <span className="popup-news-top-x mx20">
+                <span className="popup-news-top-x das-mx20">
                   <i
                     className="fa fa-xmark"
                     onClick={() => setDeletePopup(false)}
                   ></i>
                 </span>
               </div>
-              <div className="das-all-news-bottom mt20">
-                <div className="news-popup-btns mx10">
+              <div className="das-all-news-bottom das-mt20">
+                <div className="news-popup-btns das-mx10">
                   <button className="btn" onClick={handleDeleteCancel}>
                     Cancel
                   </button>

@@ -96,11 +96,11 @@ const WriteNews = () => {
 
   return (
     <>
-      <div className="write-news-container my20">
+      <div className="write-news-container das-my20">
         <div className="das-news-container">
           <div className="das-news-container-title">Write News</div>
           <div className="write-news-section">
-            <div className="wns-box my20 py20">
+            <div className="wns-box das-my20 das-py20">
               <h3 className="">Add Title</h3>
               <input
                 type="text"
@@ -111,7 +111,7 @@ const WriteNews = () => {
               />
             </div>
             {preview ? (
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="">Main Image</h3>
                 <input
                   type="file"
@@ -125,7 +125,7 @@ const WriteNews = () => {
                 </label>
               </div>
             ) : (
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="">Add Image</h3>
                 <input
                   type="file"
@@ -143,8 +143,8 @@ const WriteNews = () => {
                 </label>
               </div>
             )}
-            <div className="wns-box my20 py20">
-              <div className="d-flex jcsb">
+            <div className="wns-box das-my20 das-py20">
+              <div className="das-d-flex das-jcsb">
                 <h3 className="">Add Description</h3>
                 <div
                   className="upload-system-files br5 cp"
@@ -163,9 +163,9 @@ const WriteNews = () => {
               />
             </div>
 
-            <div className="wns-box my20 py20">
+            <div className="wns-box das-my20 das-py20">
               <h3 className="">Add Tags</h3>
-              <form onSubmit={handleTags} className="d-flex pt10">
+              <form onSubmit={handleTags} className="das-d-flex pt10">
                 <input
                   type="text"
                   placeholder="Ex. Chandrababu, Pawan Kalyan, Andhra Pradesh"
@@ -193,7 +193,7 @@ const WriteNews = () => {
             </div>
 
             <div className="other-details">
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="">Category</h3>
                 <select
                   name=""
@@ -213,7 +213,7 @@ const WriteNews = () => {
                   <option value="reviews">Reviews</option>
                 </select>
               </div>
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="">Sub Category</h3>
                 <select
                   name=""
@@ -327,7 +327,7 @@ const WriteNews = () => {
             </div>
 
             {category === "reviews" && <div className="other-details">
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="">Movie Rating</h3>
                 <select
                   name=""

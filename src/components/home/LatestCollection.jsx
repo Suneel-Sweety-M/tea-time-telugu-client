@@ -71,12 +71,12 @@ const LatestCollection = () => {
                   {collection?.category}
                 </span>
                 <h3 className="latest-collection-title">{collection?.title}</h3>
-                <p
+                {/* <p
                   className="latest-collection-description dynamic-desc"
                   dangerouslySetInnerHTML={{
                     __html: collection?.description,
                   }}
-                />
+                /> */}
               </div>
             </Link>
           ))}

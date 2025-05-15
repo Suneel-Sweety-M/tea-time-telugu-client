@@ -42,9 +42,9 @@ const LatestStories = () => {
                     className="post-image"
                   />
                 </figure>
-                <div className="post-content">
-                  <span className="post-category"></span>
-                  <h3 className="post-title"></h3>
+                <div className="snlc-title p20">
+                  <div className="snlc-text"></div>
+                  <div className="snlc-half-text"></div>
                 </div>
               </div>
             </article>

@@ -136,12 +136,12 @@ const Profile = () => {
 
   return (
     <>
-      <div className="write-news-container das-profile-container my20">
+      <div className="write-news-container das-profile-container das-my20">
         <div className="das-news-container">
           <div className="das-news-container-title">My Profile</div>
           <div className="add-writer-form">
             <div className="add-writer-form-left dfc">
-              <div className="add-writer-form-img-section d-flex fdc">
+              <div className="add-writer-form-img-section das-d-flex fdc">
                 <label htmlFor="profilePic">
                   {preview ? (
                     <img
@@ -216,7 +216,7 @@ const Profile = () => {
                   readOnly
                 />
               </div>
-              <div className="das-profile-btns d-flex w100">
+              <div className="das-profile-btns das-d-flex w100">
                 <button
                   className="add-writer-btn btn"
                   onClick={() => setUpdate("details")}

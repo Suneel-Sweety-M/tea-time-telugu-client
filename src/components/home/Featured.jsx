@@ -16,7 +16,7 @@ const Featured = () => {
       try {
         const res = await getHomeGridPosts();
         if (res?.status === "success") {
-          setGridNews(res?.news?.reverse());
+          setGridNews(res?.news);
         } else {
           toast.error(res?.message || "Something went wrong!");
         }

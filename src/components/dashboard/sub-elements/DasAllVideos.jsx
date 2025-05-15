@@ -63,14 +63,14 @@ const DasAllVideos = () => {
     <>
       <div className="das-news-container">
         <i
-          className="fa fa-plus float-right cp fs22"
+          className="fa fa-plus das-float-right cp fs22"
           onClick={() => setPopupBox(true)}
         ></i>
         <div className="das-news-container-title">All Videos</div>
         {!isLoading ? (
           <div>
             {videos?.length > 0 ? (
-              <div className="das-all-videos-container mt20">
+              <div className="das-all-videos-container das-mt20">
                 {videos.map((item, index) => (
                   <div className="das-video-card box-shadow" key={index}>
                     <img
@@ -106,7 +106,7 @@ const DasAllVideos = () => {
             )}
           </div>
         ) : (
-          <div className="das-all-videos-container mt20">
+          <div className="das-all-videos-container das-mt20">
             {[...Array(8)].map((_, index) => (
               <div className="das-video-card box-shadow" key={index}>
                 <img
@@ -126,19 +126,19 @@ const DasAllVideos = () => {
         <div className="popup-news-container popup-container">
           <div className="br5 popup-img p10">
             <div className="das-news-container">
-              <div className="popup-news-top d-flex jcsb">
+              <div className="popup-news-top das-d-flex das-jcsb">
                 <div className="das-news-container-title">
                   Are you sure want to delete ?
                 </div>
-                <span className="popup-news-top-x mx20">
+                <span className="popup-news-top-x das-mx20">
                   <i
                     className="fa fa-xmark"
                     onClick={() => setDeletePopup(false)}
                   ></i>
                 </span>
               </div>
-              <div className="das-all-news-bottom mt20">
-                <div className="news-popup-btns mx10">
+              <div className="das-all-news-bottom das-mt20">
+                <div className="news-popup-btns das-mx10">
                   <button className="btn" onClick={handleDeleteCancel}>
                     Cancel
                   </button>

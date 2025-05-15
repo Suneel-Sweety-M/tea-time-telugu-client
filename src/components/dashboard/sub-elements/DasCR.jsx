@@ -229,12 +229,12 @@ const DasCR = () => {
 
   return (
     <>
-      <div className="box-shadow m20 p10">
+      <div className="box-shadow das-m20 p10">
         <h1>Collections & Releases</h1>
       </div>
-      <div className="m20 p10 d-flex main-duo-con">
-        <div className="box-shadow duo-con-50 br5 mr20">
-          <h2 className="py20 tac">Movie Releases</h2>
+      <div className="das-m20 p10 das-d-flex main-duo-con">
+        <div className="box-shadow duo-con-50 br5 das-mr20">
+          <h2 className="das-py20 text-center">Movie Releases</h2>
           {allReleases?.length > 0 ? (
             <div className="movie-schedules-section">
               <div className="current-schedules">
@@ -275,18 +275,18 @@ const DasCR = () => {
                     }}
                     onClick={() => addUpdateRelease(item)}
                   >
-                    <span className="tac">{item?.movie}</span>
+                    <span className="text-center">{item?.movie}</span>
                     <span>{item?.date}</span>
                   </div>
                 ))}
               </div>
             </div>
           ) : (
-            <p className="tac mb20">No data exist</p>
+            <p className="text-center das-mb20">No data exist</p>
           )}
         </div>
         <div className="box-shadow duo-con-50 br5">
-          <h2 className="py20 tac">Movie Collections</h2>
+          <h2 className="das-py20 text-center">Movie Collections</h2>
           {allCollections?.length > 0 ? (
             <div className="movie-schedules-section">
               <div className="current-schedules">
@@ -344,24 +344,24 @@ const DasCR = () => {
                     }}
                     onClick={() => addUpdateCollection(item)}
                   >
-                    <span className="tac">{item?.movie}</span>
+                    <span className="text-center">{item?.movie}</span>
                     <span>₹ {item?.amount}</span>
                   </div>
                 ))}
               </div>
             </div>
           ) : (
-            <p className="tac mb20">No data exist</p>
+            <p className="text-center das-mb20">No data exist</p>
           )}
         </div>
       </div>
 
-      <div className="m20 p10 d-flex main-duo-con">
+      <div className="das-m20 p10 das-d-flex main-duo-con">
         {updateRelease?.id === "" ? (
-          <div className="box-shadow duo-con-50 mr20 br5">
-            <h2 className="py20 tac">Add Movie Release</h2>
-            <div className="mx20">
-              <div className="wns-box my20 py20">
+          <div className="box-shadow duo-con-50 das-mr20 br5">
+            <h2 className="das-py20 text-center">Add Movie Release</h2>
+            <div className="das-mx20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Movie / Series Name</h3>
                 <input
                   type="text"
@@ -371,7 +371,7 @@ const DasCR = () => {
                   onChange={(e) => setMovie(e.target.value)}
                 />
               </div>
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Release Date</h3>
                 <input
                   type="text"
@@ -382,7 +382,7 @@ const DasCR = () => {
                 />
               </div>
 
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Sub Category</h3>
                 <select
                   name=""
@@ -397,7 +397,7 @@ const DasCR = () => {
                 </select>
               </div>
 
-              <div className="other-details mb20">
+              <div className="other-details das-mb20">
                 <div></div>
                 {!isSaving ? (
                   <div className="post-news-btn btn" onClick={onSubmit1}>
@@ -412,10 +412,10 @@ const DasCR = () => {
             </div>
           </div>
         ) : (
-          <div className="box-shadow duo-con-50 mr20 br5">
-            <h2 className="py20 tac">Update Movie Release</h2>
-            <div className="mx20">
-              <div className="wns-box my20 py20">
+          <div className="box-shadow duo-con-50 das-mr20 br5">
+            <h2 className="das-py20 text-center">Update Movie Release</h2>
+            <div className="das-mx20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Movie / Series Name</h3>
                 <input
                   type="text"
@@ -426,7 +426,7 @@ const DasCR = () => {
                   onChange={handleURChange}
                 />
               </div>
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Release Date</h3>
                 <input
                   type="text"
@@ -438,7 +438,7 @@ const DasCR = () => {
                 />
               </div>
 
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Sub Category</h3>
                 <select
                   name="category"
@@ -453,9 +453,9 @@ const DasCR = () => {
                 </select>
               </div>
 
-              <div className="other-details mb20">
+              <div className="other-details das-mb20">
                 <div className="btn">
-                  <span className="mr20" onClick={cancelURChange}>
+                  <span className="das-mr20" onClick={cancelURChange}>
                     Cancel
                   </span>
                   <span className="color-red">
@@ -481,9 +481,9 @@ const DasCR = () => {
 
         {updateCollection?.id === "" ? (
           <div className="box-shadow duo-con-50 br5">
-            <h2 className="py20 tac">Add Movie Collection</h2>
-            <div className="mx20">
-              <div className="wns-box my20 py20">
+            <h2 className="das-py20 text-center">Add Movie Collection</h2>
+            <div className="das-mx20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Movie / Series Name</h3>
                 <input
                   type="text"
@@ -493,7 +493,7 @@ const DasCR = () => {
                   onChange={(e) => setMovie2(e.target.value)}
                 />
               </div>
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Amount (In ₹)</h3>
                 <input
                   type="text"
@@ -504,7 +504,7 @@ const DasCR = () => {
                 />
               </div>
 
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Category</h3>
                 <select
                   name=""
@@ -520,7 +520,7 @@ const DasCR = () => {
                 </select>
               </div>
 
-              <div className="other-details mb20">
+              <div className="other-details das-mb20">
                 <div></div>
                 {!isSaving2 ? (
                   <div className="post-news-btn btn" onClick={onSubmit2}>
@@ -536,9 +536,9 @@ const DasCR = () => {
           </div>
         ) : (
           <div className="box-shadow duo-con-50 br5">
-            <h2 className="py20 tac">Update Movie Collection</h2>
-            <div className="mx20">
-              <div className="wns-box my20 py20">
+            <h2 className="das-py20 text-center">Update Movie Collection</h2>
+            <div className="das-mx20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Movie / Series Name</h3>
                 <input
                   type="text"
@@ -549,7 +549,7 @@ const DasCR = () => {
                   onChange={handleUCChange}
                 />
               </div>
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Add Amount (In ₹)</h3>
                 <input
                   type="text"
@@ -561,7 +561,7 @@ const DasCR = () => {
                 />
               </div>
 
-              <div className="wns-box my20 py20">
+              <div className="wns-box das-my20 das-py20">
                 <h3 className="text-start">Category</h3>
                 <select
                   name="category"
@@ -577,9 +577,9 @@ const DasCR = () => {
                 </select>
               </div>
 
-              <div className="other-details mb20">
+              <div className="other-details das-mb20">
                 <div className="btn">
-                  <span className="mr20" onClick={cancelUCChange}>
+                  <span className="das-mr20" onClick={cancelUCChange}>
                     Cancel
                   </span>
                   <span className="color-red">

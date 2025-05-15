@@ -121,7 +121,7 @@ const DasTopNine = () => {
     <>
       <div className="das-news-container">
         <i
-          className="fa fa-pen-to-square float-right cp"
+          className="fa fa-pen-to-square das-float-right cp"
           onClick={() => setPopupNews(true)}
         ></i>
         <div className="das-news-container-title">Top 9</div>
@@ -188,9 +188,9 @@ const DasTopNine = () => {
         <div className="popup-news-container popup-container">
           <div className="br5 popup-img p10">
             <div className="das-news-container">
-              <div className="popup-news-top d-flex jcsb">
+              <div className="popup-news-top das-d-flex das-jcsb">
                 <div className="das-news-container-title">Select Top 9</div>
-                <span className="popup-news-top-x mx20">
+                <span className="popup-news-top-x das-mx20">
                   <i
                     className="fa fa-xmark"
                     onClick={() => setPopupNews(false)}
@@ -240,7 +240,7 @@ const DasTopNine = () => {
               </table>
 
               <div className="das-all-news-bottom">
-                <div className="news-popup-btns mx10">
+                <div className="news-popup-btns das-mx10">
                   {!isUploading ? (
                     <button className="btn save-btn" onClick={handleSave}>
                       Save

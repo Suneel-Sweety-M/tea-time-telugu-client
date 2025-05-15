@@ -91,7 +91,7 @@ const MovieCollections = () => {
                 display: collectionsCategory !== item?.category && "none",
               }}
             >
-              <span className="tac ms-text">{item?.movie}</span>
+              <span className="text-center ms-text">{item?.movie}</span>
               <span className="ms-text">₹ {item?.amount}</span>
             </div>
           ))}

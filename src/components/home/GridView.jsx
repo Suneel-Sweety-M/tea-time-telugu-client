@@ -73,12 +73,12 @@ const GridView = () => {
                     {moment(movie?.createdAt).format("MMM DD, YYYY")}
                   </span>
                   <h3 className="movie-title">{movie?.title}</h3>
-                  <p
+                  {/* <p
                     className="movie-description dynamic-desc"
                     dangerouslySetInnerHTML={{
                       __html: movie?.description,
                     }}
-                  />
+                  /> */}
                 </div>
               </Link>
             </article>

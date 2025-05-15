@@ -154,13 +154,13 @@
 .single-category-post-title {
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   line-height: 1.4;
   color: #333;
 }
 
 .single-category-post:hover .single-category-post-title {
-  color: #d32f2f;
+  color: #ff5e62;
   text-decoration: underline;
 }
 
