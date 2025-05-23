@@ -92,7 +92,7 @@ const DasAllVideos = () => {
                         <i className="fa fa-eye"></i> <span>View</span>
                       </Link>
                       <div
-                        className="das-video-card-btn delete-btn"
+                        className="das-video-card-btn das-delete-btn"
                         onClick={() => handleDeletePopup(item?._id)}
                       >
                         <i className="fa fa-trash"></i> <span>Delete</span>

@@ -235,6 +235,8 @@ const NewsComments = ({ news, getNews, setCommentsCount }) => {
           ...prev,
           [parentCommentId]: { ...prev[parentCommentId], replyText: "" },
         }));
+      } else {
+        toast.error(res?.message);
       }
     } catch (error) {
       console.log(error);

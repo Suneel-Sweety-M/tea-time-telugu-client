@@ -27,7 +27,7 @@ const UploadFile = ({ setIsUpload }) => {
   const submitFile = async () => {
     try {
       setIsUploading(true);
-      console.log('Selected file:', file); // Check if file exists
+      console.log("Selected file:", file); // Check if file exists
 
       const formData = new FormData();
       formData.append("file", file);
@@ -56,7 +56,7 @@ const UploadFile = ({ setIsUpload }) => {
       }
       setFile(f);
       console.log(file);
-      
+
       submitFile();
     } catch (error) {
       console.log(error);
@@ -76,7 +76,7 @@ const UploadFile = ({ setIsUpload }) => {
         <input
           type="file"
           accept="image/*"
-          multiple
+          multiple={false}
           onChange={(e) => addFile(e.target.files[0])}
           style={{ display: "none" }}
           id="image"

@@ -337,7 +337,8 @@ a {
   right: 25px;
   bottom: 25px;
   cursor: pointer;
-  color: #777;
+  color: #777 !important;
+  font-size: 18px !important;
 }
 
 /* Buttons */
