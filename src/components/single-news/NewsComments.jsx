@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   addNewsComment,
@@ -17,7 +17,7 @@ import moment from "moment";
 
 const NewsComments = ({ news, getNews, setCommentsCount }) => {
   // const [showReplyBox, setShowReplyBox] = useState(false);
-  const { id } = useParams();
+  const id = news?._id;
   const { user } = useSelector((state) => state.user);
   const [allComments, setAllComments] = useState([]);
   const [directComments, setdirectComments] = useState([]);
@@ -76,7 +76,7 @@ const NewsComments = ({ news, getNews, setCommentsCount }) => {
 
   const fetchComments = useCallback(async () => {
     try {
-      const res = await getNewsComments(id);
+      const res = await getNewsComments(news?._id);
       if (res?.status !== "success") {
         toast.error(res?.message);
       } else {
@@ -92,7 +92,7 @@ const NewsComments = ({ news, getNews, setCommentsCount }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [id, setCommentsCount]);
+  }, [news, setCommentsCount]);
 
   const toggleReply = (commentId) => {
     setReplyInputs((prev) => ({
@@ -647,6 +647,15 @@ const NewsComments = ({ news, getNews, setCommentsCount }) => {
             <p className="cp" onClick={() => setIsUserJoin(!isUserJoin)}>
               Signin as {isUserJoin ? "Writer/Admin" : "user"}
             </p>{" "}
+            {!isUserJoin && (
+              <Link
+                to={"/forgot-password"}
+                className="cp"
+                onClick={() => setJoinPopup(false)}
+              >
+                <p>Forgot password?</p>
+              </Link>
+            )}
           </div>
         </div>
       )}

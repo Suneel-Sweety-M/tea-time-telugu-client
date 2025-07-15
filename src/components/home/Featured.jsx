@@ -80,7 +80,7 @@ const Featured = () => {
 const FeaturedItem = ({ item, isMain }) => {
   return (
     <Link
-      to={`/${item?.category}/${item?._id}`}
+      to={`/${item?.category}/${item?.newsId}`}
       className={`featured-news-container ${isMain ? "main-featured" : ""}`}
       key={item?._id}
     >

@@ -110,7 +110,7 @@ const HomeFiveGallery = () => {
   };
 
   const handleView = (news) => {
-    navigate(`/${news?.category}/${news?._id}`);
+    navigate(`/${news?.category}/${news?.newsId}`);
   };
 
   useEffect(() => {

@@ -24,3 +24,4 @@ yarn-error.log*
 
 # I added
 node_modules/
+.env

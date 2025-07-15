@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import SectionTitle from "../titles/SectionTitle";
 import Trailers from "../trailers/Trailers";
 import LatestStories from "../home/LatestStories";
 import { toast } from "react-toastify";
-import { getVideo, getNewsShortAd } from "../../helper/apis";
+import { getNewsShortAd, getVideoByNewsId } from "../../helper/apis";
 import moment from "moment";
 
 const SingleVideoContainer = () => {
@@ -12,16 +12,19 @@ const SingleVideoContainer = () => {
   const [videoData, setVideoData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const getVideoData = async () => {
       setIsLoading(true);
       try {
-        const res = await getVideo(vid);
+        const res = await getVideoByNewsId(vid);
         if (res?.status === "success") {
           setVideoData(res?.data);
           document.title = `${res?.data?.video?.title}`;
         } else {
           toast.error(res?.message);
+          navigate(`/videos`);
         }
         setIsLoading(false);
       } catch (error) {
@@ -30,7 +33,8 @@ const SingleVideoContainer = () => {
     };
 
     getVideoData();
-  }, [vid]);
+  }, [vid, navigate]);
+
   // const [newsLongAdImg, setNewsLongAdImg] = useState("");
   // const [newsLongAdLink, setNewsLongAdLink] = useState("");
   const [newsShortAdImg, setNewsShortAdImg] = useState("");
@@ -89,7 +93,7 @@ const SingleVideoContainer = () => {
               <div className="all-category-posts-container">
                 {videoData?.similarPosts?.map((item, index) => (
                   <Link
-                    to={`/videos/v/${item?._id}`}
+                    to={`/videos/v/${item?.newsId}`}
                     className="single-category-post"
                     aria-label={`Watch v`}
                     key={index}
@@ -126,7 +130,7 @@ const SingleVideoContainer = () => {
                   <div className="sv-suggested-posts">
                     {videoData?.suggestedPosts?.map((item, index) => (
                       <Link
-                        to={`/videos/v/${item?._id}`}
+                        to={`/videos/v/${item?.newsId}`}
                         className="sv-suggested-post"
                         key={index}
                       >
@@ -148,7 +152,7 @@ const SingleVideoContainer = () => {
                   <div className="sv-suggested-posts">
                     {videoData?.videoSongs?.map((item, index) => (
                       <Link
-                        to={`/videos/v/${item?._id}`}
+                        to={`/videos/v/${item?.newsId}`}
                         className="sv-suggested-post"
                         key={index}
                       >
@@ -170,7 +174,7 @@ const SingleVideoContainer = () => {
                   <div className="sv-suggested-posts">
                     {videoData?.relatedPosts?.map((item, index) => (
                       <Link
-                        to={`/videos/v/${item?._id}`}
+                        to={`/videos/v/${item?.newsId}`}
                         className="sv-suggested-post"
                         key={index}
                       >
@@ -233,15 +237,15 @@ const SingleVideoContainer = () => {
               </div>
               <LatestStories />
               <a href={newsShortAdLink} target="blank">
-              <img
-                src={
-                  newsShortAdImg ||
-                  "https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
-                }
-                alt="ad"
-                className="ad-img br5 cp"
-              />
-            </a>
+                <img
+                  src={
+                    newsShortAdImg ||
+                    "https://res.cloudinary.com/demmiusik/image/upload/v1741353625/Ad2_jpiggx.png"
+                  }
+                  alt="ad"
+                  className="ad-img br5 cp"
+                />
+              </a>
             </div>
           </div>
         </div>

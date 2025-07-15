@@ -604,7 +604,16 @@ const Navbar = () => {
             )}
             <p className="cp" onClick={() => setIsUserJoin(!isUserJoin)}>
               Signin as {isUserJoin ? "Writer/Admin" : "user"}
-            </p>{" "}
+            </p>
+            {!isUserJoin && (
+              <Link
+                to={"/forgot-password"}
+                className="cp"
+                onClick={() => setIsJoin(false)}
+              >
+                <p>Forgot password?</p>
+              </Link>
+            )}
           </div>
         </div>
       )}

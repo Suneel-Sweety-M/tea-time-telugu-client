@@ -31,7 +31,7 @@ const HomeReviews = () => {
         <div className="home-review-grid">
           {news?.slice(0, 4)?.map((review) => (
             <Link
-              to={`/${review?.category}/${review?._id}`}
+              to={`/${review?.category}/${review?.newsId}`}
               key={review?._id}
               className="home-review-card"
               aria-label={`Read ${review?.title} review`}

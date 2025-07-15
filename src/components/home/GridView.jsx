@@ -56,7 +56,7 @@ const GridView = () => {
           {news.slice(5, 9).map((movie) => (
             <article key={movie?._id} className="movie-card">
               <Link
-                to={`/${movie?.category}/${movie?._id}`}
+                to={`/${movie?.category}/${movie?.newsId}`}
                 className="movie-link"
               >
                 <figure className="movie-image-container">

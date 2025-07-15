@@ -6,7 +6,7 @@ import LatestStories from "../components/home/LatestStories";
 import SectionTitle from "../components/titles/SectionTitle";
 import NewsComments from "../components/single-news/NewsComments";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getNewsShortAd, getSingleNews } from "../helper/apis";
+import { getNewsShortAd, getSingleNewsByNewsId } from "../helper/apis";
 import moment from "moment";
 import { toast } from "react-toastify";
 
@@ -20,13 +20,9 @@ const SingleNews = () => {
   const [commentsCount, setCommentsCount] = useState(0);
 
   const getNews = useCallback(async () => {
-    if (!id || id.length !== 24) {
-      return navigate("/");
-    }
-
     try {
       setIsLoading(true);
-      const res = await getSingleNews(id);
+      const res = await getSingleNewsByNewsId(id); 
       if (res?.status === "success") {
         setNews(res?.news);
 
@@ -122,7 +118,7 @@ const SingleNews = () => {
                 getNews={getNews}
                 setCommentsCount={setCommentsCount}
               />
-            </div>
+            </div> 
           ) : (
             <div className="single-news-loading-container single-news-duo-left">
               <div className="snlc-title">

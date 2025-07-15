@@ -59,7 +59,7 @@ const TopNine = () => {
           {topNineNews.map((post, index) => (
             <article key={post?._id} className="top-nine-post">
               <Link
-                to={`/${post?.category}/${post?._id}`}
+                to={`/${post?.category}/${post?.newsId}`}
                 className="top-nine-link"
               >
                 <div className="post-rank">{index + 1}</div>

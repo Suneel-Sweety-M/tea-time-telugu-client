@@ -53,7 +53,7 @@ const LatestCollection = () => {
         <div className="latest-collection-grid">
           {news?.slice(0, 9)?.map((collection) => (
             <Link
-              to={`/${collection?.category}/${collection?._id}`}
+              to={`/${collection?.category}/${collection?.newsId}`}
               key={collection?._id}
               className="latest-collection-card"
               aria-label={`View ${collection?.title}`}

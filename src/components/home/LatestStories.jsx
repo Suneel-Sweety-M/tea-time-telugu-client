@@ -60,7 +60,7 @@ const LatestStories = () => {
                 className="top-nine-post latest-stories-post"
               >
                 <Link
-                  to={`/${post?.category}/${post?._id}`}
+                  to={`/${post?.category}/${post?.newsId}`}
                   className="top-nine-link"
                 >
                   <figure className="post-image-container">

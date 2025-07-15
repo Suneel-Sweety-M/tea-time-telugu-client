@@ -86,7 +86,7 @@ const DasAllVideos = () => {
                     </div>
                     <div className="das-video-card-btns">
                       <Link
-                        to={`/${item?.category}/video/${item?._id}`}
+                        to={`/${item?.category}/v/${item?.newsId}`}
                         className="das-video-card-btn view-btn"
                       >
                         <i className="fa fa-eye"></i> <span>View</span>

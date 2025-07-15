@@ -4,7 +4,7 @@ import Footer from "../components/footer/Footer";
 import LatestStories from "../components/home/LatestStories";
 import SectionTitle from "../components/titles/SectionTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getNewsShortAd, getSingleGallery } from "../helper/apis";
+import { getNewsShortAd, getSingleGalleryByNewsId } from "../helper/apis";
 import moment from "moment";
 import { toast } from "react-toastify";
 
@@ -47,7 +47,7 @@ const GalleryShow = () => {
     }
     setIsLoading(true);
     try {
-      const res = await getSingleGallery(id);
+      const res = await getSingleGalleryByNewsId(id); 
       if (res?.status === "success") {
         setGallery(res?.gallery);
         document.title = `${res?.gallery?.title}`;
@@ -287,7 +287,7 @@ const GalleryShow = () => {
             <div className="latest-collection-grid">
               {suggestedPosts?.slice(0, 9)?.map((collection) => (
                 <Link
-                  to={`/gallery/${collection?._id}`}
+                  to={`/gallery/${collection?.newsId}`}
                   key={collection?._id}
                   className="latest-collection-card"
                   aria-label={`View ${collection?.title}`}

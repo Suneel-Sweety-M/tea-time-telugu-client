@@ -71,7 +71,7 @@ const Trends = () => {
         <div className="trends-section">
           <div className="trends-left">
             <Link
-              to={`/${mainTrends?.category}/${mainTrends?._id}`}
+              to={`/${mainTrends?.category}/${mainTrends?.newsId}`}
               className="trends-post cp"
             >
               <img
@@ -99,7 +99,7 @@ const Trends = () => {
           <div className="trends-right">
             {otherTrends.slice(1, 5).map((item, index) => (
               <Link
-                to={`/${item?.category}/${item?._id}`}
+                to={`/${item?.category}/${item?.newsId}`}
                 className="trends-post cp"
                 key={index}
               >

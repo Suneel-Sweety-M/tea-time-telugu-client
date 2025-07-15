@@ -74,6 +74,10 @@ const Home = () => {
 
     if (!lastShownTime || currentTime - lastShownTime >= 600000) {
       setPoster(true);
+      const timeoutId = setTimeout(() => {
+        closePopup();
+      }, 10000);
+      return () => clearTimeout(timeoutId);
     }
     document.title = "Telugu News on AP and TS Politics, Movies and Gossips";
     handleGetMoviePoster();

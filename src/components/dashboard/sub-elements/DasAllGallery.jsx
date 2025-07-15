@@ -63,7 +63,7 @@ const DasAllGallery = () => {
   };
 
   const handleView = (item) => {
-    navigate(`/gallery/${item?._id}`);
+    navigate(`/gallery/${item?.newsId}`);
   };
 
   const handleDeletePopup = async (id) => {

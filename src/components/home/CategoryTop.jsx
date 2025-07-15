@@ -41,7 +41,7 @@ const CategoryTop = () => {
           <div className="category-top-grid">
             {moviesNews?.slice(0, 3)?.map((post) => (
               <Link
-                to={`/${post?.category}/${post?._id}`}
+                to={`/${post?.category}/${post?.newsId}`}
                 key={post?._id}
                 className="category-top-card"
                 aria-label={`Read ${post?.title}`}
@@ -92,7 +92,7 @@ const CategoryTop = () => {
           <div className="category-top-grid">
             {politicalNews?.slice(0, 3)?.map((post) => (
               <Link
-                to={`/${post?.category}/${post?._id}`}
+                to={`/${post?.category}/${post?.newsId}`}
                 key={post?._id}
                 className="category-top-card"
                 aria-label={`Read ${post?.title}`}
@@ -143,7 +143,7 @@ const CategoryTop = () => {
           <div className="category-top-grid">
             {gossipsNews?.slice(0, 3)?.map((post) => (
               <Link
-                to={`/${post?.category}/${post?._id}`}
+                to={`/${post?.category}/${post?.newsId || post?._id}`}
                 key={post?._id}
                 className="category-top-card"
                 aria-label={`Read ${post?.title}`}

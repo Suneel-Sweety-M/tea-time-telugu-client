@@ -53,8 +53,8 @@ const MostViewed = () => {
         <div className="most-viewed-grid">
           {news?.slice(9, 15)?.map((article) => (
             <Link
-              to="/"
-              key={article?._id}
+              to={`/${article?.category}/${article?.newsId}`}
+              key={article?.newsId}
               className="most-viewed-card"
               aria-label={`Read ${article?.title}`}
             >

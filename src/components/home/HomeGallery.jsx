@@ -50,7 +50,7 @@ const HomeGallery = () => {
         <div className="gallery-grid">
           {homeGalleryNews?.slice(0, 5)?.map((item) => (
             <Link
-              to={`/gallery/${item?._id}`}
+              to={`/gallery/${item?.newsId}`}
               key={item?._id}
               className="gallery-card"
               aria-label={`View ${item?.name} gallery`}

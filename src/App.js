@@ -33,6 +33,8 @@ import { useEffect } from "react";
 import { getLoggedinUser } from "./helper/apis";
 import { login } from "./redux/userSlice";
 import Search from "./pages/Search";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -55,9 +57,11 @@ function App() {
   }, [dispatch, location]);
   return (
     <>
-      <ToastContainer />
+      <ToastContainer /> 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

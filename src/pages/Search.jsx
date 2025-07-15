@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
 import TabTitle from "../components/titles/TabTitle";
@@ -12,27 +12,94 @@ const Search = () => {
   const { search } = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(search);
-  const q = queryParams.get("q");
+  const q = queryParams.get("q") || "";
 
-  const [searchText, setSearchText] = useState(q || "");
-  const [searchData, setSearchData] = useState({});
-  const [visiblePosts, setVisiblePosts] = useState(8);
+  const [searchText, setSearchText] = useState(q);
+  const [debouncedSearchText, setDebouncedSearchText] = useState(q);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const limit = 9;
 
-  // Debounced search text for live search
-  const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
+  // ✅ categories are stable
+  const categories = useMemo(
+    () => [
+      { key: "news", title: "News" },
+      { key: "politics", title: "Politics" },
+      { key: "movies", title: "Movies" },
+      { key: "ott", title: "OTT" },
+      { key: "gossips", title: "Gossips" },
+      { key: "reviews", title: "Reviews" },
+      { key: "collections", title: "Collections" },
+      { key: "shows", title: "Shows" },
+      { key: "gallery", title: "Gallery" },
+      { key: "videos", title: "Videos" },
+    ],
+    []
+  );
 
-  // Debounce the search input
+  const [searchData, setSearchData] = useState(() =>
+    categories.reduce((acc, c) => {
+      acc[c.key] = { items: [], skip: 0, hasMore: true };
+      return acc;
+    }, {})
+  );
+
+  // ✅ debounce search input
   useEffect(() => {
-    const handler = setTimeout(() => {
+    const timer = setTimeout(() => {
       setDebouncedSearchText(searchText);
     }, 500);
-    return () => clearTimeout(handler);
+    return () => clearTimeout(timer);
   }, [searchText]);
 
-  // Function to handle search submission
-  const handleSearch = async (e) => {
+  // ✅ stable function to fetch a category
+  const fetchCategoryResults = useCallback(async (categoryKey, term, customSkip = 0) => {
+    try {
+      setIsLoading(true);
+      const res = await getSearchNews(term, customSkip, limit);
+      if (res?.status === "success") {
+        const categoryResult = res.data[categoryKey];
+        if (categoryResult) {
+          setSearchData((prev) => {
+            const old = prev[categoryKey];
+            const newSkip = customSkip + limit;
+            return {
+              ...prev,
+              [categoryKey]: {
+                items: customSkip === 0 ? categoryResult.items : [...old.items, ...categoryResult.items],
+                skip: newSkip,
+                hasMore: newSkip < categoryResult.total,
+              },
+            };
+          });
+        }
+      } else {
+        toast.error(res?.message || `Failed to fetch ${categoryKey}`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(`Error fetching ${categoryKey}`);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []); // ✅ no searchData here, use functional setState
+
+  // ✅ fetch all categories
+  const fetchAllCategories = useCallback((term) => {
+    // reset data before fetching
+    setSearchData(
+      categories.reduce((acc, c) => {
+        acc[c.key] = { items: [], skip: 0, hasMore: true };
+        return acc;
+      }, {})
+    );
+    categories.forEach((cat) => {
+      fetchCategoryResults(cat.key, term, 0);
+    });
+  }, [categories, fetchCategoryResults]);
+
+  // ✅ handle submit
+  const handleSearch = (e) => {
     e.preventDefault();
     if (!searchText.trim()) {
       toast.info("Please enter a search term!");
@@ -40,87 +107,52 @@ const Search = () => {
     }
     setHasSearched(true);
     navigate(`/search?q=${encodeURIComponent(searchText)}`);
+    fetchAllCategories(searchText);
   };
 
-  // Fetch search results based on query
-  const fetchSearchResults = useCallback(async () => {
+  // ✅ trigger search on mount or query change
+  useEffect(() => {
     if (debouncedSearchText.trim()) {
-      setIsLoading(true);
-      try {
-        const res = await getSearchNews(debouncedSearchText);
-        if (res?.status === "success") {
-          setSearchData(res?.data || {});
-        } else {
-          toast.error(res?.message || "Failed to fetch search results");
-          setSearchData({});
-        }
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-        toast.error("Something went wrong while fetching results!");
-        setSearchData({});
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      setSearchData({});
+      setHasSearched(true);
+      fetchAllCategories(debouncedSearchText);
     }
-  }, [debouncedSearchText]);
+  }, [debouncedSearchText, fetchAllCategories]);
 
-  // Update document title
-  useEffect(() => {
-    document.title = debouncedSearchText
-      ? `Search - ${debouncedSearchText}`
-      : "Search";
-  }, [debouncedSearchText]);
-
-  // Fetch results when debounced search text changes
-  useEffect(() => {
-    fetchSearchResults();
-  }, [fetchSearchResults]);
-
-  // Function to load more posts
-  const loadMorePosts = () => {
-    setVisiblePosts((prev) => prev + 8);
-  };
-
-  const renderPosts = (category) => {
-    const categoryData = searchData[category] || [];
-
-    if (categoryData.length === 0) return null;
-
+  const renderPosts = (categoryKey, title) => {
+    const cat = searchData[categoryKey];
+    if (!cat.items.length) return null;
     return (
-      <div className="videos-category-container" key={category}>
-        <SectionTitle
-          title={category.charAt(0).toUpperCase() + category.slice(1)}
-          nav={`/${category}`}
-        />
+      <div className="videos-category-container" key={categoryKey}>
+        <SectionTitle title={title} />
         <div className="all-category-posts-container">
-          {categoryData.slice(0, visiblePosts).map((item) => (
+          {cat.items.map((item) => (
             <Link
-              key={item?._id}
-              to={`/${item?.category}/${item?._id}`}
+              key={item._id}
+              to={
+                categoryKey === "gallery"
+                  ? `/gallery/${item.newsId}`
+                  : categoryKey === "videos"
+                  ? `/videos/v/${item.newsId}`
+                  : `/${item.category}/${item.newsId}`
+              }
               className="single-category-post"
-              aria-label={`View ${item?.title}`}
             >
               <div className="video-thumbnail-container">
                 <img
                   src={
-                    category === "gallery"
-                      ? item?.galleryPics[0]?.url
-                      : item?.mainUrl
+                    categoryKey === "gallery"
+                      ? item.galleryPics?.[0]?.url
+                      : item.mainUrl
                   }
-                  alt={item?.title}
+                  alt={item.title}
                   loading="lazy"
                   onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300x200?text=Image+Not+Available";
+                    e.target.src = "https://via.placeholder.com/300x200?text=Image+Not+Available";
                   }}
                 />
-                {category === "videos" && (
+                {categoryKey === "videos" && (
                   <div className="play-icon">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                   </div>
                 )}
               </div>
@@ -133,34 +165,20 @@ const Search = () => {
             </Link>
           ))}
         </div>
-        {visiblePosts < categoryData.length && (
-          <button className="load-more-btn" onClick={loadMorePosts}>
+        {cat.hasMore && (
+          <button
+            className="load-more-btn"
+            onClick={() => fetchCategoryResults(categoryKey, debouncedSearchText, cat.skip)}
+          >
             <span className="btn-text">Load More</span>
-            <span className="btn-icon">
-              <i className="fa-solid fa-arrow-rotate-right"></i>
-            </span>
+            <span className="btn-icon"><i className="fa-solid fa-arrow-rotate-right"></i></span>
           </button>
         )}
       </div>
     );
   };
 
-  const categories = [
-    "news",
-    "politics",
-    "movies",
-    "ott",
-    "gallery",
-    "videos",
-    "gossips",
-    "reviews",
-    "collections",
-    "shows",
-  ];
-
-  const hasResults = Object.values(searchData).some(
-    (category) => category?.length > 0
-  );
+  const hasResults = Object.values(searchData).some((cat) => cat.items.length > 0);
 
   return (
     <>
@@ -169,10 +187,7 @@ const Search = () => {
         <TabTitle title="Search" />
         <div className="search-page-container">
           <div className="search-container-top">
-            <form
-              onSubmit={handleSearch}
-              className="search-container-input-box"
-            >
+            <form onSubmit={handleSearch} className="search-container-input-box">
               <input
                 type="text"
                 placeholder="Search here..."
@@ -180,12 +195,7 @@ const Search = () => {
                 onChange={(e) => setSearchText(e.target.value)}
                 aria-label="Search input"
               />
-              <button
-                type="submit"
-                className="btn search-btn"
-                aria-label="Search"
-                disabled={isLoading}
-              >
+              <button type="submit" className="btn search-btn" disabled={isLoading}>
                 {isLoading ? "Searching..." : "Search"}
               </button>
             </form>
@@ -196,10 +206,10 @@ const Search = () => {
             )}
           </div>
 
-          {isLoading ? (
+          {isLoading && Object.values(searchData).every((c) => c.items.length === 0) ? (
             <div className="all-category-posts-container">
-              {[...Array(12)].map((_, index) => (
-                <div className="single-category-post box-shadow" key={index}>
+              {Array.from({ length: 9 }).map((_, i) => (
+                <div className="single-category-post box-shadow" key={i}>
                   <img
                     src="https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
                     alt="Loading placeholder"
@@ -209,7 +219,7 @@ const Search = () => {
             </div>
           ) : hasResults ? (
             <div className="all-videos-container">
-              {categories.map((category) => renderPosts(category))}
+              {categories.map((cat) => renderPosts(cat.key, cat.title))}
             </div>
           ) : (
             hasSearched && (
@@ -223,10 +233,6 @@ const Search = () => {
       <Footer />
     </>
   );
-};
-
-Search.propTypes = {
-  // Add any prop types if needed
 };
 
 export default Search;

@@ -1,79 +1,127 @@
 import React, { useEffect, useState } from "react";
 import SectionTitle from "../titles/SectionTitle";
 import { Link } from "react-router-dom";
-import { getAllCategoryVideos } from "../../helper/apis";
+import { getPaginatedCategoryVideos } from "../../helper/apis";
 import { toast } from "react-toastify";
 import moment from "moment";
 
 const AllVideos = () => {
-  const [videos, setVideos] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [visiblePosts, setVisiblePosts] = useState(8);
 
-  const fetchAllVideos = async () => {
-    setIsLoading(true);
+  const [categoryData, setCategoryData] = useState({
+    latestVideos: { items: [], skip: 0, hasMore: true },
+    trailers: { items: [], skip: 0, hasMore: true },
+    videoSongs: { items: [], skip: 0, hasMore: true },
+    lyricalVideos: { items: [], skip: 0, hasMore: true },
+    shows: { items: [], skip: 0, hasMore: true },
+    ott: { items: [], skip: 0, hasMore: true },
+    events: { items: [], skip: 0, hasMore: true },
+  });
+
+  // Map state keys to DB subCategory values
+  const getSubCategoryParam = (key) => {
+    switch (key) {
+      case "latestVideos":
+        return "latestVideos"; // special handling in backend
+      case "trailers":
+        return "trailers";
+      case "videoSongs":
+        return "video songs";
+      case "lyricalVideos":
+        return "lyrical videos";
+      case "shows":
+        return "shows";
+      case "ott":
+        return "ott";
+      case "events":
+        return "events";
+      default:
+        return "";
+    }
+  };
+
+  const fetchVideosByCategory = async (categoryKey) => {
+    const limit = 9;
+    const { skip, hasMore } = categoryData[categoryKey];
+    if (!hasMore) return;
+
     try {
-      document.title = "Videos";
-      const res = await getAllCategoryVideos();
+      setIsLoading(true);
+      const res = await getPaginatedCategoryVideos({
+        category: "videos",
+        subCategory: getSubCategoryParam(categoryKey),
+        skip,
+        limit,
+      });
 
       if (res?.status === "success") {
-        setVideos(res?.data || {}); // Ensure we always have an object
+        setCategoryData((prev) => {
+          const old = prev[categoryKey];
+          const newSkip = old.skip + limit;
+          return {
+            ...prev,
+            [categoryKey]: {
+              items: [...old.items, ...res.data.videos],
+              skip: newSkip,
+              hasMore: newSkip < res.data.total,
+            },
+          };
+        });
       } else {
-        toast.error(res?.message);
-        setVideos({}); // Set empty object on error
+        toast.error(res?.message || "Failed to load videos");
       }
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setVideos({}); // Set empty object on error
+    } catch (err) {
+      console.error(err);
+      toast.error("Error while fetching videos");
+    } finally {
       setIsLoading(false);
     }
   };
 
-  const loadMorePosts = () => {
-    setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 8);
-  };
-
+  // Load initial 9 for each category
   useEffect(() => {
-    fetchAllVideos();
+    Object.keys(categoryData).forEach((key) => {
+      fetchVideosByCategory(key);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderPosts = (category, title) => {
-    // Add null check for videos[category]
-    const categoryVideos = videos[category] || [];
+  const renderCategory = (key, title) => {
+    const cat = categoryData[key];
+    if (!cat.items.length) return null;
 
     return (
-      <div key={title} className="videos-category-container">
-        {categoryVideos?.length > 0 && <SectionTitle title={title} />}
-        {categoryVideos?.length > 0 && (
-          <div className="all-category-posts-container">
-            {categoryVideos?.slice(0, visiblePosts)?.map((video) => (
-              <Link
-                key={video?._id}
-                to={`/videos/v/${video?._id}`}
-                className="single-category-post"
-                aria-label={`Watch ${video?.title}`}
-              >
-                <div className="video-thumbnail-container">
-                  <img src={video?.mainUrl} alt={video?.title} loading="lazy" />
-                  <div className="play-icon">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
+      <div className="videos-category-container" key={key}>
+        <SectionTitle title={title} />
+        <div className="all-category-posts-container">
+          {cat.items.map((video) => (
+            <Link
+              key={video._id}
+              to={`/videos/v/${video.newsId}`}
+              className="single-category-post"
+            >
+              <div className="video-thumbnail-container">
+                <img src={video.mainUrl} alt={video.title} loading="lazy" />
+                <div className="play-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
                 </div>
-                <div className="single-category-post-texts">
-                  <span className="video-meta">
-                    {moment(video?.createdAt).format("Do MMM YYYY")}
-                  </span>
-                  <h3 className="video-title">{video?.title}</h3>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-        {visiblePosts < videos[category]?.length && (
-          <button className="load-more-btn" onClick={loadMorePosts}>
+              </div>
+              <div className="single-category-post-texts">
+                <span className="video-meta">
+                  {moment(video.createdAt).format("Do MMM YYYY")}
+                </span>
+                <h3 className="video-title">{video.title}</h3>
+              </div>
+            </Link>
+          ))}
+        </div>
+        {cat.hasMore && (
+          <button
+            className="load-more-btn"
+            onClick={() => fetchVideosByCategory(key)}
+          >
             <span className="btn-text">Load More</span>
             <span className="btn-icon">
               <i className="fa-solid fa-arrow-rotate-right"></i>
@@ -86,27 +134,28 @@ const AllVideos = () => {
 
   return (
     <div className="all-videos-container">
-      {!isLoading ? (
-        <div>
-          {renderPosts("latestVideos", "Latest Videos")}
-          {renderPosts("trailers", "Trailers")}
-          {renderPosts("videoSongs", "Video Songs")}
-          {renderPosts("lyricalSongs", "Lyrical Songs")}
-          {renderPosts("ott", "Ott")}
-          {renderPosts("events", "Events")}
-          {renderPosts("shows", "Shows")}
-        </div>
-      ) : (
+      {isLoading && Object.values(categoryData).every((cat) => cat.items.length === 0) ? (
+        // Initial loader
         <div className="all-category-posts-container">
-          {[...Array(12)].map((_, index) => (
+          {[...Array(9)].map((_, index) => (
             <div className="single-category-post box-shadow" key={index}>
               <img
                 src="https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
-                alt=""
+                alt="Loading placeholder"
               />
             </div>
           ))}
         </div>
+      ) : (
+        <>
+          {renderCategory("latestVideos", "Latest Videos")}
+          {renderCategory("trailers", "Trailers")}
+          {renderCategory("videoSongs", "Video Songs")}
+          {renderCategory("lyricalVideos", "Lyrical Videos")}
+          {renderCategory("ott", "OTT")}
+          {renderCategory("events", "Events")}
+          {renderCategory("shows", "Shows")}
+        </>
       )}
     </div>
   );

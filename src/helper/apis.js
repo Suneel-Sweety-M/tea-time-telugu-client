@@ -4,7 +4,7 @@ import { logout } from "../redux/userSlice";
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const API = axios.create({
-  baseURL: API_URL, 
+  baseURL: API_URL,
   responseType: "json",
   withCredentials: true,
 });
@@ -232,6 +232,23 @@ export const getGalleryPosts = async () => {
   }
 };
 
+export const loadGalleryPosts = async (page = 1, limit = 12) => {
+  try {
+    const query = new URLSearchParams();
+    query.append("page", page);
+    query.append("limit", limit);
+
+    const res = await apiRequest({
+      url: `/gallery/posts?${query.toString()}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getFilteredGallery = async (category, time, searchText) => {
   const url =
     category || time || searchText
@@ -253,6 +270,19 @@ export const getSingleGallery = async (id) => {
   try {
     const res = await apiRequest({
       url: `/gallery/${id}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSingleGalleryByNewsId = async (newsId) => {
+  try {
+    const res = await apiRequest({
+      url: `/gallery/g/${newsId}`,
       method: "GET",
     });
 
@@ -319,10 +349,41 @@ export const getFilteredNews = async (category, time, searchText, writer) => {
   }
 };
 
-export const getSearchNews = async (q) => {
+// export const getSearchNews = async (q) => {
+//   try {
+//     const res = await apiRequest({
+//       url: `/news/search?q=${q}`,
+//       method: "GET",
+//     });
+
+//     return res;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+export const getSearchNews = async (q, skip = 0, limit = 9) => {
   try {
     const res = await apiRequest({
-      url: `/news/search?q=${q}`,
+      url: `/news/search?q=${encodeURIComponent(
+        q
+      )}&skip=${skip}&limit=${limit}`,
+      method: "GET",
+    });
+    return res;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getFilteredNewsPosts = async (category, subcategory) => {
+  try {
+    const url = `/news?category=${category}${
+      subcategory ? `&subcategory=${subcategory}` : ""
+    }`;
+
+    const res = await apiRequest({
+      url,
       method: "GET",
     });
 
@@ -332,11 +393,21 @@ export const getSearchNews = async (q) => {
   }
 };
 
-export const getFilteredNewsPosts = async (category, subcategory) => {
+export const getCategoryNewsPosts = async (
+  category,
+  subcategory,
+  currentPage,
+  POSTS_PER_PAGE
+) => {
   try {
-    const url = `/news?category=${category}${
-      subcategory ? `&subcategory=${subcategory}` : ""
-    }`;
+    const query = new URLSearchParams();
+
+    if (category) query.append("category", category);
+    if (subcategory) query.append("subcategory", subcategory);
+    if (currentPage) query.append("page", currentPage);
+    if (POSTS_PER_PAGE) query.append("limit", POSTS_PER_PAGE);
+
+    const url = `/news/category?${query.toString()}`;
 
     const res = await apiRequest({
       url,
@@ -394,6 +465,19 @@ export const getSingleNews = async (id) => {
   try {
     const res = await apiRequest({
       url: `/news/${id}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSingleNewsByNewsId = async (newsId) => {
+  try {
+    const res = await apiRequest({
+      url: `/news/n/${newsId}`,
       method: "GET",
     });
 
@@ -659,6 +743,30 @@ export const getNewsComments = async (id) => {
   }
 };
 
+// apis.js
+export const loadNewsComments = async (
+  id,
+  directCommentsLimit,
+  replyCommentsLimit,
+  directCommentsSkip
+) => {
+  try {
+    const res = await apiRequest({
+      url: `/comments/${id}/news-comments`,
+      method: "GET",
+      params: {
+        directCommentsLimit,
+        replyCommentsLimit,
+        directCommentsSkip,
+      },
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const addNewsComment = async (id, data) => {
   try {
     const res = await apiRequest({
@@ -753,10 +861,36 @@ export const getAllCategoryVideos = async () => {
   }
 };
 
+export const getPaginatedCategoryVideos = async (params) => {
+  try {
+    const res = await apiRequest({
+      url: `/videos/category?${new URLSearchParams(params).toString()}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getVideo = async (id) => {
   try {
     const res = await apiRequest({
       url: `/videos/${id}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getVideoByNewsId = async (newsId) => {
+  try {
+    const res = await apiRequest({
+      url: `/videos/v/${newsId}`,
       method: "GET",
     });
 
@@ -1090,6 +1224,48 @@ export const setNewsShortAd = async (data) => {
     return res;
   } catch (error) {
     console.error("Error setting news short ad:", error);
+    throw error;
+  }
+};
+
+export const sendAdminForgotPassword = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/auth/admin/forgot-password",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error sending admin forgot password:", error);
+    throw error;
+  }
+};
+
+export const sendWriterForgotPassword = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/auth/writer/forgot-password",
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error sending writer forgot password:", error);
+    throw error;
+  }
+};
+
+export const resetAdminPassword = async (token, data) => {
+  try {
+    const res = await apiRequest({
+      url: `/auth/admin/reset-password/${token}`,
+      method: "POST",
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error resetting admin password:", error);
     throw error;
   }
 };
