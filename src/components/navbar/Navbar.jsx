@@ -270,7 +270,7 @@ const Navbar = () => {
                 </Link>
 
                 {(user?.role === "admin" || user?.role === "writer") && (
-                  <a target="blank" href={`/${user?._id}/dashboard`}>
+                  <Link to={`/${user?._id}/dashboard`}>
                     <img
                       className="profile-img"
                       src={
@@ -279,7 +279,7 @@ const Navbar = () => {
                       }
                       alt="pic"
                     />
-                  </a>
+                  </Link>
                 )}
 
                 {user && user?.role === "user" && (
@@ -488,13 +488,12 @@ const Navbar = () => {
                 <div className="mobile-navbar-divider"></div>
 
                 {(user?.role === "admin" || user?.role === "writer") && (
-                  <a
-                    target="blank"
-                    href={`/${user?._id}/dashboard`}
+                  <Link
+                    to={`/${user?._id}/dashboard`}
                     className="mobile-navbar-link mobile-navbar-link--blue"
                   >
                     <span>Dashboard</span>
-                  </a>
+                  </Link>
                 )}
 
                 <a
