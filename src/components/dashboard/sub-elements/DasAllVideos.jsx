@@ -80,7 +80,7 @@ const DasAllVideos = () => {
                     />
                     <div className="das-video-card-texts">
                       <p className="text-capital">{item?.subCategory}</p>
-                      <Link to={`/${item?.category}/video/${item?._id}`}>
+                      <Link to={`/${item?.category}/v/${item?.newsId}`}>
                         <h4 className="threelineselpsis">{item?.title}</h4>
                       </Link>
                     </div>

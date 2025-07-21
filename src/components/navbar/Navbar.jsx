@@ -96,6 +96,7 @@ const Navbar = () => {
       }
 
       navigate(`/search?q=${encodeURIComponent(searchText)}`);
+      setIsMobileMenuOpen(false);
     } catch (error) {
       console.error("Error during search submission:", error);
     }
@@ -309,14 +310,13 @@ const Navbar = () => {
             <a href="https://ntnews.com" target="blank" className="nls-logo">
               <img src="/logos/nt.jpg" alt="" />
             </a>
-            <span
-              onClick={() =>
-                setYTurl("https://www.youtube.com/embed/KvZIEgHfscU")
-              }
+            <a
+              href="https://www.youtube.com/watch?v=ZeukNjINwjo"
+              target="blank"
               className="nls-logo cp"
             >
-              <img src="/logos/etv.jpg" alt="" />
-            </span>
+              <img src="/logos/etv.jpg" alt="etv" />
+            </a>
             <span
               onClick={() =>
                 setYTurl("https://www.youtube.com/embed/II_m28Bm-iM")
@@ -425,6 +425,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>Home</span>
                 </Link>
@@ -433,6 +434,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/politics") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>Politics</span>
                 </Link>
@@ -441,6 +443,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/movies") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>Movies</span>
                 </Link>
@@ -449,6 +452,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/gossips") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>Gossips</span>
                 </Link>
@@ -457,6 +461,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/reviews") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>Reviews</span>
                 </Link>
@@ -465,6 +470,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/gallery") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>Gallery</span>
                 </Link>
@@ -473,6 +479,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/videos") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>Videos</span>
                 </Link>
@@ -481,6 +488,7 @@ const Navbar = () => {
                   className={`mobile-navbar-link ${
                     isActive("/ott") ? "active-tab" : ""
                   }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>OTT</span>
                 </Link>
@@ -491,6 +499,7 @@ const Navbar = () => {
                   <Link
                     to={`/${user?._id}/dashboard`}
                     className="mobile-navbar-link mobile-navbar-link--blue"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   >
                     <span>Dashboard</span>
                   </Link>
