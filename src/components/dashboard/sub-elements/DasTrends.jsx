@@ -84,8 +84,8 @@ const DasTrends = () => {
   };
 
   const handleSave = async () => {
-    if (selected?.length < 5) {
-      toast.info("Select 5 posts");
+    if (selected?.length < 11) {
+      toast.info("Select 11 posts");
       return;
     }
     setIsUploading(true);

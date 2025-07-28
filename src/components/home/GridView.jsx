@@ -13,6 +13,7 @@ const GridView = () => {
       const res = await getTrendsPosts();
       if (res?.status === "success") {
         setNews(res?.news);
+        console.log(res?.news?.reverse());
       }
     } catch (error) {
       console.log(error);
@@ -52,8 +53,8 @@ const GridView = () => {
             ))}
         </div>
       ) : (
-        <div className="grid-view">
-          {news.slice(5, 9).map((movie) => (
+        <div className="grid-view"> 
+          {news.slice(5, 11).map((movie) => (
             <article key={movie?._id} className="movie-card">
               <Link
                 to={`/${movie?.category}/${movie?.newsId}`}

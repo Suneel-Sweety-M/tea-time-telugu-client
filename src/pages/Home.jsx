@@ -79,11 +79,14 @@ const Home = () => {
       }, 10000);
       return () => clearTimeout(timeoutId);
     }
-    document.title = "Telugu News on AP and TS Politics, Movies and Gossips";
     handleGetMoviePoster();
     handleGetHomeLongAd();
     handleGetHomeShortAd();
   }, []);
+
+  document.title =
+    "Tea Time Telugu | Telugu News on AP and TS Politics, Movies and Gossips";
+
   return (
     <>
       <Navbar />

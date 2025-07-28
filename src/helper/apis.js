@@ -329,7 +329,7 @@ export const getNewsPosts = async () => {
     return res;
   } catch (error) {
     console.log(error);
-  }
+  } 
 };
 
 export const getFilteredNews = async (category, time, searchText, writer) => {
@@ -917,6 +917,23 @@ export const getAllVideos = async () => {
   try {
     const res = await apiRequest({
       url: `/videos/`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getQueryVideos = async (category, time, searchText) => {
+  try {
+    const url =
+    category || time || searchText
+      ? `/videos/query?searchText=${searchText}&category=${category}&postedTime=${time}`
+      : "/videos/query";
+    const res = await apiRequest({ 
+      url: url,
       method: "GET",
     });
 

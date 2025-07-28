@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import moment from "moment";
 import {
@@ -11,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const HomeFiveGallery = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const [popupNews, setPopupNews] = useState(false);
@@ -19,7 +18,7 @@ const HomeFiveGallery = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [news, setNews] = useState([]);
   const [gridNews, setGridNews] = useState([]);
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState([]); // [{ id, position }]
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
@@ -47,15 +46,28 @@ const HomeFiveGallery = () => {
   const currentNews = news?.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleCheckboxChange = (id) => {
-    if (selected.includes(id)) {
-      setSelected((prevSelected) => prevSelected.filter((item) => item !== id));
+    const exists = selected.find((s) => s.id === id);
+
+    if (exists) {
+      setSelected((prev) => prev.filter((s) => s.id !== id));
     } else {
-      if (selected?.length === 5) {
+      if (selected.length === 5) {
         toast.info("You have reached max limit.");
         return;
       }
-      setSelected((prevSelected) => [...prevSelected, id]);
+      setSelected((prev) => [...prev, { id, position: null }]);
     }
+  };
+
+  const handlePositionChange = (id, position) => {
+    if (selected.some((s) => s.position === position)) {
+      toast.error("Position already selected for another post.");
+      return;
+    }
+
+    setSelected((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, position } : s))
+    );
   };
 
   const allNews = async () => {
@@ -75,7 +87,10 @@ const HomeFiveGallery = () => {
       const res = await getHomeGridPosts();
       if (res?.status === "success") {
         setGridNews(res?.news);
-        const ids = res?.news.map((newsItem) => newsItem._id);
+        const ids = res?.news.map((newsItem, index) => ({
+          id: newsItem._id,
+          position: newsItem.position,
+        }));
         setSelected(ids);
       }
     } catch (error) {
@@ -85,24 +100,35 @@ const HomeFiveGallery = () => {
   };
 
   const handleSave = async () => {
-    if (selected?.length < 5) {
-      toast.info("Select 5 posts");
+    if (selected.length !== 5) {
+      toast.info("Select exactly 5 posts.");
       return;
     }
+
+    const incomplete = selected.some((s) => !s.position);
+    if (incomplete) {
+      toast.error("Please assign position to all selected posts.");
+      return;
+    }
+
+    const items = selected.map((s) => ({
+      news: s.id,
+      position: s.position,
+    }));
+
     setIsUploading(true);
     try {
-      const res = await addHomeGridPosts({ items: selected });
+      const res = await addHomeGridPosts({ items });
       if (res?.status === "success") {
         toast.success(res?.message);
         setPopupNews(false);
       } else {
         toast.error(res?.message);
       }
-      setIsUploading(false);
     } catch (error) {
       console.log(error);
-      setIsUploading(false);
     }
+    setIsUploading(false);
   };
 
   const handleLink = (id) => {
@@ -202,13 +228,14 @@ const HomeFiveGallery = () => {
               <table className="das-all-news-section">
                 <thead>
                   <tr>
-                    <th className="table-checkbox"></th>
+                    <th className="table-checkbox">Check</th>
                     <th className="table-sn">S.No.</th>
                     <th className="table-title">Title</th>
                     <th className="table-image">Image</th>
                     <th className="table-category">Category</th>
                     <th className="table-date">Date</th>
                     <th className="table-status">Writer</th>
+                    <th>Position</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -217,7 +244,7 @@ const HomeFiveGallery = () => {
                       <td className="table-checkbox">
                         <input
                           type="checkbox"
-                          checked={selected.includes(item?._id)}
+                          checked={selected.some((s) => s.id === item?._id)}
                           onChange={() => handleCheckboxChange(item?._id)}
                         />
                       </td>
@@ -234,6 +261,31 @@ const HomeFiveGallery = () => {
                       </td>
                       <td className="table-status">
                         <span>{item?.postedBy?.fullName}</span>
+                      </td>
+                      <td>
+                        <select
+                          className="ml10"
+                          disabled={
+                            !selected.some((s) => s.id === item._id)
+                          }
+                          value={
+                            selected.find((s) => s.id === item._id)?.position ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            handlePositionChange(
+                              item._id,
+                              parseInt(e.target.value)
+                            )
+                          }
+                        >
+                          <option value="">Pos</option>
+                          {[1, 2, 3, 4, 5].map((pos) => (
+                            <option key={pos} value={pos}>
+                              {pos}
+                            </option>
+                          ))}
+                        </select>
                       </td>
                     </tr>
                   ))}

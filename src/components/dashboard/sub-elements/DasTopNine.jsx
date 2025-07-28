@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const DasTopNine = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const [popupNews, setPopupNews] = useState(false);
@@ -46,15 +46,27 @@ const DasTopNine = () => {
   const currentNews = news?.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleCheckboxChange = (id) => {
-    if (selected.includes(id)) {
-      setSelected((prevSelected) => prevSelected.filter((item) => item !== id));
+    const exists = selected.find((s) => s.id === id);
+    if (exists) {
+      setSelected((prev) => prev.filter((s) => s.id !== id));
     } else {
-      if (selected?.length === 9) {
+      if (selected.length === 9) {
         toast.info("You have reached max limit.");
         return;
       }
-      setSelected((prevSelected) => [...prevSelected, id]);
+      setSelected((prev) => [...prev, { id, position: null }]);
     }
+  };
+
+  const handlePositionChange = (id, position) => {
+    if (selected.some((s) => s.position === position)) {
+      toast.error("Position already selected!");
+      return;
+    }
+
+    setSelected((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, position } : s))
+    );
   };
 
   const allNews = async () => {
@@ -74,8 +86,11 @@ const DasTopNine = () => {
       const res = await getTopNinePosts();
       if (res?.status === "success") {
         setTopNineNews(res?.news);
-        const ids = res?.news.map((newsItem) => newsItem._id);
-        setSelected(ids);
+        const formatted = res.news.map((item) => ({
+          id: item._id,
+          position: item.position,
+        }));
+        setSelected(formatted);
       }
     } catch (error) {
       console.log(error);
@@ -84,13 +99,22 @@ const DasTopNine = () => {
   };
 
   const handleSave = async () => {
-    if (selected?.length < 9) {
-      toast.info("Select 9 posts");
+    if (selected.length !== 9) {
+      toast.info("Select exactly 9 posts.");
       return;
     }
+
+    const incomplete = selected.some((s) => !s.position);
+    if (incomplete) {
+      toast.error("Assign all positions (1–9).");
+      return;
+    }
+
+    const items = selected.map((s) => ({ news: s.id, position: s.position }));
+
     setIsUploading(true);
     try {
-      const res = await addTopNinePosts({ items: selected });
+      const res = await addTopNinePosts({ items });
       if (res?.status === "success") {
         toast.success(res?.message);
         allTopNinePosts();
@@ -98,11 +122,10 @@ const DasTopNine = () => {
       } else {
         toast.error(res?.message);
       }
-      setIsUploading(false);
     } catch (error) {
       console.log(error);
-      setIsUploading(false);
     }
+    setIsUploading(false);
   };
 
   const handleLink = (id) => {
@@ -208,6 +231,7 @@ const DasTopNine = () => {
                     <th className="table-category">Category</th>
                     <th className="table-date">Date</th>
                     <th className="table-status">Writer</th>
+                    <th>Position</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -216,9 +240,9 @@ const DasTopNine = () => {
                       <td className="table-checkbox">
                         <input
                           type="checkbox"
-                          checked={selected.includes(item?._id)}
-                          onChange={() => handleCheckboxChange(item?._id)}
-                        />
+                          checked={selected.some((s) => s.id === item._id)}
+                          onChange={() => handleCheckboxChange(item._id)}
+                        />{" "}
                       </td>
                       <td className="table-sn">
                         {indexOfFirstItem + index + 1}
@@ -233,6 +257,29 @@ const DasTopNine = () => {
                       </td>
                       <td className="table-status">
                         <span>{item?.postedBy?.fullName}</span>
+                      </td>
+                      <td>
+                        <select
+                          className="ml10"
+                          disabled={!selected.some((s) => s.id === item._id)}
+                          value={
+                            selected.find((s) => s.id === item._id)?.position ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            handlePositionChange(
+                              item._id,
+                              parseInt(e.target.value)
+                            )
+                          }
+                        >
+                          <option value="">Pos</option>
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
+                            <option key={pos} value={pos}>
+                              {pos}
+                            </option>
+                          ))}
+                        </select>
                       </td>
                     </tr>
                   ))}

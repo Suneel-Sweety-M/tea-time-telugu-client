@@ -22,11 +22,13 @@ const DashboardSidebar = ({ setBars }) => {
 
   useEffect(() => {
     if (!user || !uid) return; // Wait until user and uid are available
-  
-  if (String(uid) !== String(user._id)) {
-    navigate("/");
-  }
+
+    if (String(uid) !== String(user._id)) {
+      navigate("/");
+    }
   }, [navigate, uid, user]);
+
+  document.title = "Dashboard | Tea Time Telugu";
 
   return (
     <div className="das-sidebar">
