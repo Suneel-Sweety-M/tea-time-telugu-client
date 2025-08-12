@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SectionTitle from "../titles/SectionTitle";
 import { Link } from "react-router-dom";
-import { getNewsPosts } from "../../helper/apis";
+import { getTrendingNews } from "../../helper/apis";
 
 const MostViewed = () => {
   const [news, setNews] = useState([]);
@@ -10,7 +10,7 @@ const MostViewed = () => {
   const allNews = async () => {
     setIsLoading(true);
     try {
-      const res = await getNewsPosts();
+      const res = await getTrendingNews();
       if (res?.status === "success") {
         setNews(res?.news);
       }
@@ -27,7 +27,7 @@ const MostViewed = () => {
 
   return (
     <div className="most-viewed-container">
-      <SectionTitle title="Most Viewed" />
+      {news?.length > 0 && <SectionTitle title="Most Viewed" />}
       {isLoading ? (
         <div className="most-viewed-grid">
           {Array(6)
@@ -51,7 +51,7 @@ const MostViewed = () => {
         </div>
       ) : (
         <div className="most-viewed-grid">
-          {news?.slice(9, 15)?.map((article) => (
+          {news?.slice(0, 6)?.map((article) => (
             <Link
               to={`/${article?.category}/${article?.newsId}`}
               key={article?.newsId}

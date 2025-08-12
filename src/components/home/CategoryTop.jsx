@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SectionTitle from "../titles/SectionTitle";
 import { Link } from "react-router-dom";
-import { getFilteredNewsPosts } from "../../helper/apis";
+import { getCategoryNewsPosts } from "../../helper/apis";
 
 const CategoryTop = () => {
   const [moviesNews, setMoviesNews] = useState([]);
@@ -11,7 +11,7 @@ const CategoryTop = () => {
 
   const fetchNewsByCategory = async (category, setNews) => {
     try {
-      const res = await getFilteredNewsPosts(category);
+      const res = await getCategoryNewsPosts(category, "", 1, 3);
       if (res?.status === "success") {
         setNews(res?.news);
       }
@@ -20,7 +20,7 @@ const CategoryTop = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }; 
 
   useEffect(() => {
     // Fetch movies news

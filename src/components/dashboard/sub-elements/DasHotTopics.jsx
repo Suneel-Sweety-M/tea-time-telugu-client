@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import moment from "moment";
-import {
-  addHomeGridPosts,
-  getHomeGridPosts,
-  getNewsPosts,
-} from "../../../helper/apis";
+import { addHotTopics, getHotTopics, getNewsPosts } from "../../../helper/apis";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import moment from "moment"; 
 
-const HomeFiveGallery = () => {
+const DasHotTopics = () => {
   const { user } = useSelector((state) => state.teatimetelugu);
   const navigate = useNavigate();
 
@@ -17,8 +13,8 @@ const HomeFiveGallery = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [news, setNews] = useState([]);
-  const [gridNews, setGridNews] = useState([]);
-  const [selected, setSelected] = useState([]); // [{ id, position }]
+  const [trendsNews, setTrendsNews] = useState([]);
+  const [selected, setSelected] = useState([]); // [{ news, position }]
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
@@ -81,13 +77,13 @@ const HomeFiveGallery = () => {
     }
   };
 
-  const allGridPosts = async () => {
+  const allHotTopics = async () => {
     setIsLoading(true);
     try {
-      const res = await getHomeGridPosts();
+      const res = await getHotTopics();
       if (res?.status === "success") {
-        setGridNews(res?.news);
-        const ids = res?.news.map((newsItem, index) => ({
+        setTrendsNews(res?.news);
+        const ids = res?.news.map((newsItem) => ({
           id: newsItem._id,
           position: newsItem.position,
         }));
@@ -100,35 +96,31 @@ const HomeFiveGallery = () => {
   };
 
   const handleSave = async () => {
-    if (selected.length !== 5) {
-      toast.info("Select exactly 5 posts.");
+    if (selected?.length < 5) {
+      toast.info("Select 5 posts");
       return;
     }
+    setIsUploading(true);
 
-    const incomplete = selected.some((s) => !s.position);
-    if (incomplete) {
-      toast.error("Please assign position to all selected posts.");
-      return;
-    }
-
-    const items = selected.map((s) => ({
-      news: s.id,
-      position: s.position,
+    const items = selected.map((item) => ({
+      news: item.id, // change key to match backend schema
+      position: item.position,
     }));
 
-    setIsUploading(true);
     try {
-      const res = await addHomeGridPosts({ items });
+      const res = await addHotTopics({ items });
       if (res?.status === "success") {
         toast.success(res?.message);
         setPopupNews(false);
+        allHotTopics();
       } else {
         toast.error(res?.message);
       }
+      setIsUploading(false);
     } catch (error) {
       console.log(error);
+      setIsUploading(false);
     }
-    setIsUploading(false);
   };
 
   const handleLink = (id) => {
@@ -136,14 +128,13 @@ const HomeFiveGallery = () => {
   };
 
   const handleView = (news) => {
-    navigate(`/${news?.category}/${news?.newsId}`);
+    navigate(`/${news?.category}/${news?._id}`);
   };
 
   useEffect(() => {
-    allGridPosts();
+    allHotTopics();
     allNews();
   }, []);
-
   return (
     <>
       <div className="das-news-container">
@@ -151,7 +142,7 @@ const HomeFiveGallery = () => {
           className="fa fa-pen-to-square das-float-right cp"
           onClick={() => setPopupNews(true)}
         ></i>
-        <div className="das-news-container-title">Featured</div>
+        <div className="das-news-container-title">Hot Topics</div>
 
         {!isLoading ? (
           <table className="das-all-news-section">
@@ -166,9 +157,9 @@ const HomeFiveGallery = () => {
                 <th className="table-action">Action</th>
               </tr>
             </thead>
-            {gridNews?.length > 0 ? (
+            {trendsNews?.length > 0 ? (
               <tbody>
-                {gridNews?.map((item, index) => (
+                {trendsNews?.map((item, index) => (
                   <tr key={index}>
                     <td className="table-sn">{index + 1}</td>
                     <td className="table-title">{item?.title}</td>
@@ -216,7 +207,9 @@ const HomeFiveGallery = () => {
           <div className="br5 popup-img p10">
             <div className="das-news-container">
               <div className="popup-news-top das-d-flex das-jcsb">
-                <div className="das-news-container-title">Select Featured</div>
+                <div className="das-news-container-title">
+                  Select Hot Topics
+                </div>
                 <span className="popup-news-top-x das-mx20">
                   <i
                     className="fa fa-xmark"
@@ -225,72 +218,83 @@ const HomeFiveGallery = () => {
                 </span>
               </div>
 
-              <table className="das-all-news-section">
-                <thead>
-                  <tr>
-                    <th className="table-checkbox">Check</th>
-                    <th className="table-sn">S.No.</th>
-                    <th className="table-title">Title</th>
-                    <th className="table-image">Image</th>
-                    <th className="table-category">Category</th>
-                    <th className="table-date">Date</th>
-                    <th className="table-status">Writer</th>
-                    <th>Position</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentNews?.map((item, index) => (
-                    <tr key={index}>
-                      <td className="table-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={selected.some((s) => s.id === item?._id)}
-                          onChange={() => handleCheckboxChange(item?._id)}
-                        />
-                      </td>
-                      <td className="table-sn">
-                        {indexOfFirstItem + index + 1}
-                      </td>
-                      <td className="table-title">{item?.title}</td>
-                      <td className="table-image">
-                        <img src={item?.mainUrl} alt="pic" />
-                      </td>
-                      <td className="table-category">{item?.category}</td>
-                      <td className="table-date">
-                        {moment(item?.createdAt).format("h:mm a, D MMMM YYYY")}
-                      </td>
-                      <td className="table-status">
-                        <span>{item?.postedBy?.fullName}</span>
-                      </td>
-                      <td>
-                        <select
-                          className="ml10"
-                          disabled={
-                            !selected.some((s) => s.id === item._id)
-                          }
-                          value={
-                            selected.find((s) => s.id === item._id)?.position ||
-                            ""
-                          }
-                          onChange={(e) =>
-                            handlePositionChange(
-                              item._id,
-                              parseInt(e.target.value)
-                            )
-                          }
-                        >
-                          <option value="">Pos</option>
-                          {[1, 2, 3, 4, 5].map((pos) => (
-                            <option key={pos} value={pos}>
-                              {pos}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
+              {!isLoading ? (
+                <table className="das-all-news-section">
+                  <thead>
+                    <tr>
+                      <th className="table-checkbox"></th>
+                      <th className="table-sn">S.No.</th>
+                      <th className="table-title">Title</th>
+                      <th className="table-image">Image</th>
+                      <th className="table-category">Category</th>
+                      <th className="table-date">Date</th>
+                      <th className="table-status">Writer</th>
+                      <th>Position</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {currentNews?.map((item, index) => (
+                      <tr key={index}>
+                        <td className="table-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={selected.some((s) => s.id === item?._id)}
+                            onChange={() => handleCheckboxChange(item?._id)}
+                          />
+                        </td>
+                        <td className="table-sn">
+                          {indexOfFirstItem + index + 1}
+                        </td>
+                        <td className="table-title">{item?.title}</td>
+                        <td className="table-image">
+                          <img src={item?.mainUrl} alt="pic" />
+                        </td>
+                        <td className="table-category">{item?.category}</td>
+                        <td className="table-date">
+                          {moment(item?.createdAt).format(
+                            "h:mm a, D MMMM YYYY"
+                          )}
+                        </td>
+                        <td className="table-status">
+                          <span>{item?.postedBy?.fullName}</span>
+                        </td>
+                        <td>
+                          <select
+                            className="ml10"
+                            disabled={!selected.some((s) => s.id === item._id)}
+                            value={
+                              selected.find((s) => s.id === item._id)
+                                ?.position || ""
+                            }
+                            onChange={(e) =>
+                              handlePositionChange(
+                                item._id,
+                                parseInt(e.target.value)
+                              )
+                            }
+                          >
+                            <option value="">Pos</option>
+                            {[1, 2, 3, 4, 5].map((pos) => (
+                              <option key={pos} value={pos}>
+                                {pos}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div>
+                  <div className="snlc-text"></div>
+                  <div className="snlc-text"></div>
+                  <div className="snlc-text"></div>
+                  <div className="snlc-text"></div>
+                  <div className="snlc-text"></div>
+                  <div className="snlc-text"></div>
+                </div>
+              )}
 
               <div className="das-all-news-bottom">
                 <div className="news-popup-btns das-mx10">
@@ -339,4 +343,4 @@ const HomeFiveGallery = () => {
   );
 };
 
-export default HomeFiveGallery;
+export default DasHotTopics;

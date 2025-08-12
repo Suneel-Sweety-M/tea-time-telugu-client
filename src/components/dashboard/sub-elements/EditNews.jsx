@@ -137,9 +137,9 @@ const EditNews = () => {
                   <option value="movies">Movies</option>
                   <option value="ott">OTT</option>
                   <option value="show">Show</option>
-                  <option value="collections">Collections</option>
                   <option value="gossips">Gossips</option>
                   <option value="reviews">Reviews</option>
+                  <option value="sports">Sports</option>
                 </select>
               </div>
               <div className="wns-box das-my20 das-py20">
@@ -187,12 +187,12 @@ const EditNews = () => {
                   {category === "movies" && (
                     <option value="south">South Cinema</option>
                   )}
-                  {category === "movies" && (
+                  {/* {category === "movies" && (
                     <option value="north">North Cinema</option>
                   )}
                   {category === "movies" && (
                     <option value="trailer">Trailer</option>
-                  )}
+                  )} */}
                   {category === "movies" && (
                     <option value="collections">Collections</option>
                   )}
@@ -204,7 +204,7 @@ const EditNews = () => {
 
                   {category === "show" && <option value="tv">TV</option>}
 
-                  {category === "collections" && (
+                  {/* {category === "collections" && (
                     <option value="1stday-ta">AP/TS 1st Day</option>
                   )}
                   {category === "collections" && (
@@ -230,7 +230,7 @@ const EditNews = () => {
                   )}
                   {category === "collections" && (
                     <option value="closing-ww">World Wide Closing</option>
-                  )}
+                  )} */}
 
                   {category === "gossips" && (
                     <option value="movies">Movies</option>

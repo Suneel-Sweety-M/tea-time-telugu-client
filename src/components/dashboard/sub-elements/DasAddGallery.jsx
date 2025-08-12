@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const DasAddGallery = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.teatimetelugu); 
 
   const [title, setTitle] = useState("");
   const [name, setName] = useState("");

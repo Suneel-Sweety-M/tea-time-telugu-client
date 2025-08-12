@@ -78,9 +78,11 @@ const CategoryPosts = () => {
           <i className="fa fa-angle-left"></i>
         </span>
       )}
-      <span className="currentPage-text">
-        Page {currentPage} of {totalPages}
-      </span>
+      {totalPages > 1 && (
+        <span className="currentPage-text">
+          Page {currentPage} of {totalPages}
+        </span>
+      )}
       {totalPages > 1 && (
         <span onClick={handleNext}>
           <i className="fa fa-angle-right"></i>

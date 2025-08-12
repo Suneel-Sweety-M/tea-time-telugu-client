@@ -74,6 +74,17 @@ const SingleVideoContainer = () => {
             <span style={{ color: "red", marginRight: "10px" }}>Video:</span>
             {videoData?.video?.title}
           </h1>
+          <span className="single-news-duo-left-top-auth-details">
+            <span className="sn-author">
+              Writer: <b>{videoData?.video?.postedBy?.fullName}</b>
+            </span>
+            <span className="sn-posted-date">
+              <i className="fa fa-calendar mr5"></i>
+              {moment(videoData?.video?.createdAt).format(
+                "hh:mm A, D MMMM YYYY"
+              )}
+            </span>
+          </span>
           <div className="single-video-container-top">
             <div className="svct-video-container">
               {videoData?.video && (

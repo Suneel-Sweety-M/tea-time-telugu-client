@@ -7,6 +7,7 @@ import { getSearchNews } from "../helper/apis";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SectionTitle from "../components/titles/SectionTitle";
 import moment from "moment";
+import ScrollTop from "../components/scroll-top/ScrollTop";
 
 const Search = () => {
   const { search } = useLocation();
@@ -53,50 +54,59 @@ const Search = () => {
   }, [searchText]);
 
   // ✅ stable function to fetch a category
-  const fetchCategoryResults = useCallback(async (categoryKey, term, customSkip = 0) => {
-    try {
-      setIsLoading(true);
-      const res = await getSearchNews(term, customSkip, limit);
-      if (res?.status === "success") {
-        const categoryResult = res.data[categoryKey];
-        if (categoryResult) {
-          setSearchData((prev) => {
-            const old = prev[categoryKey];
-            const newSkip = customSkip + limit;
-            return {
-              ...prev,
-              [categoryKey]: {
-                items: customSkip === 0 ? categoryResult.items : [...old.items, ...categoryResult.items],
-                skip: newSkip,
-                hasMore: newSkip < categoryResult.total,
-              },
-            };
-          });
+  const fetchCategoryResults = useCallback(
+    async (categoryKey, term, customSkip = 0) => {
+      try {
+        setIsLoading(true);
+        const res = await getSearchNews(term, customSkip, limit);
+        if (res?.status === "success") {
+          const categoryResult = res.data[categoryKey];
+          if (categoryResult) {
+            setSearchData((prev) => {
+              const old = prev[categoryKey];
+              const newSkip = customSkip + limit;
+              return {
+                ...prev,
+                [categoryKey]: {
+                  items:
+                    customSkip === 0
+                      ? categoryResult.items
+                      : [...old.items, ...categoryResult.items],
+                  skip: newSkip,
+                  hasMore: newSkip < categoryResult.total,
+                },
+              };
+            });
+          }
+        } else {
+          toast.error(res?.message || `Failed to fetch ${categoryKey}`);
         }
-      } else {
-        toast.error(res?.message || `Failed to fetch ${categoryKey}`);
+      } catch (error) {
+        console.error(error);
+        toast.error(`Error fetching ${categoryKey}`);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-      toast.error(`Error fetching ${categoryKey}`);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []); // ✅ no searchData here, use functional setState
+    },
+    []
+  ); // ✅ no searchData here, use functional setState
 
   // ✅ fetch all categories
-  const fetchAllCategories = useCallback((term) => {
-    // reset data before fetching
-    setSearchData(
-      categories.reduce((acc, c) => {
-        acc[c.key] = { items: [], skip: 0, hasMore: true };
-        return acc;
-      }, {})
-    );
-    categories.forEach((cat) => {
-      fetchCategoryResults(cat.key, term, 0);
-    });
-  }, [categories, fetchCategoryResults]);
+  const fetchAllCategories = useCallback(
+    (term) => {
+      // reset data before fetching
+      setSearchData(
+        categories.reduce((acc, c) => {
+          acc[c.key] = { items: [], skip: 0, hasMore: true };
+          return acc;
+        }, {})
+      );
+      categories.forEach((cat) => {
+        fetchCategoryResults(cat.key, term, 0);
+      });
+    },
+    [categories, fetchCategoryResults]
+  );
 
   // ✅ handle submit
   const handleSearch = (e) => {
@@ -147,12 +157,15 @@ const Search = () => {
                   alt={item.title}
                   loading="lazy"
                   onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/300x200?text=Image+Not+Available";
+                    e.target.src =
+                      "https://via.placeholder.com/300x200?text=Image+Not+Available";
                   }}
                 />
                 {categoryKey === "videos" && (
                   <div className="play-icon">
-                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
                   </div>
                 )}
               </div>
@@ -168,17 +181,34 @@ const Search = () => {
         {cat.hasMore && (
           <button
             className="load-more-btn"
-            onClick={() => fetchCategoryResults(categoryKey, debouncedSearchText, cat.skip)}
+            onClick={() =>
+              fetchCategoryResults(categoryKey, debouncedSearchText, cat.skip)
+            }
           >
-            <span className="btn-text">Load More</span>
-            <span className="btn-icon"><i className="fa-solid fa-arrow-rotate-right"></i></span>
+            {isLoading ? (
+              <>
+                <span className="btn-text">Loading...</span>
+                <span className="btn-icon spinner"></span>
+              </>
+            ) : (
+              <>
+                <span className="btn-text">Load More</span>
+                <span className="btn-icon">
+                  <i className="fa-solid fa-arrow-rotate-right"></i>
+                </span>
+              </>
+            )}
           </button>
         )}
       </div>
     );
   };
 
-  const hasResults = Object.values(searchData).some((cat) => cat.items.length > 0);
+  const hasResults = Object.values(searchData).some(
+    (cat) => cat.items.length > 0
+  );
+
+  document.title = `Search ${debouncedSearchText}`;
 
   return (
     <>
@@ -187,7 +217,10 @@ const Search = () => {
         <TabTitle title="Search" />
         <div className="search-page-container">
           <div className="search-container-top">
-            <form onSubmit={handleSearch} className="search-container-input-box">
+            <form
+              onSubmit={handleSearch}
+              className="search-container-input-box"
+            >
               <input
                 type="text"
                 placeholder="Search here..."
@@ -195,7 +228,11 @@ const Search = () => {
                 onChange={(e) => setSearchText(e.target.value)}
                 aria-label="Search input"
               />
-              <button type="submit" className="btn search-btn" disabled={isLoading}>
+              <button
+                type="submit"
+                className="btn search-btn"
+                disabled={isLoading}
+              >
                 {isLoading ? "Searching..." : "Search"}
               </button>
             </form>
@@ -206,7 +243,8 @@ const Search = () => {
             )}
           </div>
 
-          {isLoading && Object.values(searchData).every((c) => c.items.length === 0) ? (
+          {isLoading &&
+          Object.values(searchData).every((c) => c.items.length === 0) ? (
             <div className="all-category-posts-container">
               {Array.from({ length: 9 }).map((_, i) => (
                 <div className="single-category-post box-shadow" key={i}>
@@ -231,6 +269,7 @@ const Search = () => {
         </div>
       </div>
       <Footer />
+      <ScrollTop />
     </>
   );
 };

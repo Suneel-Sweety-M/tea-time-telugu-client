@@ -7,9 +7,15 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getNewsShortAd, getSingleGalleryByNewsId } from "../helper/apis";
 import moment from "moment";
 import { toast } from "react-toastify";
+import ScrollTop from "../components/scroll-top/ScrollTop";
+import { useSelector } from "react-redux";
+import NewsComments from "../components/single-news/NewsComments";
 
 const GalleryShow = () => {
   const { id } = useParams();
+  const reactionsArray = useSelector(
+    (state) => state.teatimetelugu.reactions
+  );
   const navigate = useNavigate();
   const [gallery, setGallery] = useState({});
   const [suggestedPosts, setSuggestedPosts] = useState([]);
@@ -17,6 +23,7 @@ const GalleryShow = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [imgViewStyle, setImgViewStyle] = useState("img-h-full");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [commentsCount, setCommentsCount] = useState(0);
   // const [postsCount, setpostsCount] = useState(8);
 
   const styleOptions = ["img-h-full", "img-w-full"];
@@ -47,7 +54,7 @@ const GalleryShow = () => {
     }
     setIsLoading(true);
     try {
-      const res = await getSingleGalleryByNewsId(id); 
+      const res = await getSingleGalleryByNewsId(id);
       if (res?.status === "success") {
         setGallery(res?.gallery);
         document.title = `${res?.gallery?.title}`;
@@ -65,7 +72,7 @@ const GalleryShow = () => {
   useEffect(() => {
     getPictures();
   }, [getPictures]);
-// const [newsLongAdImg, setNewsLongAdImg] = useState("");
+  // const [newsLongAdImg, setNewsLongAdImg] = useState("");
   // const [newsLongAdLink, setNewsLongAdLink] = useState("");
   const [newsShortAdImg, setNewsShortAdImg] = useState("");
   const [newsShortAdLink, setNewsShortAdLink] = useState("");
@@ -116,12 +123,12 @@ const GalleryShow = () => {
                     {moment(gallery?.createdAt).format("h:mm a, D MMMM YYYY")}
                   </span>
                   <span className="sn-posted-date">
-                    <i className="fa-regular fa-face-smile mr5"></i>0{" "}
-                    <span>Reactions</span>
+                    <i className="fa-regular fa-face-smile mr5"></i>
+                    {reactionsArray?.length} <span> Reactions</span>
                   </span>
                   <span className="sn-posted-date">
                     <i className="fa-regular fa-comments mr5"></i>
-                    {gallery?.comments?.length}
+                    {commentsCount || gallery?.comments?.length || 0}
                     <span> Comments</span>
                   </span>
                 </span>
@@ -149,7 +156,11 @@ const GalleryShow = () => {
                   </div>
                 </div>
               </div>
-              {/* <NewsComments /> */}
+              <NewsComments
+                news={gallery}
+                commentsCount={commentsCount}
+                setCommentsCount={setCommentsCount}
+              />
             </div>
           ) : (
             <div className="single-news-loading-container single-news-duo-left">
@@ -315,6 +326,7 @@ const GalleryShow = () => {
         </div>
       </div>
       <Footer />
+      <ScrollTop />
 
       {isPopupOpen && (
         <div className="popup-container">

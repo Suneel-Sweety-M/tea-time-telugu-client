@@ -1481,3 +1481,139 @@
     padding: 0;
   }
 }
+
+
+/* ====== Scroll News Section ====== */
+.scroll-news-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.scroll-news-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.scroll-news {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.scroll-news-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Active item */
+.scroll-news-item.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Right to left animation (next item) */
+.scroll-news-item.right-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.scroll-news-item.left-exit {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* Left to right animation (previous item) */
+.scroll-news-item.left-enter {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.scroll-news-item.right-exit {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.scroll-news-item img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.scroll-news-title {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.scroll-news-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.scroll-news-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.scroll-news-button.left {
+  left: 10px;
+}
+
+.scroll-news-button.right {
+  right: 10px;
+}
+
+.scroll-news-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: -20px;
+  margin-bottom: 20px;
+  gap: 8px;
+}
+
+.scroll-news-dots .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.scroll-news-dots .dot.active {
+  background-color: #333;
+}
+
+.scroll-news-dots .dot:hover {
+  background-color: #999;
+}

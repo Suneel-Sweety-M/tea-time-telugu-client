@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const DasAllNews = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.teatimetelugu); 
   const navigate = useNavigate();
 
   const [news, setNews] = useState([]);
@@ -138,9 +138,9 @@ const DasAllNews = () => {
                 <option value="movies">Movies</option>
                 <option value="gossips">Gossips</option>
                 <option value="show">Show</option>
-                <option value="collections">Collections</option>
                 <option value="reviews">Reviews</option>
                 <option value="ott">OTT</option>
+                <option value="sports">Sports</option>
               </select>
               <div className="nfc-search">
                 <input

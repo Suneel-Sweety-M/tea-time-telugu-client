@@ -8,6 +8,7 @@ import CategoryPosts from "../components/category/CategoryPosts";
 import { useParams } from "react-router-dom";
 import { getCategoryLongAd, getCategoryShortAd } from "../helper/apis";
 import { toast } from "react-toastify";
+import ScrollTop from "../components/scroll-top/ScrollTop";
 
 const Category = () => {
   const { category } = useParams();
@@ -47,7 +48,9 @@ const Category = () => {
     <>
       <Navbar />
       <div className="category-page main-page">
-        <TabTitle title={category || "Category"} />
+        <TabTitle
+          title={category === "news" ? "General" : category || "Category"}
+        />
         <AllCategories />
         <a href={categoryShortAdLink} target="blank" className="">
           <img
@@ -72,6 +75,7 @@ const Category = () => {
         </a>
       </div>
       <Footer />
+      <ScrollTop />
     </>
   );
 };

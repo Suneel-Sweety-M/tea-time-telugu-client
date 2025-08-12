@@ -6,7 +6,6 @@ const UploadFile = ({ setIsUpload }) => {
   const [allLinks, setAllLinks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [file, setFile] = useState(null);
 
   const getLinks = async () => {
     try {
@@ -24,43 +23,33 @@ const UploadFile = ({ setIsUpload }) => {
     }
   };
 
-  const submitFile = async () => {
+  const submitFile = async (uploadedFile) => {
     try {
       setIsUploading(true);
-      console.log("Selected file:", file); // Check if file exists
 
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", uploadedFile);
 
       const res = await addFileForLink(formData);
       if (res?.status === "success") {
         toast.success(res?.message);
-        setFile(null);
         getLinks();
       } else {
         toast.error(res?.message);
       }
-      setIsUploading(false);
-      setFile(null);
     } catch (error) {
-      setFile(null);
       console.log(error);
+      toast.error("Something went wrong during upload.");
+    } finally {
       setIsUploading(false);
     }
   };
 
-  const addFile = async (f) => {
-    try {
-      if (!f) {
-        return toast.error("Please select a file!");
-      }
-      setFile(f);
-      console.log(file);
-
-      submitFile();
-    } catch (error) {
-      console.log(error);
+  const addFile = (f) => {
+    if (!f) {
+      return toast.error("Please select a file!");
     }
+    submitFile(f);
   };
 
   useEffect(() => {

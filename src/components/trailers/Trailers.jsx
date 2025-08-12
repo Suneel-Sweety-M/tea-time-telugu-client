@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./trailers.css";
 import SectionTitle from "../titles/SectionTitle";
 import { toast } from "react-toastify";
-import { getAllCategoryVideos } from "../../helper/apis";
+import { getHomeVideos } from "../../helper/apis";
 
 const Trailers = () => {
   const [currentVid, setCurrentVid] = useState({});
@@ -11,10 +11,10 @@ const Trailers = () => {
   useEffect(() => {
     const fetchAllVideos = async () => {
       try {
-        const res = await getAllCategoryVideos();
+        const res = await getHomeVideos("trailers", 10);
         if (res?.status === "success") {
-          setVideos(res?.data?.trailers);
-          setCurrentVid(res?.data?.trailers[0]);
+          setVideos(res?.videos);
+          setCurrentVid(res?.videos[0]);
         } else {
           toast.error(res?.message);
         }

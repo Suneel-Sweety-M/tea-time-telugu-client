@@ -4,7 +4,7 @@ import { logoutUser } from "../../helper/apis";
 import { useDispatch, useSelector } from "react-redux";
 
 const DashboardSidebar = ({ setBars }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.teatimetelugu);
   const location = useLocation();
   const { uid } = useParams();
   const navigate = useNavigate();

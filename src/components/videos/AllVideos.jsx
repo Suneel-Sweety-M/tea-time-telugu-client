@@ -122,10 +122,19 @@ const AllVideos = () => {
             className="load-more-btn"
             onClick={() => fetchVideosByCategory(key)}
           >
-            <span className="btn-text">Load More</span>
-            <span className="btn-icon">
-              <i className="fa-solid fa-arrow-rotate-right"></i>
-            </span>
+            {isLoading ? (
+              <>
+                <span className="btn-text">Loading...</span>
+                <span className="btn-icon spinner"></span>
+              </>
+            ) : (
+              <>
+                <span className="btn-text">Load More</span>
+                <span className="btn-icon">
+                  <i className="fa-solid fa-arrow-rotate-right"></i>
+                </span>
+              </>
+            )}
           </button>
         )}
       </div>

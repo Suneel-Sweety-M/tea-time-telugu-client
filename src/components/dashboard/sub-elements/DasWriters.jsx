@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const DasWriters = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.teatimetelugu);
   const [allUsers, setAllUsers] = useState([]);
   const [updatingUserId, setUpdatingUserId] = useState(null); // State for tracking which user is being updated
 

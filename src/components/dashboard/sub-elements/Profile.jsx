@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const Profile = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.teatimetelugu); 
   const { uid } = useParams();
   const navigate = useNavigate();
 

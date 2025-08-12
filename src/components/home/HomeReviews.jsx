@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SectionTitle from "../titles/SectionTitle";
 import { Link } from "react-router-dom";
-import { getFilteredNewsPosts } from "../../helper/apis";
+import { getCategoryNewsPosts } from "../../helper/apis";
 
 const HomeReviews = () => {
   const [news, setNews] = useState([]);
@@ -10,7 +10,7 @@ const HomeReviews = () => {
   useEffect(() => {
     const fetchNewsByCategory = async () => {
       try {
-        const res = await getFilteredNewsPosts("reviews");
+        const res = await getCategoryNewsPosts("reviews", "", 1, 4);
         if (res?.status === "success") {
           setNews(res?.news);
         }

@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const DasTopNine = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.teatimetelugu);
   const navigate = useNavigate();
 
   const [popupNews, setPopupNews] = useState(false);

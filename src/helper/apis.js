@@ -329,8 +329,47 @@ export const getNewsPosts = async () => {
     return res;
   } catch (error) {
     console.log(error);
-  } 
+  }
 };
+
+export const getTrendingNews = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/news/trending",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}; 
+
+export const getLatestNews = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/news/latest",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}; 
+
+export const getHomeNewsPosts = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/news/home",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}; 
 
 export const getFilteredNews = async (category, time, searchText, writer) => {
   const url =
@@ -608,6 +647,33 @@ export const getTrendsPosts = async () => {
   }
 };
 
+export const addHotTopics = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-hot-topics",
+      method: "POST",
+      data,
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getHotTopics = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-hot-topics",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getMovieReleases = async () => {
   try {
     const res = await apiRequest({
@@ -720,6 +786,20 @@ export const addNewsReaction = async (id, data) => {
   try {
     const res = await apiRequest({
       url: `/comments/${id}/add-reaction`,
+      method: "POST",
+      data,
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addGalleryReaction = async (id, data) => {
+  try {
+    const res = await apiRequest({
+      url: `/comments/${id}/add-gallery-reaction`,
       method: "POST",
       data,
     });
@@ -861,6 +941,23 @@ export const getAllCategoryVideos = async () => {
   }
 };
 
+export const getHomeVideos = async (subCategory, limit) => {
+  try {
+    const res = await apiRequest({
+      url: "/videos/home",
+      method: "GET",
+      params: { 
+        subCategory,
+        limit,
+      },
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}; 
+
 export const getPaginatedCategoryVideos = async (params) => {
   try {
     const res = await apiRequest({
@@ -929,10 +1026,10 @@ export const getAllVideos = async () => {
 export const getQueryVideos = async (category, time, searchText) => {
   try {
     const url =
-    category || time || searchText
-      ? `/videos/query?searchText=${searchText}&category=${category}&postedTime=${time}`
-      : "/videos/query";
-    const res = await apiRequest({ 
+      category || time || searchText
+        ? `/videos/query?searchText=${searchText}&category=${category}&postedTime=${time}`
+        : "/videos/query";
+    const res = await apiRequest({
       url: url,
       method: "GET",
     });

@@ -10,14 +10,14 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const DasTrends = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.teatimetelugu);
   const navigate = useNavigate();
 
   const [popupNews, setPopupNews] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [news, setNews] = useState([]);
-  const [topNineNews, setTopNineNews] = useState([]);
+  const [trendsNews, setTrendsNews] = useState([]);
   const [selected, setSelected] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,15 +46,28 @@ const DasTrends = () => {
   const currentNews = news?.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleCheckboxChange = (id) => {
-    if (selected.includes(id)) {
-      setSelected((prevSelected) => prevSelected.filter((item) => item !== id));
+    const exists = selected.find((s) => s.id === id);
+
+    if (exists) {
+      setSelected((prev) => prev.filter((s) => s.id !== id));
     } else {
-      if (selected?.length === 11) {
+      if (selected.length === 5) {
         toast.info("You have reached max limit.");
         return;
       }
-      setSelected((prevSelected) => [...prevSelected, id]);
+      setSelected((prev) => [...prev, { id, position: null }]);
     }
+  };
+
+  const handlePositionChange = (id, position) => {
+    if (selected.some((s) => s.position === position)) {
+      toast.error("Position already selected for another post.");
+      return;
+    }
+
+    setSelected((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, position } : s))
+    );
   };
 
   const allNews = async () => {
@@ -68,13 +81,16 @@ const DasTrends = () => {
     }
   };
 
-  const allTopNinePosts = async () => {
+  const allTrendsPosts = async () => {
     setIsLoading(true);
     try {
       const res = await getTrendsPosts();
       if (res?.status === "success") {
-        setTopNineNews(res?.news);
-        const ids = res?.news.map((newsItem) => newsItem._id);
+        setTrendsNews(res?.news);
+        const ids = res?.news.map((newsItem) => ({
+          id: newsItem._id,
+          position: newsItem.position,
+        }));
         setSelected(ids);
       }
     } catch (error) {
@@ -84,17 +100,23 @@ const DasTrends = () => {
   };
 
   const handleSave = async () => {
-    if (selected?.length < 11) {
-      toast.info("Select 11 posts");
+    if (selected?.length < 5) {
+      toast.info("Select 5 posts");
       return;
     }
     setIsUploading(true);
+
+    const items = selected.map((item) => ({
+      news: item.id, // change key to match backend schema
+      position: item.position,
+    }));
+
     try {
-      const res = await addTrendsPosts({ items: selected });
+      const res = await addTrendsPosts({ items });
       if (res?.status === "success") {
         toast.success(res?.message);
         setPopupNews(false);
-        allTopNinePosts();
+        allTrendsPosts();
       } else {
         toast.error(res?.message);
       }
@@ -114,7 +136,7 @@ const DasTrends = () => {
   };
 
   useEffect(() => {
-    allTopNinePosts();
+    allTrendsPosts();
     allNews();
   }, []);
   return (
@@ -139,9 +161,9 @@ const DasTrends = () => {
                 <th className="table-action">Action</th>
               </tr>
             </thead>
-            {topNineNews?.length > 0 ? (
+            {trendsNews?.length > 0 ? (
               <tbody>
-                {topNineNews?.map((item, index) => (
+                {trendsNews?.map((item, index) => (
                   <tr key={index}>
                     <td className="table-sn">{index + 1}</td>
                     <td className="table-title">{item?.title}</td>
@@ -209,6 +231,7 @@ const DasTrends = () => {
                       <th className="table-category">Category</th>
                       <th className="table-date">Date</th>
                       <th className="table-status">Writer</th>
+                      <th>Position</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -217,7 +240,7 @@ const DasTrends = () => {
                         <td className="table-checkbox">
                           <input
                             type="checkbox"
-                            checked={selected.includes(item?._id)}
+                            checked={selected.some((s) => s.id === item?._id)}
                             onChange={() => handleCheckboxChange(item?._id)}
                           />
                         </td>
@@ -236,6 +259,29 @@ const DasTrends = () => {
                         </td>
                         <td className="table-status">
                           <span>{item?.postedBy?.fullName}</span>
+                        </td>
+                        <td>
+                          <select
+                            className="ml10"
+                            disabled={!selected.some((s) => s.id === item._id)}
+                            value={
+                              selected.find((s) => s.id === item._id)
+                                ?.position || ""
+                            }
+                            onChange={(e) =>
+                              handlePositionChange(
+                                item._id,
+                                parseInt(e.target.value)
+                              )
+                            }
+                          >
+                            <option value="">Pos</option>
+                            {[1, 2, 3, 4, 5].map((pos) => (
+                              <option key={pos} value={pos}>
+                                {pos}
+                              </option>
+                            ))}
+                          </select>
                         </td>
                       </tr>
                     ))}

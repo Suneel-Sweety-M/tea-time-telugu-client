@@ -3,6 +3,7 @@ import HomeFiveGallery from "./sub-elements/HomeFiveGallery";
 import DasTopNine from "./sub-elements/DasTopNine";
 import DasTrends from "./sub-elements/DasTrends";
 import { getDashData } from "../../helper/apis";
+import DasHotTopics from "./sub-elements/DasHotTopics";
 
 const DasHome = () => {
   const [data, setData] = useState({});
@@ -49,6 +50,7 @@ const DasHome = () => {
       <HomeFiveGallery />
       <DasTopNine />
       <DasTrends />
+      <DasHotTopics />
     </div>
   );
 };

@@ -181,7 +181,7 @@ const AdWithUs = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer /> 
     </>
   );
 };

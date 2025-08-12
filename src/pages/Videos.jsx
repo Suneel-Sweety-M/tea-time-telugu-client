@@ -4,6 +4,7 @@ import AllVideos from "../components/videos/AllVideos";
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
 import TabTitle from "../components/titles/TabTitle";
+import ScrollTop from "../components/scroll-top/ScrollTop";
 
 const Videos = () => {
   return (
@@ -16,6 +17,7 @@ const Videos = () => {
         </div>
       </div>
       <Footer />
+      <ScrollTop />
     </>
   );
 };

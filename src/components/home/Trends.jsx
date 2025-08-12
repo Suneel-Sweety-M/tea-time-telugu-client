@@ -12,8 +12,7 @@ const Trends = () => {
     try {
       const res = await getTrendsPosts();
       if (res?.status === "success") {
-        console.log(res?.news);
-        setTrendsNews(res?.news?.reverse());
+        setTrendsNews(res?.news);
       }
     } catch (error) {
       console.log(error);

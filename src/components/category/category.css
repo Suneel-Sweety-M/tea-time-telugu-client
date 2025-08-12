@@ -18,6 +18,10 @@
   box-sizing: border-box;
 }
 
+.category-title-active{
+  color: #ff5e62 !important; 
+}
+
 @media (max-width: 800px) {
   .categorie-box {
     min-width: calc(33.33% - 10px); /* 3 boxes per row below 800px */

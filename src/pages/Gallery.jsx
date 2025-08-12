@@ -5,6 +5,7 @@ import Footer from "../components/footer/Footer";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loadGalleryPosts } from "../helper/apis";
 import { toast } from "react-toastify";
+import ScrollTop from "../components/scroll-top/ScrollTop";
 
 const POSTS_PER_PAGE = 12;
 
@@ -131,6 +132,7 @@ const Gallery = () => {
         {renderPagination()}
       </div>
       <Footer />
+      <ScrollTop />
     </>
   );
 };

@@ -620,7 +620,7 @@ const DasAdsPosters = () => {
                       id=""
                       className="br5"
                       value={newsShortAdLink}
-                      onChange={(e) => setNewsLongAdLink(e.target.value)}
+                      onChange={(e) => setNewsShortAdLink(e.target.value)}
                     />
                   </div>
                   <div className="das-mt20">

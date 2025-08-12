@@ -7,7 +7,7 @@ import JoditEditor from "jodit-react";
 import { getSingleGallery, updateGallery } from "../../../helper/apis";
 
 const DasGalleryEdit = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.teatimetelugu); 
   const { gid } = useParams();
   const navigate = useNavigate();
 

@@ -8,7 +8,7 @@ import { login } from "../../redux/userSlice";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.teatimetelugu);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
@@ -204,6 +204,14 @@ const Navbar = () => {
                   Home
                 </Link>
                 <Link
+                  to="/news"
+                  className={`cp nav-tab ${
+                    isActive("/news") ? "active-tab" : ""
+                  }`}
+                >
+                  General
+                </Link>
+                <Link
                   to="/politics"
                   className={`cp nav-tab ${
                     isActive("/politics") ? "active-tab" : ""
@@ -256,6 +264,14 @@ const Navbar = () => {
                   }`}
                 >
                   OTT
+                </Link>
+                <Link
+                  to="/sports"
+                  className={`cp nav-tab ${
+                    isActive("/sports") ? "active-tab" : ""
+                  }`}
+                >
+                  Sports
                 </Link>
               </div>
             </div>
@@ -430,6 +446,15 @@ const Navbar = () => {
                   <span>Home</span>
                 </Link>
                 <Link
+                  to="/news"
+                  className={`mobile-navbar-link ${
+                    isActive("/news") ? "active-tab" : ""
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                  <span>General</span>
+                </Link>
+                <Link
                   to="/politics"
                   className={`mobile-navbar-link ${
                     isActive("/politics") ? "active-tab" : ""
@@ -491,6 +516,15 @@ const Navbar = () => {
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                   <span>OTT</span>
+                </Link>
+                <Link
+                  to="/sports"
+                  className={`mobile-navbar-link ${
+                    isActive("/sports") ? "active-tab" : ""
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                  <span>Sports</span>
                 </Link>
 
                 <div className="mobile-navbar-divider"></div>

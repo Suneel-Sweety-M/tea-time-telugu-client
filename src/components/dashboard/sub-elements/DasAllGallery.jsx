@@ -5,7 +5,7 @@ import { deleteGallery, getFilteredGallery } from "../../../helper/apis";
 import { toast } from "react-toastify";
 
 const DasAllGallery = () => {
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.teatimetelugu); 
   const navigate = useNavigate();
 
   const [allGallery, setAllGallery] = useState([]);
