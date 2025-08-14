@@ -93,8 +93,8 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home-page main-page main-padding">
-        <BreakingNews />
         <Featured />
+        <BreakingNews />
         <TopNine />
         <div className="duo-content">
           <div className="duo-content-left">
