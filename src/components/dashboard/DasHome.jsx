@@ -4,6 +4,8 @@ import DasTopNine from "./sub-elements/DasTopNine";
 import DasTrends from "./sub-elements/DasTrends";
 import { getDashData } from "../../helper/apis";
 import DasHotTopics from "./sub-elements/DasHotTopics";
+import DasCategoryTop from "./sub-elements/DasCategoryTop";
+import DasBreakingNews from "./sub-elements/DasBreakingNews";
 
 const DasHome = () => {
   const [data, setData] = useState({});
@@ -47,10 +49,12 @@ const DasHome = () => {
         </div>
       </div>
 
+      <DasBreakingNews />
       <HomeFiveGallery />
       <DasTopNine />
       <DasTrends />
       <DasHotTopics />
+      <DasCategoryTop />
     </div>
   );
 };

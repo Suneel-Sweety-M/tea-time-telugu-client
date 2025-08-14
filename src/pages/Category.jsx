@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { getCategoryLongAd, getCategoryShortAd } from "../helper/apis";
 import { toast } from "react-toastify";
 import ScrollTop from "../components/scroll-top/ScrollTop";
+import CategoryTopNine from "../components/category/CategoryTopNine";
 
 const Category = () => {
   const { category } = useParams();
@@ -62,6 +63,9 @@ const Category = () => {
             alt="ad-img"
           />
         </a>
+        <div className="main-padding">
+          <CategoryTopNine category={category} />
+        </div>
         <CategoryPosts />
         <a href={categoryLongAdLink} target="blank" className="">
           <img

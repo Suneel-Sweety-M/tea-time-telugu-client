@@ -332,6 +332,19 @@ export const getNewsPosts = async () => {
   }
 };
 
+export const getCategoryPosts = async (category, subCategory) => {
+  try {
+    const res = await apiRequest({
+      url: `/news?category=${category}&subCategory=${subCategory}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getTrendingNews = async () => {
   try {
     const res = await apiRequest({
@@ -665,6 +678,61 @@ export const getHotTopics = async () => {
   try {
     const res = await apiRequest({
       url: "/dashboard/get-hot-topics",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const addBreakingNews = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-breaking-news",
+      method: "POST",
+      data,
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getBreakingNews = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/get-breaking-news",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addCategoryTopPosts = async (data) => {
+  try {
+    const res = await apiRequest({
+      url: "/dashboard/set-category-top",
+      method: "POST",
+      data,
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCategoryTopPosts = async (category) => {
+  try {
+    const res = await apiRequest({
+      url: `/dashboard/get-category-top?category=${category}`,
       method: "GET",
     });
 

@@ -20,6 +20,7 @@ import ScrollTop from "../components/scroll-top/ScrollTop";
 import { toast } from "react-toastify";
 import { getHomeLongAd, getHomeShortAd, getMoviePoster } from "../helper/apis";
 import ScrollNews from "../components/home/ScrollNews";
+import BreakingNews from "../components/home/BreakingNews";
 
 const Home = () => {
   const [poster, setPoster] = useState(false);
@@ -92,6 +93,7 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home-page main-page main-padding">
+        <BreakingNews />
         <Featured />
         <TopNine />
         <div className="duo-content">
