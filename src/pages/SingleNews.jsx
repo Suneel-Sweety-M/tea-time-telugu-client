@@ -11,23 +11,22 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import ScrollTop from "../components/scroll-top/ScrollTop";
 import { useSelector } from "react-redux";
+import ReadButton from "../components/single-news/ReadButton";
 
 const SingleNews = () => {
   const { id } = useParams();
-  const reactionsArray = useSelector(
-    (state) => state.teatimetelugu.reactions
-  );
+  const reactionsArray = useSelector((state) => state.teatimetelugu.reactions);
   const navigate = useNavigate();
   const [news, setNews] = useState({});
   const [suggestedNews, setSuggestedNews] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   // const [postsCount, setpostsCount] = useState(8);
   const [commentsCount, setCommentsCount] = useState(0);
 
   const getNews = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await getSingleNewsByNewsId(id); 
+      const res = await getSingleNewsByNewsId(id);
       if (res?.status === "success") {
         setNews(res?.news);
 
@@ -106,6 +105,8 @@ const SingleNews = () => {
                     <i className="fa-regular fa-comments mr5"></i>
                     {commentsCount} <span>Comments</span>
                   </span>
+
+                  <ReadButton news={news} />
                 </span>
                 <div className="single-news-content-container">
                   {news?.subCategory !== "trailer" && (
@@ -117,21 +118,21 @@ const SingleNews = () => {
                     dangerouslySetInnerHTML={{ __html: news?.description }}
                   />
                   {news?.category === "reviews" && (
-                  <div className="single-news-rating-container">
-                    <h1>Tea Time Telugu Rating :</h1>
-                    {[...Array(5)].map((_, i) => (
-                      <i
-                        key={i}
-                        className={
-                          i < news?.movieRating
-                            ? "fa-solid fa-star"
-                            : "fa-regular fa-star"
-                        }
-                        style={{ color: "#FFD700", marginRight: "4px" }}
-                      ></i>
-                    ))}
-                  </div>
-                )}
+                    <div className="single-news-rating-container">
+                      <h1>Tea Time Telugu Rating :</h1>
+                      {[...Array(5)].map((_, i) => (
+                        <i
+                          key={i}
+                          className={
+                            i < news?.movieRating
+                              ? "fa-solid fa-star"
+                              : "fa-regular fa-star"
+                          }
+                          style={{ color: "#FFD700", marginRight: "4px" }}
+                        ></i>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <NewsComments
@@ -139,7 +140,7 @@ const SingleNews = () => {
                 commentsCount={commentsCount}
                 setCommentsCount={setCommentsCount}
               />
-            </div> 
+            </div>
           ) : (
             <div className="single-news-loading-container single-news-duo-left">
               <div className="snlc-title">

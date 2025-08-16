@@ -86,7 +86,6 @@
   height: auto;
 }
 
-
 .single-news-rating-container {
   display: flex;
   align-items: center;
@@ -545,4 +544,137 @@
 
 .comment-liked {
   color: rgb(0, 132, 255) !important;
+}
+
+/*========== Read Button Styles ================*/
+.read-button-container {
+  display: inline-block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.read-aloud-btn, .control-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4285f4;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  margin-right: 8px;
+}
+
+.read-aloud-btn:hover, .control-btn:hover {
+  background-color: #3367d6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.read-aloud-btn:disabled, .control-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.read-aloud-btn.loading {
+  background-color: #a0c3ff;
+}
+
+.control-btn.play-pause-btn.playing {
+  background-color: #34a853;
+}
+
+.control-btn.play-pause-btn.playing:hover {
+  background-color: #2d9249;
+}
+
+.control-btn.play-pause-btn.paused {
+  background-color: #fbbc05;
+}
+
+.control-btn.play-pause-btn.paused:hover {
+  background-color: #e6ac04;
+}
+
+.control-btn.stop-btn {
+  background-color: #ea4335;
+}
+
+.control-btn.stop-btn:hover {
+  background-color: #d33426;
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-wrapper {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wave-animation {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.wave-animation::after {
+  content: '';
+  position: absolute;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  animation: wave 1.5s linear infinite;
+}
+
+.playing .wave-animation::after {
+  animation-play-state: running;
+}
+
+.paused .wave-animation::after,
+:not(.playing) .wave-animation::after {
+  animation-play-state: paused;
+}
+
+@keyframes wave {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.loading-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
