@@ -49,11 +49,11 @@
 
   .categorie-box {
     min-width: calc(50% - 10px); /* 2 boxes per row below 600px */
-    height: 100px;
+    height: 60px;
   }
 
   .categorie-box .category-title {
-    font-size: 20px;
+    font-size: 15px;
   }
 }
 

@@ -1622,7 +1622,7 @@
 .breaking-news-container {
   width: 100%;
   position: relative;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 /* Section Title - Adjust if needed */

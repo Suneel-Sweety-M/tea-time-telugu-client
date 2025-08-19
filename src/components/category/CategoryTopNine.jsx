@@ -9,7 +9,7 @@ const CategoryTopNine = ({ category }) => {
   const [error, setError] = useState(null);
 
   const allTopNinePosts = useCallback(async () => {
-    setLoading(true);
+    // setLoading(true);
     setError(null);
     try {
       const res = await getCategoryTopPosts(category);
@@ -30,7 +30,7 @@ const CategoryTopNine = ({ category }) => {
 
   return (
     <section className={topNineNews.length > 0 ? "top-nine-section" : ""}>
-      {topNineNews.length > 0 && <SectionTitle title="Top 9" />}
+      {topNineNews.length > 0 && <SectionTitle title="Top News" />}
       {error && <div className="error-message">{error}</div>}
       {loading ? (
         <div className="top-nine-container">
@@ -46,7 +46,7 @@ const CategoryTopNine = ({ category }) => {
                     className="post-image"
                   />
                 </figure>
-                <div className="snlc-title p20">
+                <div className="snlc-title">
                   <div className="snlc-text"></div>
                   <div className="snlc-half-text"></div>
                 </div>

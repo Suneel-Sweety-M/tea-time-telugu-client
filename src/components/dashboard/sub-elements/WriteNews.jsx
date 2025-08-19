@@ -322,29 +322,41 @@ const WriteNews = () => {
                   {category === "reviews" && (
                     <option value="rerelease">Re-release</option>
                   )}
+
+                  {category === "sports" && (
+                    <option value="cricket">Cricket</option>
+                  )}
+                  {category === "sports" && (
+                    <option value="football">Football</option>
+                  )}
+                  {category === "sports" && (
+                    <option value="olympics">Olympics</option>
+                  )}
                 </select>
               </div>
             </div>
 
-            {category === "reviews" && <div className="other-details">
-              <div className="wns-box das-my20 das-py20">
-                <h3 className="">Movie Rating</h3>
-                <select
-                  name=""
-                  id=""
-                  className="br5"
-                  value={movieRating}
-                  onChange={(e) => setMovieRating(e.target.value)}
-                >
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
+            {category === "reviews" && (
+              <div className="other-details">
+                <div className="wns-box das-my20 das-py20">
+                  <h3 className="">Movie Rating</h3>
+                  <select
+                    name=""
+                    id=""
+                    className="br5"
+                    value={movieRating}
+                    onChange={(e) => setMovieRating(e.target.value)}
+                  >
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
               </div>
-            </div>}
+            )}
 
             <div className="other-details">
               <div className="cancel-news-btn btn">Cancel</div>

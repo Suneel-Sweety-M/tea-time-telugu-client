@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SectionTitle from "../titles/SectionTitle";
 import { getHotTopics } from "../../helper/apis";
 import { Link } from "react-router-dom";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const ScrollNews = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -75,7 +76,7 @@ const ScrollNews = () => {
       {!isLoading && hotTopics.length > 0 && (
         <div className="scroll-news-wrapper">
           <button className="scroll-news-button left" onClick={goToPrev}>
-            &lt;
+            <FaChevronLeft />
           </button>
           <div className="scroll-news">
             {hotTopics.map((item, index) => (
@@ -90,7 +91,7 @@ const ScrollNews = () => {
             ))}
           </div>
           <button className="scroll-news-button right" onClick={goToNext}>
-            &gt;
+            <FaChevronRight />
           </button>
         </div>
       )}

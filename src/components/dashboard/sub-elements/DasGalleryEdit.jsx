@@ -7,7 +7,7 @@ import JoditEditor from "jodit-react";
 import { getSingleGallery, updateGallery } from "../../../helper/apis";
 
 const DasGalleryEdit = () => {
-  const { user } = useSelector((state) => state.teatimetelugu); 
+  const { user } = useSelector((state) => state.teatimetelugu);
   const { gid } = useParams();
   const navigate = useNavigate();
 
@@ -16,8 +16,10 @@ const DasGalleryEdit = () => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [mediaFiles, setMediaFiles] = useState([]);
+  const [mediaLinks, setMediaLinks] = useState([]);
   const [isUpload, setIsUpload] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [removedImages, setRemovedImages] = useState([]);
 
   const fetchGallery = useCallback(async () => {
     try {
@@ -27,7 +29,7 @@ const DasGalleryEdit = () => {
         setTitle(res?.gallery?.title);
         setName(res?.gallery?.name);
         setDescription(res?.gallery?.description);
-        setMediaFiles(res?.gallery?.galleryPics);
+        setMediaLinks(res?.gallery?.galleryPics);
         setCategory(res?.gallery?.category);
       } else {
         toast.error(res?.message);
@@ -47,16 +49,27 @@ const DasGalleryEdit = () => {
       return;
     }
     setIsSaving(true);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("name", name);
+    formData.append("category", category);
+    formData.append("description", description);
+
+    mediaFiles.forEach((file) => {
+      formData.append("mediaFiles", file);
+    });
+
+    // send removed images to backend
+    removedImages.forEach((img) => {
+      formData.append("removedImages", img.url);
+    });
+
     try {
-      const res = await updateGallery(gid, {
-        title,
-        name,
-        category,
-        description,
-      });
+      const res = await updateGallery(gid, formData);
 
       if (res?.status === "success") {
         toast.success(res?.message);
+        setMediaFiles([]);
         fetchGallery();
       } else {
         toast.error(res?.message);
@@ -67,6 +80,33 @@ const DasGalleryEdit = () => {
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    setMediaFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  const removeFile = (index) => {
+    setMediaFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
+  // remove from existing AWS uploaded links
+  const removeMediaLink = (index) => {
+    const removed = mediaLinks[index];
+    setRemovedImages((prev) => [...prev, removed]); // keep record of deleted
+    setMediaLinks((prevLinks) => prevLinks.filter((_, i) => i !== index));
+  };
+
+  const renderPreview = (file, index) => {
+    const fileURL = URL.createObjectURL(file);
+
+    return (
+      <div key={index} className="das-gg-img">
+        <i className="fa fa-xmark" onClick={() => removeFile(index)}></i>
+        <img src={fileURL} alt="pic" />
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -136,11 +176,31 @@ const DasGalleryEdit = () => {
             <div className="wns-box das-my20 das-py20">
               <h3 className="">Images</h3>
               <div className="das-gallery-grid">
-                {mediaFiles?.map((file, index) => (
+                {mediaLinks?.map((file, index) => (
                   <div key={index} className="das-gg-img">
+                    <i
+                      className="fa fa-xmark"
+                      onClick={() => removeMediaLink(index)}
+                    ></i>
                     <img src={file?.url} alt="pic" />
                   </div>
                 ))}
+                {mediaFiles?.map((file, index) => renderPreview(file, index))}
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*, gif/*"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                  id="galleryPics"
+                />
+                <label
+                  htmlFor="galleryPics"
+                  className="das-gg-img das-add-gg-img"
+                >
+                  <i className="fa fa-plus"></i>
+                  <span>Add image</span>
+                </label>
               </div>
             </div>
             <div className="other-details">

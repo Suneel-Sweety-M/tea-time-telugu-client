@@ -199,14 +199,6 @@ const DasAddGallery = () => {
         </div>
       </div>
 
-      <div className="preview-box bgc-fff das-m20 p20">
-        <h4>Preview</h4>
-        <div
-          dangerouslySetInnerHTML={{ __html: description }}
-          className="description-preview"
-        />
-      </div>
-
       {isUpload && <UploadFile setIsUpload={setIsUpload} />}
     </>
   );

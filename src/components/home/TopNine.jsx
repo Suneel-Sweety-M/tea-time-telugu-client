@@ -46,7 +46,7 @@ const TopNine = () => {
                     className="post-image"
                   />
                 </figure>
-                <div className="snlc-title p20">
+                <div className="snlc-title">
                   <div className="snlc-text"></div>
                   <div className="snlc-half-text"></div>
                 </div>

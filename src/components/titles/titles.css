@@ -100,19 +100,19 @@
 
 @media (max-width: 600px) {
   .tab-title-container, .gallery-title-container {
-    height: 200px;
+    height: 100px;
   }
   .tab-title-container h1 {
-    font-size: 50px;
+    font-size: 30px;
   }
 }
 
 @media screen and (max-width: 400px) {
   .tab-title-container, .gallery-title-container {
-    height: 120px;
+    height: 80px;
   }
   .tab-title-container h1 {
-    font-size: 40px;
+    font-size: 20px;
     padding: 10px;
   }
 }
