@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SectionTitle from "../titles/SectionTitle";
 import Trailers from "../trailers/Trailers";
 import LatestStories from "../home/LatestStories";
 import { toast } from "react-toastify";
-import { getNewsShortAd, getVideoByNewsId } from "../../helper/apis";
+import { getVideo, getNewsShortAd } from "../../helper/apis";
 import moment from "moment";
 
 const SingleVideoContainer = () => {
   const { vid } = useParams();
   const [videoData, setVideoData] = useState({});
+  const [suggestedPosts, setSuggestedPosts] = useState([]);
+  const [similarPosts, setSimilarPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getVideoData = async () => {
       setIsLoading(true);
       try {
-        const res = await getVideoByNewsId(vid);
+        const res = await getVideo(vid);
         if (res?.status === "success") {
-          setVideoData(res?.data);
-          document.title = `${res?.data?.video?.title}`;
+          setVideoData(res?.video);
+          document.title = `${res?.video?.title?.te}`;
+          setSuggestedPosts(res?.suggestedVideos);
+          setSimilarPosts(res?.similarVideos || []);
         } else {
           toast.error(res?.message);
-          navigate(`/videos`);
         }
         setIsLoading(false);
       } catch (error) {
@@ -33,8 +34,7 @@ const SingleVideoContainer = () => {
     };
 
     getVideoData();
-  }, [vid, navigate]);
-
+  }, [vid]);
   // const [newsLongAdImg, setNewsLongAdImg] = useState("");
   // const [newsLongAdLink, setNewsLongAdLink] = useState("");
   const [newsShortAdImg, setNewsShortAdImg] = useState("");
@@ -72,41 +72,45 @@ const SingleVideoContainer = () => {
         <div className="single-video-container main-padding">
           <h1 className="p20">
             <span style={{ color: "red", marginRight: "10px" }}>Video:</span>
-            {videoData?.video?.title}
+            {videoData?.title?.en}
           </h1>
           <span className="single-news-duo-left-top-auth-details">
             <span className="sn-author">
-              Writer: <b>{videoData?.video?.postedBy?.fullName}</b>
+              Writer: <b>{videoData?.postedBy?.fullName}</b>
             </span>
             <span className="sn-posted-date">
               <i className="fa fa-calendar mr5"></i>
-              {moment(videoData?.video?.createdAt).format(
-                "hh:mm A, D MMMM YYYY"
-              )}
+              {moment(videoData?.createdAt).format("hh:mm A, D MMMM YYYY")}
             </span>
+            {/* <span className="sn-posted-date">
+              <i className="fa-regular fa-face-smile mr5"></i>
+              {videoData?.reactions?.length} <span>Reactions</span>
+            </span>
+            <span className="sn-posted-date">
+              <i className="fa-regular fa-comments mr5"></i>
+              {commentsCount} <span>Comments</span>
+            </span> */}
           </span>
           <div className="single-video-container-top">
             <div className="svct-video-container">
-              {videoData?.video && (
-                <iframe
-                  src={videoData?.video?.videoUrl}
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              )}
+              <iframe
+                src={videoData?.videoUrl}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
-          {videoData?.similarPosts?.length > 0 && (
+          {similarPosts?.length > 0 && (
             <div className="video-related-videos">
               <SectionTitle title={"Related Videos"} />
               <div className="all-category-posts-container">
-                {videoData?.similarPosts?.map((item, index) => (
+                {similarPosts?.map((item, index) => (
                   <Link
                     to={`/videos/v/${item?.newsId}`}
                     className="single-category-post"
-                    aria-label={`Watch v`}
+                    aria-label={`Watch video`}
                     key={index}
                   >
                     <div className="video-thumbnail-container">
@@ -125,7 +129,7 @@ const SingleVideoContainer = () => {
                       <span className="video-meta">
                         {moment(item?.createdAt).format("Do MMM YYYY")}
                       </span>
-                      <h3 className="video-title">{item?.title}</h3>
+                      <h3 className="video-title">{item?.title?.en}</h3>
                     </div>
                   </Link>
                 ))}
@@ -135,66 +139,29 @@ const SingleVideoContainer = () => {
           <Trailers />
           <div className="single-video-container-suggested">
             <div className="single-video-container-suggested-left">
-              {videoData?.suggestedPosts?.length > 0 && (
+              {suggestedPosts?.length > 0 && (
                 <div className="single-video-suggested-posts-container">
                   <SectionTitle title={"Suggested Posts"} />
                   <div className="sv-suggested-posts">
-                    {videoData?.suggestedPosts?.map((item, index) => (
+                    {suggestedPosts?.map((item, index) => (
                       <Link
                         to={`/videos/v/${item?.newsId}`}
                         className="sv-suggested-post"
                         key={index}
                       >
-                        <img src={item?.mainUrl} alt="yt-thumbnail" />
+                        <div className="video-thumbnail-container">
+                          <img src={item?.mainUrl} alt="yt-thumbnail" />
+                          <div className="play-icon">
+                            <svg viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                        </div>
                         <h4>
                           <span style={{ color: "red" }} className="mr10">
                             Video:
                           </span>
-                          {item?.title}
-                        </h4>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {videoData?.videoSongs?.length > 0 && (
-                <div className="single-video-suggested-posts-container">
-                  <SectionTitle title={"Video Songs"} />
-                  <div className="sv-suggested-posts">
-                    {videoData?.videoSongs?.map((item, index) => (
-                      <Link
-                        to={`/videos/v/${item?.newsId}`}
-                        className="sv-suggested-post"
-                        key={index}
-                      >
-                        <img src={item?.mainUrl} alt="yt-thumbnail" />
-                        <h4>
-                          <span style={{ color: "red" }} className="mr10">
-                            Video:
-                          </span>
-                          {item?.title}
-                        </h4>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {videoData?.relatedPosts?.length > 0 && (
-                <div className="single-video-suggested-posts-container">
-                  <SectionTitle title={"Related Posts"} />
-                  <div className="sv-suggested-posts">
-                    {videoData?.relatedPosts?.map((item, index) => (
-                      <Link
-                        to={`/videos/v/${item?.newsId}`}
-                        className="sv-suggested-post"
-                        key={index}
-                      >
-                        <img src={item?.mainUrl} alt="yt-thumbnail" />
-                        <h4>
-                          <span style={{ color: "red" }} className="mr10">
-                            Video:
-                          </span>
-                          {item?.title}
+                          {item?.title?.en}
                         </h4>
                       </Link>
                     ))}

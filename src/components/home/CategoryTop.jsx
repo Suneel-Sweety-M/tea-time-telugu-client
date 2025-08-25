@@ -41,15 +41,15 @@ const CategoryTop = () => {
           <div className="category-top-grid">
             {moviesNews?.slice(0, 3)?.map((post) => (
               <Link
-                to={`/${post?.category}/${post?.newsId}`}
+                to={`/${post?.category?.en}/${post?.newsId}`}
                 key={post?._id}
                 className="category-top-card"
-                aria-label={`Read ${post?.title}`}
+                aria-label={`Read ${post?.title?.en}`}
               >
                 <div className="category-top-image-container">
                   <img
                     src={post?.mainUrl}
-                    alt={post?.title}
+                    alt={post?.title?.en}
                     loading="lazy"
                     className="category-top-image"
                   />
@@ -58,7 +58,7 @@ const CategoryTop = () => {
                   <span className="category-top-author">
                     {post?.postedBy?.fullName}
                   </span>
-                  <h3 className="category-top-title">{post?.title}</h3>
+                  <h3 className="category-top-title">{post?.title?.en}</h3>
                 </div>
               </Link>
             ))}
@@ -92,15 +92,15 @@ const CategoryTop = () => {
           <div className="category-top-grid">
             {politicalNews?.slice(0, 3)?.map((post) => (
               <Link
-                to={`/${post?.category}/${post?.newsId}`}
+                to={`/${post?.category?.en}/${post?.newsId}`}
                 key={post?._id}
                 className="category-top-card"
-                aria-label={`Read ${post?.title}`}
+                aria-label={`Read ${post?.title?.en}`}
               >
                 <div className="category-top-image-container">
                   <img
                     src={post?.mainUrl}
-                    alt={post?.title}
+                    alt={post?.title?.en}
                     loading="lazy"
                     className="category-top-image"
                   />
@@ -109,7 +109,7 @@ const CategoryTop = () => {
                   <span className="category-top-author">
                     {post?.postedBy?.fullName}
                   </span>
-                  <h3 className="category-top-title">{post?.title}</h3>
+                  <h3 className="category-top-title">{post?.title?.en}</h3>
                 </div>
               </Link>
             ))}
@@ -143,15 +143,15 @@ const CategoryTop = () => {
           <div className="category-top-grid">
             {gossipsNews?.slice(0, 3)?.map((post) => (
               <Link
-                to={`/${post?.category}/${post?.newsId || post?._id}`}
+                to={`/${post?.category?.en}/${post?.newsId || post?._id}`}
                 key={post?._id}
                 className="category-top-card"
-                aria-label={`Read ${post?.title}`}
+                aria-label={`Read ${post?.title?.en}`}
               >
                 <div className="category-top-image-container">
                   <img
                     src={post?.mainUrl}
-                    alt={post?.title}
+                    alt={post?.title?.en}
                     loading="lazy"
                     className="category-top-image"
                   />
@@ -160,7 +160,7 @@ const CategoryTop = () => {
                   <span className="category-top-author">
                     {post?.postedBy?.fullName}
                   </span>
-                  <h3 className="category-top-title">{post?.title}</h3>
+                  <h3 className="category-top-title">{post?.title?.en}</h3>
                 </div>
               </Link>
             ))}

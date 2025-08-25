@@ -3,25 +3,25 @@ import "./navbar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Youtube from "../youtube/Youtube";
 import { useDispatch, useSelector } from "react-redux";
-import { getNavbarAd, loginUser, logoutUser } from "../../helper/apis";
-import { login } from "../../redux/userSlice";
+import { getNavbarAd, logoutUser } from "../../helper/apis";
+// import { login } from "../../redux/userSlice";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.teatimetelugu);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [seePassword, setSeePassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [seePassword, setSeePassword] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
-  const [isUserJoin, setIsUserJoin] = useState(true);
+  // const [isUserJoin, setIsUserJoin] = useState(true);
   const [yTurl, setYTurl] = useState("");
   const [searchText, setSearchText] = useState("");
   const [date, setDate] = useState("");
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
+  // const [data, setData] = useState({
+  //   email: "",
+  //   password: "",
+  // });
   const [navbarAdImg, setNavbarAdImg] = useState("");
   const [navbarAdLink, setNavbarAdLink] = useState("");
   const dispatch = useDispatch();
@@ -29,7 +29,12 @@ const Navbar = () => {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
+  const [logoutPopup, setLogoutPopup] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  const handleLogoutCancel = () => {
+    setLogoutPopup(false);
+  };
   const handleGetNavbarAd = async () => {
     const res = await getNavbarAd();
     if (res?.status === "success") {
@@ -40,49 +45,52 @@ const Navbar = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setData({
+  //     ...data,
+  //     [name]: value,
+  //   });
+  // };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      const res = await loginUser(data);
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+  //   try {
+  //     const res = await loginUser(data);
 
-      if (res?.status === "fail") {
-        toast.error(res?.message || "Error");
-      } else if (res?.status === "success") {
-        toast.success(res?.message || "Success");
-        const newData = {
-          user: res?.user,
-        };
+  //     if (res?.status === "fail") {
+  //       toast.error(res?.message || "Error");
+  //     } else if (res?.status === "success") {
+  //       toast.success(res?.message || "Success");
+  //       const newData = {
+  //         user: res?.user,
+  //       };
 
-        dispatch(login(newData));
-        setIsJoin(false);
-        setData({
-          email: "",
-          password: "",
-        });
-      } else {
-        toast.info(res?.message || "Info");
-      }
-      setIsSubmitting(false);
-    } catch (error) {
-      console.log(error);
-      setIsSubmitting(false);
-    }
-  };
+  //       dispatch(login(newData));
+  //       setIsJoin(false);
+  //       setData({
+  //         email: "",
+  //         password: "",
+  //       });
+  //     } else {
+  //       toast.info(res?.message || "Info");
+  //     }
+  //     setIsSubmitting(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     try {
       await logoutUser(dispatch, navigate);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -286,24 +294,20 @@ const Navbar = () => {
                   <i className="fa-solid fa-magnifying-glass cp"></i>
                 </Link>
 
-                {(user?.role === "admin" || user?.role === "writer") && (
-                  <Link to={`/${user?._id}/dashboard`}>
-                    <img
-                      className="profile-img"
-                      src={
-                        user?.profileUrl ||
-                        "https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
-                      }
-                      alt="pic"
-                    />
-                  </Link>
-                )}
-
-                {user && user?.role === "user" && (
-                  <i
-                    className="fa-solid fa-right-from-bracket cp"
-                    onClick={handleLogout}
-                  ></i>
+                {user ? (
+                  <div className="navbar-logout">
+                    <i
+                      className="fa-solid fa-right-from-bracket cp"
+                      onClick={() => setLogoutPopup(true)}
+                    ></i>
+                  </div>
+                ) : (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => setIsJoin(true)}
+                  >
+                    <i className="fa-solid fa-right-to-bracket cp"></i>
+                  </span>
                 )}
               </div>
             </div>
@@ -529,16 +533,6 @@ const Navbar = () => {
 
                 <div className="mobile-navbar-divider"></div>
 
-                {(user?.role === "admin" || user?.role === "writer") && (
-                  <Link
-                    to={`/${user?._id}/dashboard`}
-                    className="mobile-navbar-link mobile-navbar-link--blue"
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  >
-                    <span>Dashboard</span>
-                  </Link>
-                )}
-
                 <a
                   href="https://te.teatimetelugu.com"
                   target="_blank"
@@ -567,14 +561,20 @@ const Navbar = () => {
                 {user ? (
                   <button
                     className="mobile-navbar-link mobile-logout-btn mobile-navbar-link--red"
-                    onClick={handleLogout}
+                    onClick={() => {
+                      setLogoutPopup(true);
+                      setIsMobileMenuOpen(!isMobileMenuOpen);
+                    }}
                   >
                     Logout
                   </button>
                 ) : (
                   <button
                     className="mobile-navbar-link mobile-logout-btn mobile-navbar-link--red"
-                    onClick={() => setIsJoin(true)}
+                    onClick={() => {
+                      setIsJoin(true);
+                      setIsMobileMenuOpen(!isMobileMenuOpen);
+                    }}
                   >
                     Login
                   </button>
@@ -590,72 +590,52 @@ const Navbar = () => {
           <div className="join-popup">
             <i className="fa fa-xmark" onClick={() => setIsJoin(false)}></i>
             <h1>Login</h1>
-            {isUserJoin && (
-              <a
-                href={`${process.env.REACT_APP_API_URL}/auth/join-with-google`}
-                className="continue-with-google cursor-pointer"
+            <a
+              href={`${process.env.REACT_APP_API_URL}/auth/join-with-google?client=${process.env.REACT_APP_CLIENT_URL}`}
+              className="continue-with-google cursor-pointer"
+            >
+              <img
+                src="https://th.bing.com/th/id/R.0fa3fe04edf6c0202970f2088edea9e7?rik=joOK76LOMJlBPw&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fgoogle-logo-png-open-2000.png&ehk=0PJJlqaIxYmJ9eOIp9mYVPA4KwkGo5Zob552JPltDMw%3d&risl=&pid=ImgRaw&r=0"
+                alt="google-logo"
+              />
+              <h4>Continue With Google</h4>
+            </a>
+          </div>
+        </div>
+      )}
+
+      {logoutPopup && (
+        <div className="logout-popup-container">
+          <div className="logout-popup-box">
+            <div className="logout-popup-top">
+              <div>Are you sure you want to log out?</div>
+              <span className="logout-popup-top-x">
+                <i
+                  className="fa fa-xmark"
+                  onClick={() => setLogoutPopup(false)}
+                ></i>
+              </span>
+            </div>
+            <div className="logout-popup-bottom">
+              <button
+                className="logout-popup-btn cancel-btn"
+                onClick={handleLogoutCancel}
               >
-                <img
-                  src="https://th.bing.com/th/id/R.0fa3fe04edf6c0202970f2088edea9e7?rik=joOK76LOMJlBPw&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fgoogle-logo-png-open-2000.png&ehk=0PJJlqaIxYmJ9eOIp9mYVPA4KwkGo5Zob552JPltDMw%3d&risl=&pid=ImgRaw&r=0"
-                  alt="google-logo"
-                />
-                <h4>Continue With Google</h4>
-              </a>
-            )}
-            {!isUserJoin && (
-              <form onSubmit={onSubmit} className="singin-form">
-                <div className="join-input">
-                  <h3 className="">Email</h3>
-                  <input
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="join-input">
-                  <h3 className="password-label">Password</h3>
-                  <i
-                    className={
-                      seePassword
-                        ? "fa fa-eye password-see-hide"
-                        : "fa fa-eye-slash password-see-hide"
-                    }
-                    onClick={() => setSeePassword(!seePassword)}
-                  ></i>
-                  <input
-                    type={seePassword ? "text" : "password"}
-                    name="password"
-                    value={data.password}
-                    onChange={handleChange}
-                  />
-                </div>
-                {!isSubmitting ? (
-                  <button type="submit" className="login-btn btn">
-                    Login
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="is-submitting-btn login-btn btn"
-                  >
-                    Submitting...
-                  </button>
-                )}
-              </form>
-            )}
-            <p className="cp" onClick={() => setIsUserJoin(!isUserJoin)}>
-              Signin as {isUserJoin ? "Writer/Admin" : "user"}
-            </p>
-            {!isUserJoin && (
-              <Link
-                to={"/forgot-password"}
-                className="cp"
-                onClick={() => setIsJoin(false)}
-              >
-                <p>Forgot password?</p>
-              </Link>
-            )}
+                No
+              </button>
+              {!isLoggingOut ? (
+                <button
+                  className="logout-popup-btn logout-btn"
+                  onClick={handleLogout}
+                >
+                  Yes
+                </button>
+              ) : (
+                <button className="logout-popup-btn loading-btn">
+                  Logging out...
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

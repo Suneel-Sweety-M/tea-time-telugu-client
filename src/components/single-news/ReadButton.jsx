@@ -23,12 +23,12 @@ const ReadButton = ({ news }) => {
       setIsLoading(true);
 
       if (!audioSrc) {
-        let base64Audio = news.newsAudio;
+        let base64Audio = news.newsAudio?.en;
 
         // If audio not already stored, request backend
         if (!base64Audio) {
           const res = await getSpeech({
-            text: `<p>Title: ${news.title}.</p> <p>Description:</p> ${news.description}`,
+            text: `<p>Title: ${news.title?.en}.</p> <p>Description:</p> ${news.description?.en}`,
             newsId: news._id,
           });
           base64Audio = res.audioContent; // backend returns audioContent (base64)

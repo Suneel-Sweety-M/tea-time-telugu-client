@@ -21,16 +21,15 @@ const Search = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const limit = 9;
 
-  // ✅ categories are stable
   const categories = useMemo(
     () => [
-      { key: "news", title: "News" },
+      { key: "news", title: "General" },
       { key: "politics", title: "Politics" },
       { key: "movies", title: "Movies" },
       { key: "ott", title: "OTT" },
       { key: "gossips", title: "Gossips" },
       { key: "reviews", title: "Reviews" },
-      { key: "collections", title: "Collections" },
+      { key: "sports", title: "Sports" },
       { key: "shows", title: "Shows" },
       { key: "gallery", title: "Gallery" },
       { key: "videos", title: "Videos" },
@@ -45,7 +44,6 @@ const Search = () => {
     }, {})
   );
 
-  // ✅ debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchText(searchText);
@@ -53,7 +51,6 @@ const Search = () => {
     return () => clearTimeout(timer);
   }, [searchText]);
 
-  // ✅ stable function to fetch a category
   const fetchCategoryResults = useCallback(
     async (categoryKey, term, customSkip = 0) => {
       try {
@@ -89,12 +86,10 @@ const Search = () => {
       }
     },
     []
-  ); // ✅ no searchData here, use functional setState
+  );
 
-  // ✅ fetch all categories
   const fetchAllCategories = useCallback(
     (term) => {
-      // reset data before fetching
       setSearchData(
         categories.reduce((acc, c) => {
           acc[c.key] = { items: [], skip: 0, hasMore: true };
@@ -108,7 +103,6 @@ const Search = () => {
     [categories, fetchCategoryResults]
   );
 
-  // ✅ handle submit
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchText.trim()) {
@@ -120,13 +114,12 @@ const Search = () => {
     fetchAllCategories(searchText);
   };
 
-  // ✅ trigger search on mount or query change
-  useEffect(() => {
-    if (debouncedSearchText.trim()) {
-      setHasSearched(true);
-      fetchAllCategories(debouncedSearchText);
-    }
-  }, [debouncedSearchText, fetchAllCategories]);
+  // useEffect(() => {
+  //   if (debouncedSearchText.trim()) {
+  //     setHasSearched(true);
+  //     fetchAllCategories(debouncedSearchText);
+  //   }
+  // }, [debouncedSearchText, fetchAllCategories]);
 
   const renderPosts = (categoryKey, title) => {
     const cat = searchData[categoryKey];
@@ -135,48 +128,54 @@ const Search = () => {
       <div className="videos-category-container" key={categoryKey}>
         <SectionTitle title={title} />
         <div className="all-category-posts-container">
-          {cat.items.map((item) => (
-            <Link
-              key={item._id}
-              to={
-                categoryKey === "gallery"
-                  ? `/gallery/${item.newsId}`
-                  : categoryKey === "videos"
-                  ? `/videos/v/${item.newsId}`
-                  : `/${item.category}/${item.newsId}`
-              }
-              className="single-category-post"
-            >
-              <div className="video-thumbnail-container">
-                <img
-                  src={
-                    categoryKey === "gallery"
-                      ? item.galleryPics?.[0]?.url
-                      : item.mainUrl
-                  }
-                  alt={item.title}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300x200?text=Image+Not+Available";
-                  }}
-                />
-                {categoryKey === "videos" && (
-                  <div className="play-icon">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                )}
-              </div>
-              <div className="single-category-post-texts">
-                <span className="video-meta">
-                  {moment(item.createdAt).format("Do MMM YYYY")}
-                </span>
-                <h3 className="video-title">{item.title}</h3>
-              </div>
-            </Link>
-          ))}
+          {cat.items.map((item) => {
+            // Telugu for display, English for SEO/link
+            const displayTitle = item.title?.en || item.title?.en || "Untitled";
+            const seoTitle = item.title?.en || displayTitle;
+
+            return (
+              <Link
+                key={item._id}
+                to={
+                  categoryKey === "gallery"
+                    ? `/gallery/${item.newsId}`
+                    : categoryKey === "videos"
+                    ? `/videos/v/${item.newsId}`
+                    : `/${item.category?.en || "news"}/${item.newsId}`
+                }
+                className="single-category-post"
+              >
+                <div className="video-thumbnail-container">
+                  <img
+                    src={
+                      categoryKey === "gallery"
+                        ? item.galleryPics?.[0]
+                        : item.mainUrl
+                    }
+                    alt={seoTitle}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/300x200?text=Image+Not+Available";
+                    }}
+                  />
+                  {categoryKey === "videos" && (
+                    <div className="play-icon">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <div className="single-category-post-texts">
+                  <span className="video-meta">
+                    {moment(item.createdAt).format("Do MMM YYYY")}
+                  </span>
+                  <h3 className="video-title">{displayTitle}</h3>
+                </div>
+              </Link>
+            );
+          })}
         </div>
         {cat.hasMore && (
           <button
@@ -208,7 +207,9 @@ const Search = () => {
     (cat) => cat.items.length > 0
   );
 
-  document.title = `Search ${debouncedSearchText}`;
+  useEffect(() => {
+    document.title = `Search ${debouncedSearchText}`;
+  }, [debouncedSearchText]);
 
   return (
     <>

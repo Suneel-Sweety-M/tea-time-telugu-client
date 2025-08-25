@@ -53,24 +53,24 @@ const MostViewed = () => {
         <div className="most-viewed-grid">
           {news?.slice(0, 6)?.map((article) => (
             <Link
-              to={`/${article?.category}/${article?.newsId}`}
+              to={`/${article?.category?.en}/${article?.newsId}`}
               key={article?.newsId}
               className="most-viewed-card"
-              aria-label={`Read ${article?.title}`}
+              aria-label={`Read ${article?.title?.en}`}
             >
               <div className="most-viewed-card-image-container">
                 <img
                   src={article?.mainUrl}
-                  alt={article?.title}
+                  alt={article?.title?.en}
                   loading="lazy"
                   className="most-viewed-card-image"
                 />
               </div>
               <div className="most-viewed-card-content">
                 <span className="most-viewed-card-category">
-                  {article?.category}
+                  {article?.category?.en}
                 </span>
-                <h3 className="most-viewed-card-title">{article?.title}</h3>
+                <h3 className="most-viewed-card-title">{article?.title?.en}</h3>
               </div>
             </Link>
           ))}

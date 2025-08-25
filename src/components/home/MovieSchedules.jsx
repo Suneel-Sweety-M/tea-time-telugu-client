@@ -72,11 +72,11 @@ const MovieSchedules = () => {
                 className="schedules-list-item"
                 key={index}
                 style={{
-                  display: releaseCategory !== item?.category && "none",
+                  display: releaseCategory !== item?.category?.en && "none",
                 }}
               >
-                <span className="text-center ms-text">{item?.movie}</span>
-                <span className="ms-text">{item?.date} </span>
+                <span className="text-center ms-text">{item?.movie?.en}</span>
+                <span className="ms-text">{item?.date?.en} </span>
               </div>
             ))}
           </div>

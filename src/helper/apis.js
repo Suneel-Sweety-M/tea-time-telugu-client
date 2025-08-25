@@ -16,13 +16,6 @@ export const apiRequest = async ({ url, data, method }) => {
       data: data || {},
     });
 
-    if (
-      result?.data?.message === "No token provided!" ||
-      result?.data?.message === "Invalid or expired token!"
-    ) {
-      localStorage.removeItem("eetnewsuser");
-    }
-
     return result?.data;
   } catch (error) {
     const err = error.response.data;
@@ -31,8 +24,9 @@ export const apiRequest = async ({ url, data, method }) => {
   }
 };
 
-/*========= API REQUESTES ===========*/
+/*///========= API REQUESTES ===========///*/
 
+//=========== AUTHENTICATION ===========
 export const logoutUser = async (dispatch, navigate) => {
   try {
     dispatch(logout());
@@ -63,20 +57,6 @@ export const getLoggedinUser = async () => {
   }
 };
 
-export const registerUserByAdmin = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/auth/register-by-admin",
-      data: data,
-      method: "POST",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const loginUser = async (data) => {
   try {
     const res = await apiRequest({
@@ -91,544 +71,54 @@ export const loginUser = async (data) => {
   }
 };
 
-export const getUser = async (id) => {
+export const sendAdminForgotPassword = async (data) => {
   try {
     const res = await apiRequest({
-      url: `/user/${id}`,
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addUserProfile = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: `/user/add-profile-pic`,
+      url: "/auth/admin/forgot-password",
       method: "POST",
       data,
     });
     return res;
   } catch (error) {
-    console.log(error);
+    console.error("Error sending admin forgot password:", error);
+    throw error;
   }
 };
 
-export const editUserPic = async (data, id) => {
+export const sendWriterForgotPassword = async (data) => {
   try {
     const res = await apiRequest({
-      url: `/user/edit-profile-pic/${id}`,
+      url: "/auth/writer/forgot-password",
       method: "POST",
       data,
     });
     return res;
   } catch (error) {
-    console.log(error);
+    console.error("Error sending writer forgot password:", error);
+    throw error;
   }
 };
 
-export const updateUserDetails = async (id, data) => {
+export const resetAdminPassword = async (token, data) => {
   try {
     const res = await apiRequest({
-      url: `/user/${id}/update-details`,
+      url: `/auth/admin/reset-password/${token}`,
       method: "POST",
       data,
     });
     return res;
   } catch (error) {
-    console.log(error);
+    console.error("Error resetting admin password:", error);
+    throw error;
   }
 };
 
-export const editUserDetails = async (id, data) => {
-  try {
-    const res = await apiRequest({
-      url: `/user/${id}/update-user-details`,
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateUserPassword = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: `/auth/change-password`,
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const editUserPassword = async (data, id) => {
-  try {
-    const res = await apiRequest({
-      url: `/auth/change-password/${id}`,
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getWritersAndAdmins = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/user/admins-and-writers",
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateActiveStatus = async (id) => {
-  try {
-    const res = await apiRequest({
-      url: `/user/${id}/update-active`,
-      method: "POST",
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addGalleryPosts = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/gallery/add-gallery",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getGalleryPosts = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/gallery",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const loadGalleryPosts = async (page = 1, limit = 12) => {
-  try {
-    const query = new URLSearchParams();
-    query.append("page", page);
-    query.append("limit", limit);
-
-    const res = await apiRequest({
-      url: `/gallery/posts?${query.toString()}`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getFilteredGallery = async (category, time, searchText) => {
-  const url =
-    category || time || searchText
-      ? `/gallery/search?searchText=${searchText}&category=${category}&postedTime=${time}`
-      : "/gallery/search";
-  try {
-    const res = await apiRequest({
-      url,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getSingleGallery = async (id) => {
-  try {
-    const res = await apiRequest({
-      url: `/gallery/${id}`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getSingleGalleryByNewsId = async (newsId) => {
-  try {
-    const res = await apiRequest({
-      url: `/gallery/g/${newsId}`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateGallery = async (id, data) => {
-  try {
-    const res = await apiRequest({
-      url: `/gallery/${id}/edit`,
-      method: "PUT",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteGallery = async (id) => {
-  try {
-    const res = await apiRequest({
-      url: `/gallery/${id}/delete`,
-      method: "DELETE",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getNewsPosts = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/news",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getCategoryPosts = async (category, subCategory) => {
-  try {
-    const res = await apiRequest({
-      url: `/news?category=${category}&subCategory=${subCategory}`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getTrendingNews = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/news/trending",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-}; 
-
-export const getLatestNews = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/news/latest",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-}; 
-
-export const getHomeNewsPosts = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/news/home",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-}; 
-
-export const getFilteredNews = async (category, time, searchText, writer) => {
-  const url =
-    category || time || searchText || writer
-      ? `/news/filtered?searchText=${searchText}&category=${category}&time=${time}&writer=${writer}`
-      : "/news/filtered";
-  try {
-    const res = await apiRequest({
-      url,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// export const getSearchNews = async (q) => {
-//   try {
-//     const res = await apiRequest({
-//       url: `/news/search?q=${q}`,
-//       method: "GET",
-//     });
-
-//     return res;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-export const getSearchNews = async (q, skip = 0, limit = 9) => {
-  try {
-    const res = await apiRequest({
-      url: `/news/search?q=${encodeURIComponent(
-        q
-      )}&skip=${skip}&limit=${limit}`,
-      method: "GET",
-    });
-    return res;
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-export const getFilteredNewsPosts = async (category, subcategory) => {
-  try {
-    const url = `/news?category=${category}${
-      subcategory ? `&subcategory=${subcategory}` : ""
-    }`;
-
-    const res = await apiRequest({
-      url,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getCategoryNewsPosts = async (
-  category,
-  subcategory,
-  currentPage,
-  POSTS_PER_PAGE
-) => {
-  try {
-    const query = new URLSearchParams();
-
-    if (category) query.append("category", category);
-    if (subcategory) query.append("subcategory", subcategory);
-    if (currentPage) query.append("page", currentPage);
-    if (POSTS_PER_PAGE) query.append("limit", POSTS_PER_PAGE);
-
-    const url = `/news/category?${query.toString()}`;
-
-    const res = await apiRequest({
-      url,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addNewsPost = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/news/add-news",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const editNewsPost = async (data, newsId) => {
-  try {
-    const res = await apiRequest({
-      url: `/news/${newsId}/edit-news`,
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteNewsPost = async (newsId) => {
-  try {
-    const res = await apiRequest({
-      url: `/news/${newsId}/delete-news`,
-      method: "POST",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getSingleNews = async (id) => {
-  try {
-    const res = await apiRequest({
-      url: `/news/${id}`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getSingleNewsByNewsId = async (newsId) => {
-  try {
-    const res = await apiRequest({
-      url: `/news/n/${newsId}`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getSpeech = async ({text, newsId}) => {
-  try {
-    const res = await apiRequest({
-      url: `/speech/text-to-speech`,
-      method: "POST",
-      data: {
-        text,
-        newsId,
-      },
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addFileForLink = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-files-links",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getFileLink = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-files-links",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addHomeGridPosts = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-home-grid",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getDashData = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/data",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+//========== HOME NEWS ==========
 export const getHomeGridPosts = async () => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/get-home-grid",
+      url: "/home/get-featured-posts",
       method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addTopNinePosts = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-top-nine",
-      method: "POST",
-      data,
     });
 
     return res;
@@ -640,22 +130,8 @@ export const addTopNinePosts = async (data) => {
 export const getTopNinePosts = async () => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/get-top-nine",
+      url: "/home/get-top-nine",
       method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addTrendsPosts = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-trends",
-      method: "POST",
-      data,
     });
 
     return res;
@@ -667,22 +143,8 @@ export const addTrendsPosts = async (data) => {
 export const getTrendsPosts = async () => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/get-trends",
+      url: "/home/get-trends",
       method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addHotTopics = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-hot-topics",
-      method: "POST",
-      data,
     });
 
     return res;
@@ -694,23 +156,8 @@ export const addHotTopics = async (data) => {
 export const getHotTopics = async () => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/get-hot-topics",
+      url: "/home/get-hot-topics",
       method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-
-export const addBreakingNews = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-breaking-news",
-      method: "POST",
-      data,
     });
 
     return res;
@@ -722,22 +169,8 @@ export const addBreakingNews = async (data) => {
 export const getBreakingNews = async () => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/get-breaking-news",
+      url: "/home/get-breaking-news",
       method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addCategoryTopPosts = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-category-top",
-      method: "POST",
-      data,
     });
 
     return res;
@@ -749,7 +182,7 @@ export const addCategoryTopPosts = async (data) => {
 export const getCategoryTopPosts = async (category) => {
   try {
     const res = await apiRequest({
-      url: `/dashboard/get-category-top?category=${category}`,
+      url: `/home/get-category-top?category=${category}`,
       method: "GET",
     });
 
@@ -762,7 +195,7 @@ export const getCategoryTopPosts = async (category) => {
 export const getMovieReleases = async () => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/get-movie-releases",
+      url: "/home/get-movie-releases",
       method: "GET",
     });
 
@@ -775,7 +208,7 @@ export const getMovieReleases = async () => {
 export const getMovieCollections = async () => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/get-movie-collections",
+      url: "/home/get-movie-collections",
       method: "GET",
     });
 
@@ -785,12 +218,14 @@ export const getMovieCollections = async () => {
   }
 };
 
-export const addMovieReleases = async (data) => {
+//======== CONTACT AND AD ===========
+
+export const contactUsEmail = async (data) => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/add-movie-releases",
+      url: "/user/contact-mail",
       method: "POST",
-      data,
+      data: data,
     });
 
     return res;
@@ -799,39 +234,12 @@ export const addMovieReleases = async (data) => {
   }
 };
 
-export const editMovieRelease = async (data) => {
+export const adWithUsEmail = async (data) => {
   try {
     const res = await apiRequest({
-      url: "/dashboard/edit-movie-release",
-      method: "PUT",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteMovieRelease = async (id) => {
-  try {
-    const res = await apiRequest({
-      url: `/dashboard/delete-movie-release/${id}`,
-      method: "DELETE",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const addMovieCollections = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/add-movie-collections",
+      url: "/user/ad-mail",
       method: "POST",
-      data,
+      data: data,
     });
 
     return res;
@@ -840,38 +248,12 @@ export const addMovieCollections = async (data) => {
   }
 };
 
-export const editMovieCollection = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/edit-movie-collection",
-      method: "PUT",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteMovieCollection = async (id) => {
-  try {
-    const res = await apiRequest({
-      url: `/dashboard/delete-movie-collection/${id}`,
-      method: "DELETE",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+//======= REACTIONS AND COMMENTS ====
 export const addNewsReaction = async (id, data) => {
   try {
     const res = await apiRequest({
-      url: `/comments/${id}/add-reaction`,
-      method: "POST",
+      url: `/news/${id}/add-reaction`,
+      method: "PUT",
       data,
     });
 
@@ -884,8 +266,8 @@ export const addNewsReaction = async (id, data) => {
 export const addGalleryReaction = async (id, data) => {
   try {
     const res = await apiRequest({
-      url: `/comments/${id}/add-gallery-reaction`,
-      method: "POST",
+      url: `/gallery/${id}/add-reaction`,
+      method: "PUT",
       data,
     });
 
@@ -898,32 +280,8 @@ export const addGalleryReaction = async (id, data) => {
 export const getNewsComments = async (id) => {
   try {
     const res = await apiRequest({
-      url: `/comments/${id}`,
+      url: `/comments/${id}?language=en`,
       method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// apis.js
-export const loadNewsComments = async (
-  id,
-  directCommentsLimit,
-  replyCommentsLimit,
-  directCommentsSkip
-) => {
-  try {
-    const res = await apiRequest({
-      url: `/comments/${id}/news-comments`,
-      method: "GET",
-      params: {
-        directCommentsLimit,
-        replyCommentsLimit,
-        directCommentsSkip,
-      },
     });
 
     return res;
@@ -977,7 +335,7 @@ export const likeNewsComment = async (id) => {
   try {
     const res = await apiRequest({
       url: `/comments/${id}/like-comment`,
-      method: "POST",
+      method: "PUT",
     });
 
     return res;
@@ -990,7 +348,7 @@ export const dislikeNewsComment = async (id) => {
   try {
     const res = await apiRequest({
       url: `/comments/${id}/dislike-comment`,
-      method: "POST",
+      method: "PUT",
     });
 
     return res;
@@ -999,24 +357,12 @@ export const dislikeNewsComment = async (id) => {
   }
 };
 
-export const addVideoPost = async (data) => {
+//============ POSTERS AND ADS ============
+
+export const getPopupPoster = async () => {
   try {
     const res = await apiRequest({
-      url: "/videos/add-video",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getAllCategoryVideos = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/videos/all",
+      url: "/home/get-popup-poster",
       method: "GET",
     });
 
@@ -1026,14 +372,230 @@ export const getAllCategoryVideos = async () => {
   }
 };
 
-export const getHomeVideos = async (subCategory, limit) => {
+export const getMoviePoster = async () => {
   try {
     const res = await apiRequest({
-      url: "/videos/home",
+      url: "/home/get-movie-poster",
       method: "GET",
-      params: { 
-        subCategory,
-        limit,
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getNavbarAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/home/get-navbar-ad",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+// Home Ads
+export const getHomeLongAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/home/get-home-long-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting home long ad:", error);
+    throw error;
+  }
+};
+
+export const getHomeShortAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/home/get-home-short-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting home short ad:", error);
+    throw error;
+  }
+};
+// Category Ads
+export const getCategoryLongAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/home/get-category-long-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting category long ad:", error);
+    throw error;
+  }
+};
+
+export const getCategoryShortAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/home/get-category-short-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting category short ad:", error);
+    throw error;
+  }
+};
+// News Ads
+export const getNewsLongAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/home/get-news-long-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting news long ad:", error);
+    throw error;
+  }
+};
+
+export const getNewsShortAd = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/home/get-news-short-ad",
+      method: "GET",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error getting news short ad:", error);
+    throw error;
+  }
+};
+
+//======== NEWS ==========
+export const getTrendingNews = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/news/trending",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getLatestNews = async () => {
+  try {
+    const res = await apiRequest({
+      url: "/news/latest",
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getFilteredNews = async (
+  category,
+  time,
+  searchText,
+  writer,
+  page,
+  limit
+) => {
+  try {
+    const params = new URLSearchParams({
+      category: category || "",
+      time: time || "",
+      searchText: searchText || "",
+      writer: writer || "",
+      page: page || 1,
+      limit: limit || 10,
+    });
+
+    const res = await apiRequest({
+      url: `/news/filter?${params.toString()}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCategoryNewsPosts = async (
+  category,
+  subcategory,
+  currentPage,
+  POSTS_PER_PAGE
+) => {
+  try {
+    const query = new URLSearchParams();
+
+    if (category) query.append("category", category);
+    if (subcategory) query.append("subcategory", subcategory);
+    if (currentPage) query.append("page", currentPage);
+    if (POSTS_PER_PAGE) query.append("limit", POSTS_PER_PAGE);
+
+    const url = `/news/category?${query.toString()}`;
+
+    const res = await apiRequest({
+      url,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSingleNews = async (id) => {
+  try {
+    const res = await apiRequest({
+      url: `/news/n/${id}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//========= SEARCH ==============
+export const getSearchNews = async (q, skip = 0, limit = 9) => {
+  try {
+    const res = await apiRequest({
+      url: `/home/search?q=${encodeURIComponent(
+        q
+      )}&skip=${skip}&limit=${limit}`,
+      method: "GET",
+    });
+    return res;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+//
+export const getSpeech = async ({ text, newsId }) => {
+  try {
+    const res = await apiRequest({
+      url: `/speech/text-to-speech`,
+      method: "POST",
+      data: {
+        text,
+        newsId,
       },
     });
 
@@ -1041,12 +603,68 @@ export const getHomeVideos = async (subCategory, limit) => {
   } catch (error) {
     console.log(error);
   }
-}; 
+};
 
-export const getPaginatedCategoryVideos = async (params) => {
+//========== GALLERY ==============
+export const getFilteredGallery = async (
+  category,
+  time,
+  searchText,
+  page,
+  limit
+) => {
+  try {
+    const params = new URLSearchParams({
+      category: category || "",
+      time: time || "",
+      searchText: searchText || "",
+      page: page || 1,
+      limit: limit || 8,
+    });
+
+    const res = await apiRequest({
+      url: `/gallery/filter?${params.toString()}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSingleGallery = async (id) => {
   try {
     const res = await apiRequest({
-      url: `/videos/category?${new URLSearchParams(params).toString()}`,
+      url: `/gallery/g/${id}`,
+      method: "GET",
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//========== VIDEOS ==============
+export const getFilteredVideos = async (
+  category,
+  time,
+  searchText,
+  page,
+  limit
+) => {
+  try {
+    const params = new URLSearchParams({
+      category: category || "",
+      time: time || "",
+      searchText: searchText || "",
+      page: page || 1,
+      limit: limit || 8,
+    });
+
+    const res = await apiRequest({
+      url: `/videos/filter?${params.toString()}`,
       method: "GET",
     });
 
@@ -1059,412 +677,12 @@ export const getPaginatedCategoryVideos = async (params) => {
 export const getVideo = async (id) => {
   try {
     const res = await apiRequest({
-      url: `/videos/${id}`,
+      url: `/videos/v/${id}`,
       method: "GET",
     });
 
     return res;
   } catch (error) {
     console.log(error);
-  }
-};
-
-export const getVideoByNewsId = async (newsId) => {
-  try {
-    const res = await apiRequest({
-      url: `/videos/v/${newsId}`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteVideo = async (id) => {
-  try {
-    const res = await apiRequest({
-      url: `/videos/delete/${id}`,
-      method: "DELETE",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getAllVideos = async () => {
-  try {
-    const res = await apiRequest({
-      url: `/videos/`,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getQueryVideos = async (category, time, searchText) => {
-  try {
-    const url =
-      category || time || searchText
-        ? `/videos/query?searchText=${searchText}&category=${category}&postedTime=${time}`
-        : "/videos/query";
-    const res = await apiRequest({
-      url: url,
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-/*=== Home Page === */
-
-export const getTopScrollPosts = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/auth/news/home-scrolls",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getTopFivePosts = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/auth/news/top-five",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const contactUsEmail = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/user/contact-mail",
-      method: "POST",
-      data: data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const adWithUsEmail = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/user/ad-mail",
-      method: "POST",
-      data: data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getPopupPoster = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-popup-poster",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const setPopupPoster = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-popup-poster",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getMoviePoster = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-movie-poster",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const setMoviePoster = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-movie-poster",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getNavbarAd = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-navbar-ad",
-      method: "GET",
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const setNavbarAd = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-navbar-ad",
-      method: "POST",
-      data,
-    });
-
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// Home Ads
-export const getHomeLongAd = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-home-long-ad",
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.error("Error getting home long ad:", error);
-    throw error;
-  }
-};
-
-export const setHomeLongAd = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-home-long-ad",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error setting home long ad:", error);
-    throw error;
-  }
-};
-
-export const getHomeShortAd = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-home-short-ad",
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.error("Error getting home short ad:", error);
-    throw error;
-  }
-};
-
-export const setHomeShortAd = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-home-short-ad",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error setting home short ad:", error);
-    throw error;
-  }
-};
-
-// Category Ads
-export const getCategoryLongAd = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-category-long-ad",
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.error("Error getting category long ad:", error);
-    throw error;
-  }
-};
-
-export const setCategoryLongAd = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-category-long-ad",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error setting category long ad:", error);
-    throw error;
-  }
-};
-
-export const getCategoryShortAd = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-category-short-ad",
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.error("Error getting category short ad:", error);
-    throw error;
-  }
-};
-
-export const setCategoryShortAd = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-category-short-ad",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error setting category short ad:", error);
-    throw error;
-  }
-};
-
-// News Ads
-export const getNewsLongAd = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-news-long-ad",
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.error("Error getting news long ad:", error);
-    throw error;
-  }
-};
-
-export const setNewsLongAd = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-news-long-ad",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error setting news long ad:", error);
-    throw error;
-  }
-};
-
-export const getNewsShortAd = async () => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/get-news-short-ad",
-      method: "GET",
-    });
-    return res;
-  } catch (error) {
-    console.error("Error getting news short ad:", error);
-    throw error;
-  }
-};
-
-export const setNewsShortAd = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/dashboard/set-news-short-ad",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error setting news short ad:", error);
-    throw error;
-  }
-};
-
-export const sendAdminForgotPassword = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/auth/admin/forgot-password",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error sending admin forgot password:", error);
-    throw error;
-  }
-};
-
-export const sendWriterForgotPassword = async (data) => {
-  try {
-    const res = await apiRequest({
-      url: "/auth/writer/forgot-password",
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error sending writer forgot password:", error);
-    throw error;
-  }
-};
-
-export const resetAdminPassword = async (token, data) => {
-  try {
-    const res = await apiRequest({
-      url: `/auth/admin/reset-password/${token}`,
-      method: "POST",
-      data,
-    });
-    return res;
-  } catch (error) {
-    console.error("Error resetting admin password:", error);
-    throw error;
   }
 };

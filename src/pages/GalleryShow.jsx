@@ -4,18 +4,17 @@ import Footer from "../components/footer/Footer";
 import LatestStories from "../components/home/LatestStories";
 import SectionTitle from "../components/titles/SectionTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getNewsShortAd, getSingleGalleryByNewsId } from "../helper/apis";
+import { getNewsShortAd, getSingleGallery } from "../helper/apis";
 import moment from "moment";
 import { toast } from "react-toastify";
 import ScrollTop from "../components/scroll-top/ScrollTop";
 import { useSelector } from "react-redux";
 import NewsComments from "../components/single-news/NewsComments";
+import ReadButton from "../components/single-news/ReadButton";
 
 const GalleryShow = () => {
   const { id } = useParams();
-  const reactionsArray = useSelector(
-    (state) => state.teatimetelugu.reactions
-  );
+  const reactionsArray = useSelector((state) => state.teatimetelugu.reactions);
   const navigate = useNavigate();
   const [gallery, setGallery] = useState({});
   const [suggestedPosts, setSuggestedPosts] = useState([]);
@@ -54,11 +53,11 @@ const GalleryShow = () => {
     }
     setIsLoading(true);
     try {
-      const res = await getSingleGalleryByNewsId(id);
+      const res = await getSingleGallery(id);
       if (res?.status === "success") {
         setGallery(res?.gallery);
-        document.title = `${res?.gallery?.title}`;
-        setSuggestedPosts(res?.suggestedPosts);
+        document.title = `${res?.gallery?.title?.en}`;
+        setSuggestedPosts(res?.suggestedGallery);
       } else {
         navigate("/gallery");
       }
@@ -112,7 +111,7 @@ const GalleryShow = () => {
             <div className="single-news-duo-left">
               <div className="single-news-duo-left-top">
                 <h1 className="single-news-duo-left-top-title">
-                  {gallery?.title}
+                  {gallery?.title?.en}
                 </h1>
                 <span className="single-news-duo-left-top-auth-details">
                   <span className="sn-author">
@@ -131,20 +130,23 @@ const GalleryShow = () => {
                     {commentsCount || gallery?.comments?.length || 0}
                     <span> Comments</span>
                   </span>
+                  {gallery?.newsAudio?.en && <ReadButton news={gallery} />}
                 </span>
                 <div className="single-news-content-container">
                   {gallery?.galleryPics?.length > 0 && (
-                    <img src={gallery?.galleryPics[0]?.url} alt="pic" />
+                    <img src={gallery?.galleryPics[0]} alt="pic" />
                   )}
                   <div
                     className="single-news-description main-font"
-                    dangerouslySetInnerHTML={{ __html: gallery?.description }}
+                    dangerouslySetInnerHTML={{
+                      __html: gallery?.description?.en,
+                    }}
                   />
                   <div className="all-pics-grid">
                     {gallery?.galleryPics?.map((pic, index) => (
                       <img
                         key={index}
-                        src={pic?.url}
+                        src={pic}
                         alt=""
                         className="grid-pic"
                         onClick={() => {
@@ -186,34 +188,10 @@ const GalleryShow = () => {
               <SectionTitle title={"Tags"} />
               <div className="sn-all-tags">
                 <Link
-                  to={`/search?q=${gallery?.name}`}
+                  to={`/search?q=${gallery?.name?.en}`}
                   className="sn-tag box-shadow"
                 >
-                  {gallery?.name}
-                </Link>
-                <Link to={`/search?q=Tollywood`} className="sn-tag box-shadow">
-                  Tollywood
-                </Link>
-                <Link to={`/search?q=NTR`} className="sn-tag box-shadow">
-                  NTR
-                </Link>
-                <Link to={`/search?q=Samanta`} className="sn-tag box-shadow">
-                  Samanta
-                </Link>
-                <Link
-                  to={`/search?q=Pooja Hegde`}
-                  className="sn-tag box-shadow"
-                >
-                  Pooja Hegde
-                </Link>
-                <Link to={`/search?q=Rajamouli`} className="sn-tag box-shadow">
-                  Rajamouli
-                </Link>
-                <Link
-                  to={`/search?q=Mahesh Babu`}
-                  className="sn-tag box-shadow"
-                >
-                  Mahesh Babu
+                  {gallery?.name?.en}
                 </Link>
               </div>
             </div>
@@ -301,22 +279,22 @@ const GalleryShow = () => {
                   to={`/gallery/${collection?.newsId}`}
                   key={collection?._id}
                   className="latest-collection-card"
-                  aria-label={`View ${collection?.title}`}
+                  aria-label={`View ${collection?.title?.en}`}
                 >
                   <div className="latest-collection-image-container">
                     <img
-                      src={collection?.galleryPics[0]?.url}
-                      alt={collection?.title}
+                      src={collection?.galleryPics[0]}
+                      alt={collection?.title?.en}
                       loading="lazy"
                       className="latest-collection-image"
                     />
                   </div>
                   <div className="latest-collection-content">
                     <span className="latest-collection-category">
-                      {collection?.category}
+                      {collection?.category?.en}
                     </span>
                     <h3 className="latest-collection-title">
-                      {collection?.title}
+                      {collection?.title?.en}
                     </h3>
                   </div>
                 </Link>
@@ -352,8 +330,8 @@ const GalleryShow = () => {
               </span>
             </div>
             <img
-              src={gallery?.galleryPics[currentImageIndex]?.url}
-              alt={gallery?.name}
+              src={gallery?.galleryPics[currentImageIndex]}
+              alt={gallery?.name?.en}
               className="popup-image"
             />
           </div>

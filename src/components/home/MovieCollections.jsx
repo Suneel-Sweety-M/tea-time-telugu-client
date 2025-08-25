@@ -88,11 +88,11 @@ const MovieCollections = () => {
               className="schedules-list-item"
               key={index}
               style={{
-                display: collectionsCategory !== item?.category && "none",
+                display: collectionsCategory !== item?.category?.en && "none",
               }}
             >
-              <span className="text-center ms-text">{item?.movie}</span>
-              <span className="ms-text">₹ {item?.amount}</span>
+              <span className="text-center ms-text">{item?.movie?.en}</span>
+              <span className="ms-text">₹ {item?.amount?.en}</span>
             </div>
           ))}
           </div>

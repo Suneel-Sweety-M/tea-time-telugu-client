@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SectionTitle from "../titles/SectionTitle";
 import { Link } from "react-router-dom";
-import { loadGalleryPosts } from "../../helper/apis";
+import { getFilteredGallery } from "../../helper/apis";
 
 const HomeGallery = () => {
   const [homeGalleryNews, setHomeGalleryNews] = useState([]);
@@ -9,9 +9,9 @@ const HomeGallery = () => {
 
   const allHomeGalleryPosts = async () => {
     try {
-      const res = await loadGalleryPosts(1, 5);
+      const res = await getFilteredGallery("", "", "", 1, 5);
       if (res?.status === "success") {
-        setHomeGalleryNews(res?.gallery);
+        setHomeGalleryNews(res?.gallery); 
       }
     } catch (error) {
       console.log(error);
@@ -53,22 +53,22 @@ const HomeGallery = () => {
               to={`/gallery/${item?.newsId}`}
               key={item?._id}
               className="gallery-card"
-              aria-label={`View ${item?.name} gallery`}
+              aria-label={`View ${item?.name?.en} gallery`}
             >
               <div className="card-image-container">
                 <img
                   src={
-                    item?.galleryPics[0]?.url ||
+                    item?.galleryPics[0] ||
                     "https://res.cloudinary.com/demmiusik/image/upload/v1729620719/EET_cyxysf.png"
                   }
-                  alt={item?.name}
+                  alt={item?.name?.en}
                   loading="lazy"
                   className="card-image"
                 />
               </div>
               <div className="card-overlay">
-                <span className="card-category">{item?.category}</span>
-                <h3 className="card-title">{item?.name}</h3>
+                <span className="card-category">{item?.category?.en}</span>
+                <h3 className="card-title">{item?.name?.en}</h3>
               </div>
             </Link>
           ))}

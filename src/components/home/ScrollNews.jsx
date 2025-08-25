@@ -83,10 +83,10 @@ const ScrollNews = () => {
               <Link
                 key={index}
                 className={`scroll-news-item ${getItemPosition(index)}`}
-                to={`/${item?.category}/${item?.newsId}`}
+                to={`/${item?.category?.en}/${item?.newsId}`}
               >
-                <img src={item?.mainUrl} alt={item?.title} />
-                <div className="scroll-news-title">{item?.title}</div>
+                <img src={item?.mainUrl} alt={item?.title?.en} />
+                <div className="scroll-news-title">{item?.title?.en}</div>
               </Link>
             ))}
           </div>

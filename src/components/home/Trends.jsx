@@ -71,7 +71,7 @@ const Trends = () => {
         <div className="trends-section">
           <div className="trends-left">
             <Link
-              to={`/${mainTrends?.category}/${mainTrends?.newsId}`}
+              to={`/${mainTrends?.category?.en}/${mainTrends?.newsId}`}
               className="trends-post cp"
             >
               <img
@@ -86,7 +86,7 @@ const Trends = () => {
                   {mainTrends?.postedBy?.fullName} -{" "}
                   {moment(mainTrends?.createdAt).format("MMM DD, YYYY")}
                 </span>
-                <h3 className="trends-title fs20">{mainTrends?.title}</h3>
+                <h3 className="trends-title fs20">{mainTrends?.title?.en}</h3>
                 {/* <span
                   className="trends-desc dynamic-desc"
                   dangerouslySetInnerHTML={{
@@ -99,7 +99,7 @@ const Trends = () => {
           <div className="trends-right">
             {otherTrends.slice(0, 4).map((item, index) => (
               <Link
-                to={`/${item?.category}/${item?.newsId}`}
+                to={`/${item?.category?.en}/${item?.newsId}`}
                 className="trends-post cp"
                 key={index}
               >
@@ -112,10 +112,10 @@ const Trends = () => {
                 />
                 <div className="trends-texts">
                   <span className="trends-category">
-                    {item?.category} /{" "}
+                    {item?.category?.en} /{" "}
                     {moment(item?.createdAt).format("MMM DD, YYYY")}
                   </span>
-                  <h3 className="trends-title fs20">{item?.title}</h3>
+                  <h3 className="trends-title fs20">{item?.title?.en}</h3>
                   {/* <span
                     className="trends-desc dynamic-desc"
                     dangerouslySetInnerHTML={{

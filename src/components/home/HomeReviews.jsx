@@ -31,15 +31,15 @@ const HomeReviews = () => {
         <div className="home-review-grid">
           {news?.slice(0, 4)?.map((review) => (
             <Link
-              to={`/${review?.category}/${review?.newsId}`}
+              to={`/${review?.category?.en}/${review?.newsId}`}
               key={review?._id}
               className="home-review-card"
-              aria-label={`Read ${review?.title} review`}
+              aria-label={`Read ${review?.title?.en} review`}
             >
               <div className="home-review-image-container">
                 <img
                   src={review?.mainUrl}
-                  alt={review?.title}
+                  alt={review?.title?.en}
                   loading="lazy"
                   className="home-review-image"
                 />
@@ -55,7 +55,7 @@ const HomeReviews = () => {
                     />
                   ))}
                 </div>
-                <h3 className="home-review-title">{review?.title}</h3>
+                <h3 className="home-review-title">{review?.title?.en}</h3>
               </div>
             </Link>
           ))}

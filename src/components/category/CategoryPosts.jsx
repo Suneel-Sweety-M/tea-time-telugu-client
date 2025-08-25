@@ -36,13 +36,13 @@ const CategoryPosts = () => {
       const res = await getCategoryNewsPosts(
         category,
         subcategory,
-        pageParam || 1,
+        currentPage || 1,
         POSTS_PER_PAGE
       );
-      document.title = `Tea Time Telugu - ${category.toUpperCase()}`;
+      document.title = `Tea Time Telugu - ${category?.toUpperCase()}`;
       if (res?.status === "success") {
         setNews(res.news || []);
-        setTotalPages(Math.ceil((res.total || 0) / POSTS_PER_PAGE));
+        setTotalPages(res?.pagination?.totalPages || 1);
       } else {
         toast.error(res.message);
       }
@@ -52,7 +52,7 @@ const CategoryPosts = () => {
     } finally {
       setLoading(false);
     }
-  }, [category, subcategory, pageParam]);
+  }, [category, subcategory, currentPage]);
 
   useEffect(() => {
     fetchNewsByCategory();
@@ -117,7 +117,7 @@ const CategoryPosts = () => {
           {news?.length > 0 ? (
             news.map((post) => (
               <Link
-                to={`/${post?.category}/${post?.newsId}`}
+                to={`/${post?.category?.en}/${post?.newsId}`}
                 key={post?._id}
                 className="single-category-post box-shadow"
               >
@@ -127,15 +127,17 @@ const CategoryPosts = () => {
                       post?.mainUrl ||
                       "https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
                     }
-                    alt={post.title}
+                    alt={post.title?.en}
                   />
                 </div>
                 <div className="single-category-post-texts">
                   <span className="single-category-post-category">
-                    {post?.category} /{" "}
+                    {post?.category?.en} /{" "}
                     {moment(post?.createdAt).format("MMM DD, YYYY")}
                   </span>
-                  <h3 className="single-category-post-title">{post?.title}</h3>
+                  <h3 className="single-category-post-title">
+                    {post?.title?.en}
+                  </h3>
                 </div>
               </Link>
             ))

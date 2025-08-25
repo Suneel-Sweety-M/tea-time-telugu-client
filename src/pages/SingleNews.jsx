@@ -6,7 +6,7 @@ import LatestStories from "../components/home/LatestStories";
 import SectionTitle from "../components/titles/SectionTitle";
 import NewsComments from "../components/single-news/NewsComments";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getNewsShortAd, getSingleNewsByNewsId } from "../helper/apis";
+import { getNewsShortAd, getSingleNews } from "../helper/apis";
 import moment from "moment";
 import { toast } from "react-toastify";
 import ScrollTop from "../components/scroll-top/ScrollTop";
@@ -26,11 +26,10 @@ const SingleNews = () => {
   const getNews = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await getSingleNewsByNewsId(id);
+      const res = await getSingleNews(id);
       if (res?.status === "success") {
         setNews(res?.news);
-
-        document.title = `${res?.news?.title}`;
+        document.title = `${res?.news?.title?.en}`;
         setSuggestedNews(res?.suggestedNews);
       } else {
         navigate("/");
@@ -87,7 +86,7 @@ const SingleNews = () => {
             <div className="single-news-duo-left">
               <div className="single-news-duo-left-top">
                 <h1 className="single-news-duo-left-top-title">
-                  {news?.title}
+                  {news?.title?.en}
                 </h1>
                 <span className="single-news-duo-left-top-auth-details">
                   <span className="sn-author">
@@ -106,18 +105,15 @@ const SingleNews = () => {
                     {commentsCount} <span>Comments</span>
                   </span>
 
-                  <ReadButton news={news} />
+                  {news?.newsAudio?.en && <ReadButton news={news} />}
                 </span>
                 <div className="single-news-content-container">
-                  {news?.subCategory !== "trailer" && (
-                    <img src={news?.mainUrl} alt={news?.title} />
-                  )}
-
+                  <img src={news?.mainUrl} alt={news?.title?.en} />
                   <div
                     className="single-news-description main-font"
-                    dangerouslySetInnerHTML={{ __html: news?.description }}
+                    dangerouslySetInnerHTML={{ __html: news?.description?.en }}
                   />
-                  {news?.category === "reviews" && (
+                  {news?.category?.en === "reviews" && (
                     <div className="single-news-rating-container">
                       <h1>Tea Time Telugu Rating :</h1>
                       {[...Array(5)].map((_, i) => (
@@ -165,7 +161,7 @@ const SingleNews = () => {
               <div className="single-news-tags">
                 <SectionTitle title={"Tags"} />
                 <div className="sn-all-tags">
-                  {news?.tags?.map((tag, index) => (
+                  {news?.tags?.en?.map((tag, index) => (
                     <Link
                       to={`/search?q=${tag}`}
                       className="sn-tag box-shadow"
@@ -259,25 +255,25 @@ const SingleNews = () => {
               <div className="latest-collection-grid">
                 {suggestedNews?.slice(0, 9)?.map((collection) => (
                   <Link
-                    to={`/${collection?.category}/${collection?.newsId}`}
+                    to={`/${collection?.category?.en}/${collection?.newsId}`}
                     key={collection?._id}
                     className="latest-collection-card"
-                    aria-label={`View ${collection?.title}`}
+                    aria-label={`View ${collection?.title?.en}`}
                   >
                     <div className="latest-collection-image-container">
                       <img
                         src={collection?.mainUrl}
-                        alt={collection?.title}
+                        alt={collection?.title?.en}
                         loading="lazy"
                         className="latest-collection-image"
                       />
                     </div>
                     <div className="latest-collection-content">
                       <span className="latest-collection-category">
-                        {collection?.category}
+                        {collection?.category?.en}
                       </span>
                       <h3 className="latest-collection-title">
-                        {collection?.title}
+                        {collection?.title?.en}
                       </h3>
                     </div>
                   </Link>

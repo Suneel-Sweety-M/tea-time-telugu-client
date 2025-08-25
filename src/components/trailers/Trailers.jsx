@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./trailers.css";
 import SectionTitle from "../titles/SectionTitle";
 import { toast } from "react-toastify";
-import { getHomeVideos } from "../../helper/apis";
+import { getFilteredVideos } from "../../helper/apis";
 
 const Trailers = () => {
   const [currentVid, setCurrentVid] = useState({});
@@ -11,7 +11,7 @@ const Trailers = () => {
   useEffect(() => {
     const fetchAllVideos = async () => {
       try {
-        const res = await getHomeVideos("trailers", 10);
+        const res = await getFilteredVideos("trailers", "", "", 1, 10);
         if (res?.status === "success") {
           setVideos(res?.videos);
           setCurrentVid(res?.videos[0]);
@@ -50,7 +50,7 @@ const Trailers = () => {
               >
                 <img src={item?.mainUrl} alt="yt-thumbnail" />
                 <div className="vg-videos-list-item-texts">
-                  <span className="vg-item-title">{item?.title}</span>
+                  <span className="vg-item-title">{item?.title?.en}</span>
                 </div>
               </div>
             ))}

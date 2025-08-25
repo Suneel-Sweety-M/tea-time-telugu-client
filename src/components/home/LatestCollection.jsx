@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SectionTitle from "../titles/SectionTitle";
 import { Link } from "react-router-dom";
-import { getHomeNewsPosts } from "../../helper/apis";
+import { getFilteredNews } from "../../helper/apis";
 
 const LatestCollection = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +11,7 @@ const LatestCollection = () => {
     const allNews = async () => {
       setIsLoading(true);
       try {
-        const res = await getHomeNewsPosts(); 
+        const res = await getFilteredNews("", "", "", 1, 9);  
         if (res?.status === "success") {
           setNews(res?.news);
         }
@@ -27,7 +27,7 @@ const LatestCollection = () => {
 
   return (
     <div className="latest-collection-container">
-      <SectionTitle title="Latest Collection" />
+      {news.length > 0 && <SectionTitle title="Latest Collection" />}
       {isLoading ? (
         <div className="latest-collection-grid">
           {Array(9)
@@ -53,24 +53,24 @@ const LatestCollection = () => {
         <div className="latest-collection-grid">
           {news?.slice(0, 9)?.map((collection) => (
             <Link
-              to={`/${collection?.category}/${collection?.newsId}`}
+              to={`/${collection?.category?.en}/${collection?.newsId}`}
               key={collection?._id}
               className="latest-collection-card"
-              aria-label={`View ${collection?.title}`}
+              aria-label={`View ${collection?.title?.en}`}
             >
               <div className="latest-collection-image-container">
                 <img
                   src={collection?.mainUrl}
-                  alt={collection?.title}
+                  alt={collection?.title?.en}
                   loading="lazy"
                   className="latest-collection-image"
                 />
               </div>
               <div className="latest-collection-content">
                 <span className="latest-collection-category">
-                  {collection?.category}
+                  {collection?.category?.en}
                 </span>
-                <h3 className="latest-collection-title">{collection?.title}</h3>
+                <h3 className="latest-collection-title">{collection?.title?.en}</h3>
                 {/* <p
                   className="latest-collection-description dynamic-desc"
                   dangerouslySetInnerHTML={{

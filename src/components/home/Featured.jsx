@@ -80,21 +80,21 @@ const Featured = () => {
 const FeaturedItem = ({ item, isMain }) => {
   return (
     <Link
-      to={`/${item?.category}/${item?.newsId}`}
+      to={`/${item?.category?.en}/${item?.newsId}`}
       className={`featured-news-container ${isMain ? "main-featured" : ""}`}
       key={item?._id}
     >
       <img
         src={item?.mainUrl}
-        alt={item?.title}
+        alt={item?.title?.en}
         loading="lazy" // Add lazy loading for better performance
       />
       <div className="featured-news-overlay"></div>
       <div className="featured-news-texts">
         <span className="featured-news-category text-capital">
-          {item?.category}
+          {item?.category?.en}
         </span>
-        <h3 className="featured-news-title">{item?.title}</h3>
+        <h3 className="featured-news-title">{item?.title?.en}</h3>
       </div>
     </Link>
   );

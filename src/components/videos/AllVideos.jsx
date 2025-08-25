@@ -1,171 +1,161 @@
-import React, { useEffect, useState } from "react";
-import SectionTitle from "../titles/SectionTitle";
-import { Link } from "react-router-dom";
-import { getPaginatedCategoryVideos } from "../../helper/apis";
+import React, { useCallback, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getFilteredVideos } from "../../helper/apis";
 import { toast } from "react-toastify";
 import moment from "moment";
 
+const POSTS_PER_PAGE = 12;
+
 const AllVideos = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { search } = useLocation();
+  const navigate = useNavigate();
 
-  const [categoryData, setCategoryData] = useState({
-    latestVideos: { items: [], skip: 0, hasMore: true },
-    trailers: { items: [], skip: 0, hasMore: true },
-    videoSongs: { items: [], skip: 0, hasMore: true },
-    lyricalVideos: { items: [], skip: 0, hasMore: true },
-    shows: { items: [], skip: 0, hasMore: true },
-    ott: { items: [], skip: 0, hasMore: true },
-    events: { items: [], skip: 0, hasMore: true },
-  });
+  const queryParams = new URLSearchParams(search);
+  const subcategory = queryParams.get("subcategory");
+  const pageParam = parseInt(queryParams.get("page"), 10);
 
-  // Map state keys to DB subCategory values
-  const getSubCategoryParam = (key) => {
-    switch (key) {
-      case "latestVideos":
-        return "latestVideos"; // special handling in backend
-      case "trailers":
-        return "trailers";
-      case "videoSongs":
-        return "video songs";
-      case "lyricalVideos":
-        return "lyrical videos";
-      case "shows":
-        return "shows";
-      case "ott":
-        return "ott";
-      case "events":
-        return "events";
-      default:
-        return "";
-    }
-  };
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(pageParam || 1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchVideosByCategory = async (categoryKey) => {
-    const limit = 9;
-    const { skip, hasMore } = categoryData[categoryKey];
-    if (!hasMore) return;
-
+  const fetchNewsByCategory = useCallback(async () => {
+    setLoading(true);
     try {
-      setIsLoading(true);
-      const res = await getPaginatedCategoryVideos({
-        category: "videos",
-        subCategory: getSubCategoryParam(categoryKey),
-        skip,
-        limit,
-      });
+      const res = await getFilteredVideos(
+        subcategory,
+        "",
+        "",
+        currentPage,
+        POSTS_PER_PAGE
+      );
 
       if (res?.status === "success") {
-        setCategoryData((prev) => {
-          const old = prev[categoryKey];
-          const newSkip = old.skip + limit;
-          return {
-            ...prev,
-            [categoryKey]: {
-              items: [...old.items, ...res.data.videos],
-              skip: newSkip,
-              hasMore: newSkip < res.data.total,
-            },
-          };
-        });
+        setNews(res?.videos || []);
+        setTotalPages(res?.pagination?.totalPages || 1);
       } else {
-        toast.error(res?.message || "Failed to load videos");
+        toast.error(res?.message || "Failed to fetch news");
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Error while fetching videos");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong.");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
+  }, [subcategory, currentPage]);
+
+  useEffect(() => {
+    fetchNewsByCategory();
+    window.scrollTo(0, 0);
+  }, [fetchNewsByCategory]);
+
+  useEffect(() => {
+    if (!isNaN(pageParam) && pageParam > 0) {
+      setCurrentPage(pageParam);
+    } else {
+      setCurrentPage(1);
+    }
+  }, [pageParam]);
+
+  const goToPage = (page) => {
+    const validPage = Math.max(1, Math.min(page, totalPages));
+    const searchParams = new URLSearchParams();
+    if (subcategory) searchParams.set("subcategory", subcategory);
+    searchParams.set("page", validPage);
+    navigate(`/videos?${searchParams.toString()}`);
   };
 
-  // Load initial 9 for each category
+  const handlePrevious = () => goToPage(currentPage - 1);
+  const handleNext = () => goToPage(currentPage + 1);
+
+  const renderPageNumbers = () => (
+    <>
+      {totalPages > 1 && (
+        <span onClick={handlePrevious}>
+          <i className="fa fa-angle-left"></i>
+        </span>
+      )}
+      {totalPages > 1 && (
+        <span className="currentPage-text">
+          Page {currentPage} of {totalPages}
+        </span>
+      )}
+      {totalPages > 1 && (
+        <span onClick={handleNext}>
+          <i className="fa fa-angle-right"></i>
+        </span>
+      )}
+    </>
+  );
+
   useEffect(() => {
-    Object.keys(categoryData).forEach((key) => {
-      fetchVideosByCategory(key);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    document.title = `Tea Time Telugu - VIDEOS`;
   }, []);
 
-  const renderCategory = (key, title) => {
-    const cat = categoryData[key];
-    if (!cat.items.length) return null;
-
-    return (
-      <div className="videos-category-container" key={key}>
-        <SectionTitle title={title} />
-        <div className="all-category-posts-container">
-          {cat.items.map((video) => (
-            <Link
-              key={video._id}
-              to={`/videos/v/${video.newsId}`}
-              className="single-category-post"
-            >
-              <div className="video-thumbnail-container">
-                <img src={video.mainUrl} alt={video.title} loading="lazy" />
-                <div className="play-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="single-category-post-texts">
-                <span className="video-meta">
-                  {moment(video.createdAt).format("Do MMM YYYY")}
-                </span>
-                <h3 className="video-title">{video.title}</h3>
-              </div>
-            </Link>
-          ))}
-        </div>
-        {cat.hasMore && (
-          <button
-            className="load-more-btn"
-            onClick={() => fetchVideosByCategory(key)}
-          >
-            {isLoading ? (
-              <>
-                <span className="btn-text">Loading...</span>
-                <span className="btn-icon spinner"></span>
-              </>
-            ) : (
-              <>
-                <span className="btn-text">Load More</span>
-                <span className="btn-icon">
-                  <i className="fa-solid fa-arrow-rotate-right"></i>
-                </span>
-              </>
-            )}
-          </button>
-        )}
-      </div>
-    );
-  };
-
   return (
-    <div className="all-videos-container">
-      {isLoading && Object.values(categoryData).every((cat) => cat.items.length === 0) ? (
-        // Initial loader
-        <div className="all-category-posts-container">
+    <div className="category-posts-container"> 
+      {loading ? (
+        <div className="latest-collection-grid">
           {[...Array(9)].map((_, index) => (
-            <div className="single-category-post box-shadow" key={index}>
-              <img
-                src="https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
-                alt="Loading placeholder"
-              />
+            <div key={index} className="latest-collection-card">
+              <div className="latest-collection-image-container">
+                <img
+                  src="https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
+                  alt="loading"
+                  loading="lazy"
+                  className="latest-collection-image"
+                />
+              </div>
+              <div className="snlc-title p20">
+                <div className="snlc-text"></div>
+                <div className="snlc-half-text"></div>
+              </div>
             </div>
           ))}
         </div>
       ) : (
-        <>
-          {renderCategory("latestVideos", "Latest Videos")}
-          {renderCategory("trailers", "Trailers")}
-          {renderCategory("videoSongs", "Video Songs")}
-          {renderCategory("lyricalVideos", "Lyrical Videos")}
-          {renderCategory("ott", "OTT")}
-          {renderCategory("events", "Events")}
-          {renderCategory("shows", "Shows")}
-        </>
+        <div className="category-posts-section">
+          {news?.length > 0 ? (
+            news.map((post) => (
+              <Link
+                to={`/videos/v/${post?.newsId}`}
+                key={post?._id}
+                className="single-category-post box-shadow"
+              >
+                <div className="single-category-post-image-container video-thumbnail-container">
+                  <img
+                    src={
+                      post?.mainUrl ||
+                      "https://res.cloudinary.com/demmiusik/image/upload/v1729620426/post-default-pic_jbf1gl.png"
+                    }
+                    alt={post?.title?.en}
+                  />
+                  <div className="play-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="single-category-post-texts">
+                  <span className="single-category-post-category">
+                    {post?.subCategory?.en} /{" "}
+                    {moment(post?.createdAt).format("MMM DD, YYYY")}
+                  </span>
+                  <h3 className="single-category-post-title">
+                    {post?.title?.en}
+                  </h3>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p>No data found!</p>
+          )}
+        </div>
       )}
+
+      <div className="news-pagenations">
+        <div className="news-page-count">{renderPageNumbers()}</div>
+      </div>
     </div>
   );
 };
