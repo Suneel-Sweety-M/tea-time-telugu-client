@@ -175,7 +175,7 @@ const NewsComments = ({ news, commentsCount, setCommentsCount }) => {
           emoji:
             "https://res.cloudinary.com/demmiusik/image/upload/v1727518078/sad-emoji_lrx7hc.png",
         },
-      ].map((reaction) => ({
+      ].map((reaction) => ({ 
         ...reaction,
         count: reactionsArray.filter((r) => r.type === reaction.type).length,
         percentage:

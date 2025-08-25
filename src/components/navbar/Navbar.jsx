@@ -91,6 +91,7 @@ const Navbar = () => {
       console.log(error);
     } finally {
       setIsLoggingOut(false);
+      setLogoutPopup(false);
     }
   };
 
