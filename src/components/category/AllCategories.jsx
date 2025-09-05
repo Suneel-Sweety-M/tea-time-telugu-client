@@ -330,6 +330,56 @@ const AllCategories = () => {
           </Link>
         </div>
       )}
+
+      {category === "sports" && (
+        <div className="all-categories-container">
+          <Link to={"/sports?subcategory=cricket"} className="categorie-box">
+            <img
+              src="https://www.indiaeveryday.com/wp-content/uploads/2024/01/India-Cricket-World-Cup-history.webp"
+              alt="category-img"
+            />
+            <h3
+              className={
+                subcategory === "cricket"
+                  ? "category-title-active category-title text-capital"
+                  : "category-title text-capital"
+              }
+            >
+              Cricket
+            </h3>
+          </Link>
+          <Link to={"/sports?subcategory=football"} className="categorie-box">
+            <img
+              src="https://static.toiimg.com/thumb/imgsize-68734,msid-105049830,width-650,resizemode-4/105049830.jpg"
+              alt="category-img"
+            />
+            <h3
+              className={
+                subcategory === "football"
+                  ? "category-title-active category-title text-capital"
+                  : "category-title text-capital"
+              }
+            >
+              Football
+            </h3>
+          </Link>
+          <Link to={"/sports?subcategory=olympics"} className="categorie-box">
+            <img
+              src="https://e1.365dm.com/23/02/1600x900/skysports-paris-olympics-rings_6052203.jpg"
+              alt="category-img"
+            />
+            <h3
+              className={
+                subcategory === "olympics"
+                  ? "category-title-active category-title text-capital"
+                  : "category-title text-capital"
+              }
+            >
+              Olympics
+            </h3>
+          </Link>
+        </div>
+      )}
     </>
   );
 };
