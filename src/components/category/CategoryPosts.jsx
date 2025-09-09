@@ -42,7 +42,7 @@ const CategoryPosts = () => {
       document.title = `Tea Time Telugu - ${category?.toUpperCase()}`;
       if (res?.status === "success") {
         setNews(res.news || []);
-        setTotalPages(res?.pagination?.totalPages || 1);
+        setTotalPages(Math.ceil((res?.total || 0) / POSTS_PER_PAGE));
       } else {
         toast.error(res.message);
       }
@@ -70,6 +70,7 @@ const CategoryPosts = () => {
 
   const handlePrevious = () => goToPage(currentPage - 1);
   const handleNext = () => goToPage(currentPage + 1);
+console.log(totalPages);
 
   const renderPageNumbers = () => (
     <>
