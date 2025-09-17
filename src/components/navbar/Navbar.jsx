@@ -287,7 +287,7 @@ const Navbar = () => {
 
             <div className="navbar-pages-section-right">
               <div className="navbar-pages-section-right-items">
-                <a href="https://te.teatimetelugu.com" target="blank">
+                <a href="https://teatimetelugu.com" target="blank">
                   <b>తెలుగు</b>
                 </a>
 
@@ -535,7 +535,7 @@ const Navbar = () => {
                 <div className="mobile-navbar-divider"></div>
 
                 <a
-                  href="https://te.teatimetelugu.com"
+                  href="https://teatimetelugu.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mobile-navbar-link mobile-navbar-link--green"
@@ -594,7 +594,7 @@ const Navbar = () => {
             <a
               href={`${process.env.REACT_APP_API_URL}/auth/join-with-google?client=${process.env.REACT_APP_CLIENT_URL}`}
               className="continue-with-google cursor-pointer"
-            >
+            > 
               <img
                 src="https://th.bing.com/th/id/R.0fa3fe04edf6c0202970f2088edea9e7?rik=joOK76LOMJlBPw&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fgoogle-logo-png-open-2000.png&ehk=0PJJlqaIxYmJ9eOIp9mYVPA4KwkGo5Zob552JPltDMw%3d&risl=&pid=ImgRaw&r=0"
                 alt="google-logo"

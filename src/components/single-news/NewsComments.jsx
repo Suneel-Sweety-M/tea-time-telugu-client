@@ -289,7 +289,7 @@ const NewsComments = ({ news, commentsCount, setCommentsCount }) => {
     }
   }, [dispatch, news?.reactions]);
 
-  return (
+  return ( 
     <>
       <div className="news-comments-container">
         <div className="news-reactions-section">

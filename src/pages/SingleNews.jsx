@@ -111,7 +111,7 @@ const SingleNews = () => {
                   <img src={news?.mainUrl} alt={news?.title?.en} />
                   <div
                     className="single-news-description main-font"
-                    dangerouslySetInnerHTML={{ __html: news?.description?.en }}
+                    dangerouslySetInnerHTML={{ __html: news?.description?.enHtml }}
                   />
                   {news?.category?.en === "reviews" && (
                     <div className="single-news-rating-container">
